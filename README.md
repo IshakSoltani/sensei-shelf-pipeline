@@ -83,11 +83,13 @@ The code rules and the open-weight model run locally for nothing; Opus is billed
 
 Under our older coverage-only stock rule, the same pipeline scores 1,378 of 1,802 on our labels. Those labels predate the two-customer test and call one or two packs "empty". The 20 areas where they disagree with it are listed in the decision log. We kept the two-customer test because it is the organisers' own definition of empty: nobody would buy what is left.
 
-### The model's test page
+### The model's test page and tuning panel
 
 <p align="center"><img src="docs/img/app.jpg" alt="The gate-first test page: the score in the official points format, then each photo with its areas outlined and, per area, who decided it and why" width="100%"></p>
 
 Drop the validation folder (with `annotations.json` if you have it). Every photo is judged, scored in the brief's points format, and shown with each area outlined. Each area shows its verdict, who decided it and why. **Fresh run** asks Opus again instead of reusing saved answers.
+
+Next to the score, **Tune the decision** exposes every setting that turns the model's answers into verdicts: the code rule (on or off, and its two thresholds), the fill levels for empty and half, the two-customer test, and how strict the wrong-product flag is. Every change re-decides all photos at once from the answers already collected (no new model calls) and shows how many areas changed and, with annotations, the new score. The download uses the tuned settings. "Ask Opus about every area" (on by default) collects an answer for the areas the code rule settles too, so the code rule itself can be tuned afterwards.
 
 ## Run it
 

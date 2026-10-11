@@ -110,9 +110,10 @@ async def analyze(img, cam, name, fresh=False):
             "samples": CFG["samples"]}
 
 
-def gate_analysis(img, cam, name, allow_api=False, fresh=False):
+def gate_analysis(img, cam, name, allow_api=False, fresh=False, params=None, collect_all=False, version=None):
     """The gate-first pipeline on one photo (scored against our hand labels when this photo has them)."""
-    out = asyncio.run(gatepipe.run_photo(img, cam, name, allow_api=allow_api, fresh=fresh))
+    out = asyncio.run(gatepipe.run_photo(img, cam, name, allow_api=allow_api, fresh=fresh, params=params, collect_all=collect_all,
+                                         version=version))
     labels = {k: v for k, v in sc.load_labels().items() if k[0] == cam and k[1] == name}
     for a in out["areas"]:
         lab = labels.get((cam, name, a["area_id"]))
@@ -137,6 +138,9 @@ class Handler(BaseHTTPRequestHandler):
             b = (HERE / {"/": "index.html", "/batch": "gates.html", "/gates": "gates.html"}[url.path]).read_bytes()
             self.send_response(200); self.send_header("Content-Type", "text/html; charset=utf-8"); self.send_header("Content-Length", str(len(b)))
             self.end_headers(); self.wfile.write(b)
+        elif url.path == "/settings":   # the decision settings the test page can tune, and the prompt versions it can ask
+            self.send_json({"defaults": gatepipe.DEFAULTS, "default_version": CFG["version"],
+                            "versions": {"v5": "v5: fill and product (submitted)", "v9": "v9: also asks the two-customer question"}})
         elif url.path == "/samples":
             self.send_json({"samples": SAMPLES, "cameras": sorted(sc.CAM_AREAS), "camera_names": sc.CAMERA_NAMES,
                             "model": CFG["model"], "samples_per_area": CFG["samples"]})
@@ -176,6 +180,17 @@ class Handler(BaseHTTPRequestHandler):
             except Exception as e:
                 self.send_json({"error": f"Could not score: {e!r}"[:300]}, 400)
             return
+        if url.path == "/redecide":   # {"params": {...}, "photos": [{"camera", "file", "raw": {area: {"opus", "gate"}}}]}
+            try:
+                d = json.loads(self.rfile.read(int(self.headers.get("Content-Length", 0))))
+                out = []
+                for p in d["photos"]:
+                    sub, by = gatepipe.redecide(p["camera"], p["file"], p["raw"], d.get("params"))
+                    out.append({"camera": p["camera"], "file": p["file"], "submission": sub, "decided_by": by})
+                self.send_json({"photos": out, "settings": gatepipe.settings(d.get("params"))})
+            except Exception as e:
+                self.send_json({"error": f"Could not re-decide: {e!r}"[:300]}, 400)
+            return
         if url.path not in ("/analyze", "/analyze_gates"):
             self.send_json({"error": "not found"}, 404); return
         q = urllib.parse.parse_qs(url.query)
@@ -194,7 +209,12 @@ class Handler(BaseHTTPRequestHandler):
         name = (q.get("name") or ["upload.jpg"])[0]
         if url.path == "/analyze_gates":
             try:
-                out = gate_analysis(img, cam, name, allow_api=(q.get("api") or ["0"])[0] == "1", fresh=(q.get("fresh") or ["0"])[0] == "1")
+                params = json.loads((q.get("params") or ["{}"])[0])
+                version = (q.get("version") or [""])[0] or None
+                if version and version not in sc.SYSTEMS:
+                    raise ValueError(f"unknown prompt version {version}")
+                out = gate_analysis(img, cam, name, allow_api=(q.get("api") or ["0"])[0] == "1", fresh=(q.get("fresh") or ["0"])[0] == "1",
+                                    params=params, collect_all=(q.get("collect") or ["0"])[0] == "1", version=version)
             except Exception as e:
                 self.send_json({"error": f"Checking failed: {e!r}"[:300]}, 500); return
             out["detected"] = detected; out["detect_margin"] = margin

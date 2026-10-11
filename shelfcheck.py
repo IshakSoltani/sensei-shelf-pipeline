@@ -596,19 +596,22 @@ def counts_units(aid):
     return is_packaged(aid) or any(w in planned(aid)["en"].lower() for w in LARGE_ITEMS)
 
 
-def units_seen(text):
-    """Number of packs / bags / large items Opus describes, or None when its observation gives no count."""
+def units_seen(text, one_or_two=1):
+    """Number of packs / bags / large items Opus describes, or None when its observation gives no count.
+    one_or_two: what "one or two bags" counts as (1 by default: two customers are not guaranteed)."""
     m = _COUNT.search(text or "")
     if m:
-        return _NUMBER[m.group(1).lower()]
+        w = m.group(1).lower()
+        return one_or_two if w == "one or two" else _NUMBER[w]
     if _ONE.search(text or "") and not re.search(_UNITS.replace("s?", "s"), text or "", re.I):
         return 1
     return None
 
 
-def two_customer_test(stock, rs, aid):
-    """Apply the two-customer test to a stock level decided from coverage. Returns the new level."""
-    if STOCK_TEST != "two_customers":
+def two_customer_test(stock, rs, aid, test=None, one_or_two=1):
+    """Apply the two-customer test to a stock level decided from coverage. Returns the new level.
+    test / one_or_two override config.json's stock_test and the "one or two" count (the app's tuning panel)."""
+    if (test or STOCK_TEST) != "two_customers":
         return stock
     ok = [r for r in rs if r and "error" not in r]
     if not ok or any(r.get("image_usable") == "fully_occluded" for r in ok):
@@ -621,7 +624,7 @@ def two_customer_test(stock, rs, aid):
     if not counts_units(aid):
         return stock
     right = all(r.get("matches_planned") == "yes" or same_kind(planned(aid)["en"], r.get("visible_product", "")) for r in ok)
-    n = [units_seen(r.get("observations")) for r in ok]
+    n = [units_seen(r.get("observations"), one_or_two) for r in ok]
     if not right or any(x is None for x in n):
         return stock
     n = min(n)

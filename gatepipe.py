@@ -138,9 +138,9 @@ def content_for(ph, aid, img):
     return sc.build_content(ph, aid, refs=None, img=img, with_time=CFG.get("use_time", False))
 
 
-def saved_answer(ph, aid, img):
+def saved_answer(ph, aid, img, version=None):
     """The saved Opus answer for this exact area crop under the frozen config, or None. A file lookup, never a call."""
-    key = sc.Judge.key(None, content_for(ph, aid, img), 0, CFG["effort"], CFG["version"], CFG["model"])
+    key = sc.Judge.key(None, content_for(ph, aid, img), 0, CFG["effort"], version or CFG["version"], CFG["model"])
     p = sc.CACHE / f"{key}.json"
     if p.exists():
         r = json.load(open(p))
@@ -148,11 +148,66 @@ def saved_answer(ph, aid, img):
     return None
 
 
-def opus_decision(r, aid):
-    stock, comp, _ = sc.decide([r], CFG["stock_rule"], CFG["flag_rule"], CFG.get("alpha", 1.0))
-    if not comp and sc.SAME_KIND_OVERRIDE and sc.same_kind(sc.planned(aid)["en"], r.get("visible_product", "")):
+def opus_decision(r, aid, P=None):
+    """Opus's answer alone (no code rule) -> (stock, compliant)."""
+    stock, comp, _ = decide_area(r, None, aid, P)
+    return stock, comp
+
+
+# ---------------------------------------------------------------- the decision, with every setting the app can tune
+DEFAULTS = {
+    "gate": True, "cov_min": COV_MIN, "fp_max": FP_MAX,                      # tier 0: the clearly-full code rule
+    "fill_empty": 35, "fill_half": 65,                                          # loose produce: fill % -> level
+    "two_customers": CFG.get("stock_test", "coverage") == "two_customers",      # packs, bags, large items counted
+    "one_or_two": 1,                                                            # what "one or two bags" counts as
+    "flag": True, "flag_pmatch_max": 30, "same_kind": True,                     # wrong product
+}
+if CFG["stock_rule"].startswith("fill:"):
+    DEFAULTS["fill_empty"], DEFAULTS["fill_half"] = (int(x) for x in CFG["stock_rule"].split(":")[1:3])
+
+
+def settings(P=None):
+    out = dict(DEFAULTS)
+    for k, v in (P or {}).items():
+        if k in out and v is not None:
+            out[k] = type(DEFAULTS[k])(v) if not isinstance(DEFAULTS[k], bool) else bool(v)
+    return out
+
+
+def gate_fires(g, aid, P):
+    return bool(P["gate"] and g and g.get("fingerprint") is not None and g["coverage"] >= P["cov_min"]
+                and g["fingerprint"] <= P["fp_max"] and not (P["two_customers"] and sc.counts_units(aid)))
+
+
+def decide_area(r, g, aid, P=None):
+    """(stock, compliant, decided_by) for one area from its Opus answer r and its code-rule measurements g.
+    With the default settings this is exactly the submitted pipeline."""
+    P = settings(P)
+    if gate_fires(g, aid, P):
+        return "full", True, "gate"
+    if not r or "error" in r or r.get("image_usable") == "fully_occluded":
+        stock, comp = fallback(aid)
+        return stock, comp, "fallback"
+    stock, _, _ = sc.decide([r], f"fill:{P['fill_empty']}:{P['fill_half']}", "unanimous_no", CFG.get("alpha", 1.0))
+    if r.get("matches_planned") == "no_product":
         comp = True
-    return sc.two_customer_test(stock, [r], aid), comp
+    else:
+        comp = not (P["flag"] and r.get("matches_planned") == "no" and (r.get("p_match") or 0) <= P["flag_pmatch_max"])
+        if not comp and P["same_kind"] and sc.same_kind(sc.planned(aid)["en"], r.get("visible_product", "")):
+            comp = True
+    stock = sc.two_customer_test(stock, [r], aid, test="two_customers" if P["two_customers"] else "coverage", one_or_two=P["one_or_two"])
+    return stock, comp, "opus"
+
+
+def redecide(cam, name, raw, P=None):
+    """Re-decide a photo from what was collected (raw = {area: {"opus": answer, "gate": measurements}}): no image, no call."""
+    out, by = {}, {}
+    for aid in sc.CAM_AREAS[cam]:
+        x = raw.get(aid) or {}
+        stock, comp, who = decide_area(x.get("opus"), x.get("gate"), aid, P)
+        out[aid] = {"planogram_compliant": bool(comp), "stock_level": stock, "stock_value": sc.STOCK_VALUE[stock]}
+        by[aid] = who
+    return {cam: {name: out}}, by
 
 
 def fallback(aid):
@@ -160,25 +215,30 @@ def fallback(aid):
     return (last.get("stock", "half"), True)
 
 
-async def run_photo(img, cam, name, allow_api=False, gates_on=True, fresh=False):
+async def run_photo(img, cam, name, allow_api=False, gates_on=True, fresh=False, params=None, collect_all=False, version=None):
     """One photo -> {"areas": [...], "submission": {...}, "summary": {...}}. gates_on=False = plain Opus (for comparison).
-    fresh=True ignores the saved answers and asks Opus again (throwaway cache), so the run is a real test."""
+    fresh=True ignores the saved answers and asks Opus again (throwaway cache), so the run is a real test.
+    params: the decision settings (see DEFAULTS). collect_all: also ask Opus about the areas the code rule answers, so
+    every setting can be tuned afterwards from the collected answers (redecide). version: the prompt version to ask."""
     allow_api = allow_api or fresh
+    version = version or CFG["version"]
+    P = settings(params)
+    if not gates_on:
+        P["gate"] = False
     t0 = time.time()
     ph = sc.Photo(cam, name, sc.parse_ts(name), "-")
     areas, ask = {}, []
     for aid in sc.CAM_AREAS[cam]:
-        g = gate(img, aid) if gates_on else None
+        g = gate(img, aid)
         a = {"area_id": aid, "number": int(aid.split("_")[1]), "product": sc.planned(aid)["en"], "product_pt": sc.AREAS[aid]["product_name"],
-             "quad": sc.quad(sc.AREAS[aid]).tolist(), "gate": g}
-        if g and g["fired"]:
-            a.update(stock="full", compliant=True, decided_by="gate")
+             "quad": sc.quad(sc.AREAS[aid]).tolist(), "gate": g if gates_on else None, "counts_units": sc.counts_units(aid)}
+        if gate_fires(g, aid, P) and not collect_all:
+            areas[aid] = a; continue
+        r = None if fresh else saved_answer(ph, aid, img, version)
+        if r:
+            a.update(opus=r, source="saved")
         else:
-            r = None if fresh else saved_answer(ph, aid, img)
-            if r:
-                a.update(opus=r, source="saved")
-            else:
-                ask.append(aid)
+            ask.append(aid)
         areas[aid] = a
     calls, cost = 0, 0.0
     if ask and allow_api:
@@ -188,7 +248,7 @@ async def run_photo(img, cam, name, allow_api=False, gates_on=True, fresh=False)
         judge = sc.Judge(model=CFG["model"], concurrency=CFG["concurrency"], ramp_start=min(CFG["concurrency"], 16),
                          **({"cache": tempfile.mkdtemp(prefix="fresh_")} if fresh else {}))
         res = await judge.judge_many([(ph, aid) for aid in ask], lambda p, aid, s: content_for(p, aid, img), samples=(0,),
-                                     effort=CFG["effort"], version=CFG["version"], quiet=True)
+                                     effort=CFG["effort"], version=version, quiet=True)
         for aid in ask:
             r = res.get((cam, name, aid, 0))
             if r and "error" not in r:
@@ -197,27 +257,27 @@ async def run_photo(img, cam, name, allow_api=False, gates_on=True, fresh=False)
                 areas[aid]["api_error"] = r.get("error", "")[:200]
         u = judge.usage_summary(); calls, cost = u["calls"], u["cost"]
     for aid, a in areas.items():
-        if "decided_by" in a:
-            continue
-        r = a.get("opus")
-        if r and r.get("image_usable") != "fully_occluded":
-            stock, comp = opus_decision(r, aid)
-            a.update(stock=stock, compliant=comp, decided_by="opus", fill=r.get("fill_percent"), seen=r.get("visible_product"),
-                     observation=r.get("observations"), matches=r.get("matches_planned"))
-        else:
-            stock, comp = fallback(aid)
-            a.update(stock=stock, compliant=comp, decided_by="fallback",
-                     note="view blocked" if r else ("no saved Opus answer" + ("" if allow_api else " (Opus calls are off)")))
-        a.pop("opus", None)
+        r = a.pop("opus", None)
+        stock, comp, who = decide_area(r, a["gate"], aid, P)
+        a.update(stock=stock, compliant=comp, decided_by=who)
+        if r:
+            a.update(fill=r.get("fill_percent"), seen=r.get("visible_product"), observation=r.get("observations"),
+                     matches=r.get("matches_planned"), units=sc.units_seen(r.get("observations"), P["one_or_two"]))
+        if who == "fallback":
+            a["note"] = "view blocked" if r else ("no saved Opus answer" + ("" if allow_api else " (Opus calls are off)"))
+        # what was collected, so the app can re-decide with other settings without asking again
+        a["raw"] = {"opus": {k: v for k, v in r.items() if not k.startswith("_")} if r else None,
+                    "gate": {"coverage": g["coverage"], "fingerprint": g["fingerprint"]} if (g := a["gate"]) else None}
     sub = {cam: {name: {aid: {"planogram_compliant": bool(a["compliant"]), "stock_level": a["stock"], "stock_value": sc.STOCK_VALUE[a["stock"]]}
                         for aid, a in areas.items()}}}
     n = len(areas)
     by = {k: sum(a["decided_by"] == k for a in areas.values()) for k in ("gate", "opus", "fallback")}
-    per_call = 0.0111   # mean Opus cost per area under the frozen config (docs/cost-report.pdf)
+    per_call = 0.0111   # mean Opus cost per area under the frozen config
     summary = {"areas": n, "by": by, "api_calls": calls, "api_cost_usd": round(cost, 4),
                "opus_cost_usd": round((by["opus"] + by["fallback"]) * per_call, 3), "opus_only_cost_usd": round(n * per_call, 3),
                "seconds": round(time.time() - t0, 2)}
-    return {"camera": cam, "camera_name": sc.camera_name(cam), "file": name, "areas": list(areas.values()), "submission": sub, "summary": summary}
+    return {"camera": cam, "camera_name": sc.camera_name(cam), "file": name, "areas": list(areas.values()), "submission": sub,
+            "summary": summary, "settings": P, "version": version}
 
 
 # ---------------------------------------------------------------- CLI

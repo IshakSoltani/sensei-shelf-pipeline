@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Gate-first test run</title>
+<title>Test Run and Tuning</title>
 <style>
 /* same world as the viewer: dark leaf ground, the three stock colours, cyan for a wrong product;
    plus straw for "the rule answered" and sage for "Opus answered" in the who-decided view */
@@ -54,6 +54,27 @@ input[type=file]{position:absolute;width:1px;height:1px;opacity:0;overflow:hidde
 .legend span::before{content:"";display:inline-block;width:14px;height:14px;border-radius:3px;margin-right:7px;vertical-align:-2px;background:var(--sw)}
 .legend span.dash::before{background:none;border:2px dashed var(--sw);width:10px;height:10px}
 .legend[hidden]{display:none}
+.opts select{background:var(--panel2);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:4px 8px;font:inherit;font-size:15px}
+.opts .row{display:flex;gap:10px;align-items:center;padding-left:30px}
+@media(min-width:980px){.board{grid-template-columns:minmax(0,1fr) minmax(0,1.1fr)!important;align-items:start}}
+.tune h2{margin-bottom:2px}
+.grp{border-top:1px solid var(--line);padding:12px 0 4px;margin-top:10px}
+.grp:first-of-type{border-top:0;margin-top:0}
+.grp h3{font-size:15px;margin:0 0 8px;font-weight:650;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.grp h3 label{font-weight:400;color:var(--muted);font-size:14px;display:flex;gap:6px;align-items:center;cursor:pointer}
+.ctl{display:grid;grid-template-columns:1fr auto;gap:2px 12px;align-items:center;margin:0 0 10px;font-size:14px;color:var(--muted)}
+.ctl output{color:var(--ink);font-weight:600;min-width:4ch;text-align:right}
+.ctl input[type=range]{grid-column:1 / 3;width:100%;accent-color:var(--full)}
+.ctl.off{opacity:.45}
+.tune input[type=checkbox]{accent-color:var(--full);width:16px;height:16px;margin:0}
+.tune .seg{background:var(--panel2)}
+.tune .seg button[aria-pressed=true]{background:var(--line)}
+.verdictline{margin:14px 0 0;padding-top:12px;border-top:1px solid var(--line);font-size:15px}
+.verdictline b{font-size:17px}
+.up{color:var(--full)}.down{color:var(--empty)}
+.reset{background:none;border:0;color:var(--muted);font:inherit;font-size:14px;cursor:pointer;padding:0;text-decoration:underline;text-underline-offset:3px;margin-top:8px}
+.reset:hover{color:var(--ink)}
+li .more .chg{color:var(--half)}
 
 .card{background:var(--panel);border-radius:14px;padding:16px;margin-top:20px}
 .card h2{font-size:19px;margin:0 0 10px;display:flex;flex-wrap:wrap;gap:4px 14px;align-items:baseline}
@@ -91,8 +112,8 @@ li .more .ok{color:var(--full)}li .more .bad{color:var(--empty)}
 </head>
 <body>
 <main>
-  <h1>Gate-first test run</h1>
-  <p class="lead">Drop the validation photos and <b>annotations.json</b>. Each area first goes through the clearly-full rule (pure code); only the areas it is not sure about go to Opus. The score updates as photos finish. <a href="/">Staff view</a></p>
+  <h1>Test run and tuning</h1>
+  <p class="lead">Drop the validation folder (and <b>annotations.json</b> if you have it). Each area goes through the code rule first, then Opus. When the photos are in, tune the decision settings on the right: every photo is re-decided at once, and the download uses your settings. <a href="/">Staff view</a></p>
 
   <div class="drop" id="drop">
     <p>Drop the validation folder here, or photos and annotations.json</p>
@@ -101,13 +122,33 @@ li .more .ok{color:var(--full)}li .more .bad{color:var(--empty)}
     <input type="file" id="pickdir" webkitdirectory multiple>
     <input type="file" id="pick" multiple accept="image/*,.json,application/json">
     <div class="opts">
-      <label><input type="checkbox" id="fresh" checked><span><b>Fresh run:</b> the rule checks every area, and Opus is asked again about every area the rule passes on, ignoring answers saved earlier. A real test; about $0.01 per area, roughly $0.08 a photo. Untick to reuse saved answers where they exist (fast and free on training-day photos).</span></label>
+      <label><input type="checkbox" id="fresh" checked><span><b>Fresh run:</b> Opus is asked again, ignoring answers saved earlier. A real test; about $0.01 per area. Untick to reuse saved answers where they exist (fast and free on training-day photos).</span></label>
+      <label><input type="checkbox" id="collect" checked><span><b>Ask Opus about every area,</b> also the ones the code rule answers, so every setting in the tuning panel can be changed afterwards without asking again. The verdicts are the same; about 15 % more cost.</span></label>
+      <div class="row"><span>Opus is asked with prompt</span><select id="version" aria-label="Prompt version"></select></div>
     </div>
   </div>
   <p class="status" id="status"></p>
 
   <div class="board" id="board" hidden>
     <section class="side" id="side-gates"></section>
+    <section class="side tune" id="tune">
+      <h2>Tune the decision</h2>
+      <p class="src">Re-decides every photo from the answers already collected. No new model calls, no cost.</p>
+      <div class="grp"><h3>Code rule: clearly full <label><input type="checkbox" data-k="gate"> on</label></h3>
+        <div class="ctl" data-dep="gate"><span>Floor changed from its emptiest picture, at least</span><output data-o="cov_min"></output><input type="range" data-k="cov_min" min="0.3" max="0.9" step="0.05"></div>
+        <div class="ctl" data-dep="gate"><span>Colours this close to the usual product, at most</span><output data-o="fp_max"></output><input type="range" data-k="fp_max" min="0.05" max="0.5" step="0.05"></div></div>
+      <div class="grp"><h3>Stock level from Opus's fill estimate</h3>
+        <div class="ctl"><span>Empty below</span><output data-o="fill_empty"></output><input type="range" data-k="fill_empty" min="0" max="60" step="5"></div>
+        <div class="ctl"><span>Half below (full from here)</span><output data-o="fill_half"></output><input type="range" data-k="fill_half" min="40" max="95" step="5"></div></div>
+      <div class="grp"><h3>Two-customer test <label><input type="checkbox" data-k="two_customers"> on</label></h3>
+        <div class="ctl" data-dep="two_customers" style="grid-template-columns:1fr auto"><span>Packs, bags and melons are counted: one left is empty, two or more at least half. "One or two bags" counts as</span>
+          <div class="seg" role="group" aria-label="One or two bags counts as"><button type="button" data-k="one_or_two" data-v="1">1</button><button type="button" data-k="one_or_two" data-v="2">2</button></div></div></div>
+      <div class="grp"><h3>Wrong product <label><input type="checkbox" data-k="flag"> flag it</label></h3>
+        <div class="ctl" data-dep="flag"><span>Flag when Opus says "not the planned product" and its confidence that it is, is at most</span><output data-o="flag_pmatch_max"></output><input type="range" data-k="flag_pmatch_max" min="0" max="60" step="5"></div>
+        <div class="ctl" data-dep="flag" style="grid-template-columns:auto 1fr;justify-content:start"><input type="checkbox" data-k="same_kind"><span>Another variety of the same fruit is not a wrong product (Gala where Golden is planned)</span></div></div>
+      <div class="verdictline" id="tuneline">Change a setting to see its effect.</div>
+      <button type="button" class="reset" id="reset">Back to the submitted settings</button>
+    </section>
   </div>
 
   <div class="actions" id="actions" hidden>
@@ -126,7 +167,58 @@ li .more .ok{color:var(--full)}li .more .bad{color:var(--empty)}
 const $ = id => document.getElementById(id);
 const VAL = {empty: 0, half: 0.5, full: 1};
 const queue = []; let running = 0, done = 0, total = 0, spent = 0, ann = null, annName = "";
-const subGates = {}, cards = {}, tally = {gate: 0, opus: 0, fallback: 0};
+const subGates = {}, subBase = {}, cards = {}, photos = {};   // current settings / submitted settings / per photo
+let DEF = null, P = null, tuneTimer = null;
+const FMT = {cov_min: v => Math.round(v * 100) + "%", fp_max: v => (+v).toFixed(2), fill_empty: v => v + "%", fill_half: v => v + "%", flag_pmatch_max: v => v + "%"};
+const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+async function initSettings() {
+  const d = await (await fetch("/settings")).json();
+  DEF = d.defaults;
+  try { P = Object.assign({}, DEF, JSON.parse(localStorage.getItem("shelf-tune") || "{}")); } catch (e) { P = {...DEF}; }
+  $("version").innerHTML = Object.entries(d.versions).map(([k, v]) => `<option value="${k}" ${k === d.default_version ? "selected" : ""}>${esc(v)}</option>`).join("");
+  paintControls();
+}
+function paintControls() {
+  document.querySelectorAll("#tune [data-k]").forEach(el => {
+    const k = el.dataset.k;
+    if (el.type === "checkbox") el.checked = !!P[k];
+    else if (el.type === "range") el.value = P[k];
+    else el.setAttribute("aria-pressed", String(+el.dataset.v === +P[k]));
+  });
+  document.querySelectorAll("#tune [data-o]").forEach(o => o.value = FMT[o.dataset.o](P[o.dataset.o]));
+  document.querySelectorAll("#tune [data-dep]").forEach(c => c.classList.toggle("off", !P[c.dataset.dep]));
+}
+document.addEventListener("input", ev => tuneFrom(ev.target));
+document.addEventListener("click", ev => { if (ev.target.matches("#tune button[data-k]")) tuneFrom(ev.target); });
+function tuneFrom(el) {
+  if (!el.closest || !el.closest("#tune") || !el.dataset.k) return;
+  const k = el.dataset.k;
+  P[k] = el.type === "checkbox" ? el.checked : el.type === "range" ? +el.value : +el.dataset.v;
+  if (k === "fill_empty" && P.fill_empty >= P.fill_half) P.fill_half = Math.min(95, P.fill_empty + 5);
+  if (k === "fill_half" && P.fill_half <= P.fill_empty) P.fill_empty = Math.max(0, P.fill_half - 5);
+  try { localStorage.setItem("shelf-tune", JSON.stringify(P)); } catch (e) { /* private window */ }
+  paintControls();
+  clearTimeout(tuneTimer); tuneTimer = setTimeout(() => applySettings(Object.keys(photos)), 200);
+}
+$("reset").onclick = () => { P = {...DEF}; try { localStorage.removeItem("shelf-tune"); } catch (e) {} paintControls(); applySettings(Object.keys(photos)); };
+
+// re-decide photos from what was collected, with the current settings
+async function applySettings(keys) {
+  if (!keys.length) return;
+  const body = {params: P, photos: keys.map(k => ({camera: photos[k].o.camera, file: photos[k].o.file, raw: photos[k].raw}))};
+  const r = await (await fetch("/redecide", {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(body)})).json();
+  if (r.error) { say(`<span class="err">${esc(r.error)}</span>`); return; }
+  for (const x of r.photos) {
+    const ph = photos[`${x.camera}/${x.file}`], cur = x.submission[x.camera][x.file];
+    for (const a of ph.o.areas) {
+      const v = cur[a.area_id]; a.stock = v.stock_level; a.compliant = v.planogram_compliant; a.decided_by = x.decided_by[a.area_id];
+      if (a.decided_by === "fallback" && !ph.raw[a.area_id]?.opus) a.note = "no Opus answer collected for this area (tick \"Ask Opus about every area\" before the run)";
+    }
+    Object.assign((subGates[x.camera] ??= {}), x.submission[x.camera]);
+    show(ph.card, ph.o);
+  }
+  rescore();
+}
 
 const drop = $("drop");
 ["dragenter", "dragover"].forEach(e => drop.addEventListener(e, ev => { ev.preventDefault(); drop.classList.add("over"); }));
@@ -204,14 +296,17 @@ function pump() {
 
 async function check({f, cam, card}) {
   try {
-    const q = `name=${encodeURIComponent(f.name)}&cam=${cam}&api=1&fresh=${$("fresh").checked ? 1 : 0}`;
+    const q = `name=${encodeURIComponent(f.name)}&cam=${cam}&api=1&fresh=${$("fresh").checked ? 1 : 0}&collect=${$("collect").checked ? 1 : 0}&version=${$("version").value}`;
     const r = await fetch(`/analyze_gates?${q}`, {method: "POST", body: f, headers: {"Content-Type": "application/octet-stream"}});
     const o = await r.json();
     if (!r.ok) { card.querySelector(".sub").outerHTML = `<span class="sub err">${esc(o.error || r.statusText)}</span>`; return; }
     spent += o.summary.api_cost_usd || 0;
-    for (const k in tally) tally[k] += o.summary.by[k];
+    const key = `${o.camera}/${o.file}`;
+    photos[key] = {o, card, raw: Object.fromEntries(o.areas.map(a => [a.area_id, a.raw]))};
+    Object.assign((subBase[o.camera] ??= {}), o.submission[o.camera]);     // the run used the submitted settings
     Object.assign((subGates[o.camera] ??= {}), o.submission[o.camera]);
-    cards[`${o.camera}/${o.file}`] = card; show(card, o);
+    cards[key] = card; show(card, o);
+    if (!same(P, DEF)) await applySettings([key]);
   } catch (e) { card.querySelector(".sub").outerHTML = `<span class="sub err">${esc(e.message)}</span>`; }
 }
 
@@ -227,21 +322,36 @@ function pts(p, l) {
 
 function show(card, o) {
   card._o = o;
-  const by = o.summary.by;
+  const by = {gate: 0, opus: 0, fallback: 0}; o.areas.forEach(a => by[a.decided_by]++);
+  const base = subBase[o.camera]?.[o.file] || {};
+  const changed = a => base[a.area_id] && (base[a.area_id].stock_level !== a.stock || base[a.area_id].planogram_compliant !== a.compliant);
+  const nChanged = o.areas.filter(changed).length;
+  const why = a => {   // the code rule's reason, with the current thresholds
+    const g = a.raw?.gate;
+    if (!g) return "";
+    if (!P.gate) return "code rule off";
+    if (P.two_customers && a.counts_units) return "sold per pack or large item: Opus counts what is left";
+    if (g.fingerprint == null) return a.gate?.why || "no product fingerprint";
+    if (g.coverage < P.cov_min) return `floor changed ${Math.round(g.coverage * 100)}%, under ${Math.round(P.cov_min * 100)}%`;
+    if (g.fingerprint > P.fp_max) return `colours ${g.fingerprint.toFixed(2)} from the usual product (limit ${(+P.fp_max).toFixed(2)})`;
+    return `floor changed ${Math.round(g.coverage * 100)}%, colours match the usual product (${g.fingerprint.toFixed(2)})`;
+  };
   const polys = o.areas.map(a => `<polygon data-a="${esc(a.area_id)}" class="${a.stock}${a.compliant ? "" : " wrong"} by-${a.decided_by}" points="${a.quad.map(q => q.join(",")).join(" ")}"></polygon>`).join("");
   const tags = o.areas.map(a => { const [x, y] = a.quad[0]; return `<text class="tag" x="${Math.max(4, Math.min(1220, x + 6))}" y="${Math.max(36, y + 38)}">${a.number}</text>`; }).join("");
   const rows = o.areas.slice().sort((a, b) => a.number - b.number).map(a => {
     const g = a.gate, l = labelFor(o, a);
     let how;
-    if (a.decided_by === "gate") how = `<span class="by gate">rule</span>: ${esc(g.why)}`;
-    else if (a.decided_by === "opus") how = `<span class="by">Opus</span>${a.fill != null ? `: about ${a.fill}% covered` : ""}, sees ${esc(a.seen || "nothing")}${g ? ` · rule passed it on: ${esc(g.why)}` : ""}`;
+    const op = a.raw?.opus;
+    if (a.decided_by === "gate") how = `<span class="by gate">rule</span>: ${esc(why(a))}`;
+    else if (a.decided_by === "opus") how = `<span class="by">Opus</span>${op?.fill_percent != null ? `: about ${op.fill_percent}% covered` : ""}, sees ${esc(op?.visible_product || "nothing")}${a.counts_units && a.units ? ` (${a.units === 1 ? "one unit" : a.units + " units"} left)` : ""}${!g ? "" : P.gate ? ` · rule passed it on: ${esc(why(a))}` : " · code rule off"}`;
     else how = `<span class="by">fallback</span>: ${esc(a.api_error ? "Opus call failed (" + a.api_error + ")" : a.note || "nobody judged it")}`;
     const lab = l ? ` · label ${l.stock}${l.compliant ? "" : ", wrong product"}: <span class="${pts(a, l) === 2 ? "ok" : "bad"}">${pts(a, l) > 0 ? "+" : ""}${pts(a, l)}</span>` : "";
-    return `<li data-a="${esc(a.area_id)}"><span class="n">${a.number}</span><span class="what">${esc(a.product)}</span><span class="lvl ${a.stock}${a.compliant ? "" : " wrong"}">${a.stock}</span>
-      <span class="more">${how}${lab}</span></li>`;
+    const b = base[a.area_id], chg = changed(a) ? ` · <span class="chg">changed by your settings (submitted: ${b.stock_level}${b.planogram_compliant ? "" : ", wrong product"})</span>` : "";
+    return `<li data-a="${esc(a.area_id)}" class="${changed(a) ? "changed" : ""}"><span class="n">${a.number}</span><span class="what">${esc(a.product)}</span><span class="lvl ${a.stock}${a.compliant ? "" : " wrong"}">${a.stock}</span>
+      <span class="more">${how}${chg}${lab}</span></li>`;
   }).join("");
   card.innerHTML = `
-    <h2>${esc(o.file)} <span class="pts" data-pts></span> <span class="sub">camera ${esc(o.camera)}${o.camera_name ? " · " + esc(o.camera_name) : ""}${o.time_utc ? " · " + esc(o.time_utc) + " UTC" : ""} · ${o.areas.length} areas: ${by.gate} by the rule, ${by.opus} by Opus${by.fallback ? `, ${by.fallback} fallback` : ""} · ${o.summary.seconds}s · $${(o.summary.api_cost_usd || 0).toFixed(3)}</span></h2>
+    <h2>${esc(o.file)} <span class="pts" data-pts></span> <span class="sub">camera ${esc(o.camera)}${o.camera_name ? " · " + esc(o.camera_name) : ""}${o.time_utc ? " · " + esc(o.time_utc) + " UTC" : ""} · ${o.areas.length} areas: ${by.gate} by the rule, ${by.opus} by Opus${by.fallback ? `, ${by.fallback} fallback` : ""}${nChanged ? `, ${nChanged} changed by your settings` : ""} · ${o.summary.seconds}s · $${(o.summary.api_cost_usd || 0).toFixed(3)}</span></h2>
     <div class="grid">
       <div class="shot"><img src="${o.image}" alt="${esc(o.file)} with every area outlined"><svg viewBox="0 0 1280 720" aria-hidden="true">${polys}${tags}</svg></div>
       <ol>${rows}</ol>
@@ -263,21 +373,32 @@ async function score(sub) {
 
 async function rescore() {
   if (!Object.keys(subGates).length) { status(); return; }
-  const g = await score(subGates);
+  const tuned = !same(P, DEF);
+  const [g, b] = await Promise.all([score(subGates), tuned ? score(subBase) : null]);
+  let diff = 0; for (const c in subGates) for (const f in subGates[c]) for (const a in subGates[c][f]) {
+    const x = subGates[c][f][a], y = subBase[c]?.[f]?.[a]; if (y && (x.stock_level !== y.stock_level || x.planogram_compliant !== y.planogram_compliant)) diff++; }
+  const delta = g?.areas && b?.areas ? g.points - b.points : null;
+  $("tuneline").innerHTML = !tuned ? "These are the submitted settings. Change one to see its effect."
+    : `${diff} ${diff === 1 ? "area differs" : "areas differ"} from the submitted settings` + (delta === null ? "." :
+      ` · <b class="${delta > 0 ? "up" : delta < 0 ? "down" : ""}">${delta > 0 ? "+" : ""}${delta} points</b> (${g.points} against ${b.points})`);
+  const tally = {gate: 0, opus: 0, fallback: 0};
+  Object.values(photos).forEach(ph => ph.o.areas.forEach(a => tally[a.decided_by]++));
   if (!g || !g.areas) {
     $("board").hidden = false;
-    $("side-gates").innerHTML = `<h2>Gate first</h2><p class="na">Nothing to score yet: these photos have no annotations and no hand labels. Drop annotations.json to score them.</p>`;
+    $("side-gates").innerHTML = `<h2>Score</h2><p class="na">Nothing to score yet: these photos have no annotations and no hand labels. Drop annotations.json to score them; you can still tune and see which areas change.</p>`;
     return;
   }
   const final = ann && !running && !queue.length;
   $("board").hidden = false;
-  $("side-gates").innerHTML = side("Gate first", g, final, `${tally.gate} areas by the rule, ${tally.opus} by Opus${tally.fallback ? `, ${tally.fallback} fallback` : ""}`);
+  $("side-gates").innerHTML = side(tuned ? "Score with your settings" : "Score", g, final, `${tally.gate} areas by the code rule, ${tally.opus} by Opus${tally.fallback ? `, ${tally.fallback} fallback` : ""}`);
   for (const [k, c] of Object.entries(cards)) {
     const pg = g.per_photo?.[k], el = c.querySelector("[data-pts]");
     if (el) el.textContent = pg ? `${pg.points} of ${pg.max} points` : "";
   }
   status();
 }
+
+initSettings();
 
 function side(title, s, final, foot) {
   const c = s.counts;
