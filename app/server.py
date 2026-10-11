@@ -140,7 +140,7 @@ class Handler(BaseHTTPRequestHandler):
             self.end_headers(); self.wfile.write(b)
         elif url.path == "/settings":   # the decision settings the test page can tune, and the prompt versions it can ask
             self.send_json({"defaults": gatepipe.DEFAULTS, "default_version": CFG["version"],
-                            "versions": {"v5": "v5: fill and product (submitted)", "v9": "v9: also asks the two-customer question"}})
+                            "versions": {"v5": "v5", "v9": "v9"}})
         elif url.path == "/samples":
             self.send_json({"samples": SAMPLES, "cameras": sorted(sc.CAM_AREAS), "camera_names": sc.CAMERA_NAMES,
                             "model": CFG["model"], "samples_per_area": CFG["samples"]})
