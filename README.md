@@ -16,6 +16,20 @@ The dashboard also **plans the people**: from a full day of camera verdicts it c
 
 <sub>The manager dashboard (demo shifts), with the hour-by-hour staffing plan. The phone app and the dashboard are described in [`staff-app/README.md`](staff-app/README.md).</sub>
 
+## The phone app
+
+<p align="center"><img src="docs/img/phone.jpg" alt="Five phone screens: home with empty, wrong-product and half shelves; a live camera view with shelf areas coloured by status; the trolley pick list; the walk to the next aisle; a stop with its jobs and a Done button" width="100%"></p>
+
+**Shelf Round** is the phone app for the person restocking fruit and vegetables. It runs in Expo Go and reads the model's verdicts from the bridge every 4 seconds.
+
+1. **Home.** How many shelves are empty, hold the wrong product or are half full, from each camera's newest picture, and the round that would fix them ("4 stops · about 12 min").
+2. **Live shelves.** The store by aisle, then each camera's picture with every shelf area outlined in its status colour. Tap an area to see what it is, or report a problem from there.
+3. **Load the trolley.** One pick list for the whole round, sized to the cart (small 8, standard 12, large 16 crates). Every empty shelf goes on the first trip, wrong products next, half shelves fill the rest; heavy items go on the pallet truck. The same product in several areas of one bay is one line ("Banana ×4"), and packaged products are counted in packs.
+4. **Walk.** One aisle at a time, in the store's walking order.
+5. **At the shelf.** Each job with what to do ("Refill 4 empty areas completely · 4 crates"), and a Done button. A finished round goes back to the bridge, where the manager dashboard ranks staff and products from it.
+
+New pictures keep coming in while a round is running. If a shelf turns empty or gets the wrong product, the phone buzzes ("Aisle 2 needs you") and adds it to the next round; the plan in hand never changes under the worker. Staff can also report a problem themselves (empty, wrong, half or damaged, with an optional photo), and it joins the next round.
+
 ## The learning loop
 
 <p align="center"><img src="docs/img/loop.svg" alt="Learning loop: collect photos through the staff app, the teacher model labels every area, the labels become a training set, a LoRA fine-tune updates the open-weight student, the student answers more areas locally, and the next photos start the loop again" width="100%"></p>
@@ -114,6 +128,8 @@ cd staff-app/mobile && npm install && npx expo start --lan   # the phone app: sc
 ```
 
 Drop camera pictures on http://127.0.0.1:8787: the model checks them and the phone app picks the results up. The manager dashboard is at http://127.0.0.1:8787/manager.html.
+
+The phone must be on the same Wi-Fi as the laptop. If Expo Go is signed in to an Expo account, sign in to the same account on the laptop (`npx expo login`) or sign out in Expo Go, otherwise it refuses the project. On a network that blocks phone-to-laptop traffic, connect the laptop to the phone's hotspot.
 
 The organisers' dataset is not in this repo. Unzip it into `data/raw/extracted/new_dataset_hackathon_junctionx_10_oct_2026_v2/`; only the reference builder and the model's sample photos need it.
 

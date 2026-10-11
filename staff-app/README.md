@@ -1,6 +1,9 @@
 # Shelf Round · the staff app (JunctionX Lisbon 2026 Hackathon, Sensei)
 
 Staff restock-round app for a phone, plus a store-manager dashboard for a computer.
+
+![Five phone screens: home, live shelves, the trolley pick list, the walk to the next aisle, a stop with its jobs](../docs/img/phone.jpg)
+
 Ceiling cameras tell us, per shelf area, if the right product is there and how full it is
 (Empty / Half / Full). The app turns that into a restock round.
 
