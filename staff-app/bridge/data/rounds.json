@@ -50,7 +50,7 @@
    {
     "key": "6385_3",
     "name": "Organic red apple 500g",
-    "emoji": "🍎",
+    "emoji": "\ud83c\udf4e",
     "type": "empty",
     "bay": "1C",
     "aisle": "1",
@@ -59,7 +59,7 @@
    {
     "key": "6385_8",
     "name": "Fuji Carioca apple",
-    "emoji": "🍎",
+    "emoji": "\ud83c\udf4e",
     "type": "empty",
     "bay": "1C",
     "aisle": "1",
@@ -68,7 +68,7 @@
    {
     "key": "6385_4",
     "name": "Fuji Carioca apple",
-    "emoji": "🍎",
+    "emoji": "\ud83c\udf4e",
     "type": "half",
     "bay": "1C",
     "aisle": "1",
@@ -77,7 +77,7 @@
    {
     "key": "6373_2",
     "name": "Gala apple 60/70",
-    "emoji": "🍎",
+    "emoji": "\ud83c\udf4e",
     "type": "wrong",
     "bay": "2A",
     "aisle": "2",
@@ -86,7 +86,7 @@
    {
     "key": "6373_5",
     "name": "Golden apple 65/70",
-    "emoji": "🍏",
+    "emoji": "\ud83c\udf4f",
     "type": "half",
     "bay": "2A",
     "aisle": "2",
@@ -95,7 +95,7 @@
    {
     "key": "6594_7",
     "name": "Dried garlic 250g",
-    "emoji": "🧄",
+    "emoji": "\ud83e\uddc4",
     "type": "half",
     "bay": "3A",
     "aisle": "3",
@@ -104,7 +104,7 @@
    {
     "key": "6594_8",
     "name": "Dried garlic",
-    "emoji": "🧄",
+    "emoji": "\ud83e\uddc4",
     "type": "half",
     "bay": "3A",
     "aisle": "3",
@@ -113,7 +113,7 @@
    {
     "key": "6594_11",
     "name": "Red onions 1kg",
-    "emoji": "🧅",
+    "emoji": "\ud83e\uddc5",
     "type": "half",
     "bay": "3A",
     "aisle": "3",
@@ -122,7 +122,7 @@
    {
     "key": "6594_13",
     "name": "Sweet onions 1kg",
-    "emoji": "🧅",
+    "emoji": "\ud83e\uddc5",
     "type": "half",
     "bay": "3A",
     "aisle": "3",
@@ -131,7 +131,7 @@
    {
     "key": "6371_2",
     "name": "Black watermelon",
-    "emoji": "🍉",
+    "emoji": "\ud83c\udf49",
     "type": "half",
     "bay": "3C",
     "aisle": "3",
@@ -140,7 +140,7 @@
    {
     "key": "6371_3",
     "name": "Green melon",
-    "emoji": "🍈",
+    "emoji": "\ud83c\udf48",
     "type": "half",
     "bay": "3C",
     "aisle": "3",
@@ -149,7 +149,7 @@
    {
     "key": "6371_7",
     "name": "Cantaloupe melon",
-    "emoji": "🍈",
+    "emoji": "\ud83c\udf48",
     "type": "half",
     "bay": "3C",
     "aisle": "3",
@@ -158,7 +158,7 @@
    {
     "key": "6371_9",
     "name": "Mini watermelon",
-    "emoji": "🍉",
+    "emoji": "\ud83c\udf49",
     "type": "half",
     "bay": "3C",
     "aisle": "3",
@@ -167,7 +167,7 @@
    {
     "key": "6781_5",
     "name": "White potatoes 3kg",
-    "emoji": "🥔",
+    "emoji": "\ud83e\udd54",
     "type": "half",
     "bay": "4B",
     "aisle": "4",
@@ -176,7 +176,7 @@
    {
     "key": "6376_8",
     "name": "Algarve oranges 3kg",
-    "emoji": "🍊",
+    "emoji": "\ud83c\udf4a",
     "type": "wrong",
     "bay": "4C",
     "aisle": "4",
@@ -185,7 +185,7 @@
    {
     "key": "6376_3",
     "name": "Gold kiwi 500g",
-    "emoji": "🥝",
+    "emoji": "\ud83e\udd5d",
     "type": "half",
     "bay": "4C",
     "aisle": "4",
@@ -194,7 +194,7 @@
    {
     "key": "6376_4",
     "name": "Zespri kiwi 500g",
-    "emoji": "🥝",
+    "emoji": "\ud83e\udd5d",
     "type": "half",
     "bay": "4C",
     "aisle": "4",
@@ -203,7 +203,7 @@
    {
     "key": "6376_5",
     "name": "Organic kiwi 400g",
-    "emoji": "🥝",
+    "emoji": "\ud83e\udd5d",
     "type": "half",
     "bay": "4C",
     "aisle": "4",
@@ -212,7 +212,7 @@
    {
     "key": "6376_7",
     "name": "Algarve oranges 3kg",
-    "emoji": "🍊",
+    "emoji": "\ud83c\udf4a",
     "type": "half",
     "bay": "4C",
     "aisle": "4",
@@ -232,7 +232,7 @@
    {
     "key": "6373_5",
     "name": "Golden apple 65/70",
-    "emoji": "🍏",
+    "emoji": "\ud83c\udf4f",
     "type": "half",
     "bay": "2A",
     "aisle": "2",
@@ -241,7 +241,7 @@
    {
     "key": "6373_9",
     "name": "Cosmic Crisp apple",
-    "emoji": "🍎",
+    "emoji": "\ud83c\udf4e",
     "type": "half",
     "bay": "2A",
     "aisle": "2",
@@ -250,7 +250,7 @@
    {
     "key": "6491_4",
     "name": "Peach",
-    "emoji": "🍑",
+    "emoji": "\ud83c\udf51",
     "type": "half",
     "bay": "2B",
     "aisle": "2",
@@ -259,7 +259,7 @@
    {
     "key": "6468_1",
     "name": "Pineapple",
-    "emoji": "🍍",
+    "emoji": "\ud83c\udf4d",
     "type": "half",
     "bay": "2C",
     "aisle": "2",
@@ -268,7 +268,7 @@
    {
     "key": "6468_7",
     "name": "Passion fruit",
-    "emoji": "🍊",
+    "emoji": "\ud83c\udf4a",
     "type": "half",
     "bay": "2C",
     "aisle": "2",
@@ -277,7 +277,7 @@
    {
     "key": "6443_2",
     "name": "Cluster tomatoes",
-    "emoji": "🍅",
+    "emoji": "\ud83c\udf45",
     "type": "half",
     "bay": "3B",
     "aisle": "3",
@@ -286,7 +286,7 @@
    {
     "key": "6443_4",
     "name": "Organic cherry tomatoes 250g",
-    "emoji": "🍅",
+    "emoji": "\ud83c\udf45",
     "type": "half",
     "bay": "3B",
     "aisle": "3",
@@ -295,7 +295,7 @@
    {
     "key": "6371_5",
     "name": "Green melon",
-    "emoji": "🍈",
+    "emoji": "\ud83c\udf48",
     "type": "half",
     "bay": "3C",
     "aisle": "3",
@@ -304,7 +304,7 @@
    {
     "key": "6591_10",
     "name": "Potatoes for boiling 3kg",
-    "emoji": "🥔",
+    "emoji": "\ud83e\udd54",
     "type": "empty",
     "bay": "4A",
     "aisle": "4",
@@ -313,7 +313,7 @@
    {
     "key": "6591_4",
     "name": "Red potatoes 3kg",
-    "emoji": "🥔",
+    "emoji": "\ud83e\udd54",
     "type": "empty",
     "bay": "4A",
     "aisle": "4",
@@ -322,7 +322,7 @@
    {
     "key": "6781_4",
     "name": "White potatoes 3kg",
-    "emoji": "🥔",
+    "emoji": "\ud83e\udd54",
     "type": "half",
     "bay": "4B",
     "aisle": "4",
@@ -331,7 +331,7 @@
    {
     "key": "6376_4",
     "name": "Zespri kiwi 500g",
-    "emoji": "🥝",
+    "emoji": "\ud83e\udd5d",
     "type": "half",
     "bay": "4C",
     "aisle": "4",
@@ -401,7 +401,7 @@
    {
     "key": "6468_6",
     "name": "Guava",
-    "emoji": "🍐",
+    "emoji": "\ud83c\udf50",
     "type": "empty",
     "bay": "2C",
     "aisle": "2",
@@ -410,7 +410,7 @@
    {
     "key": "6468_3",
     "name": "Pineapple",
-    "emoji": "🍍",
+    "emoji": "\ud83c\udf4d",
     "type": "half",
     "bay": "2C",
     "aisle": "2",
@@ -419,7 +419,7 @@
    {
     "key": "6594_13",
     "name": "Sweet onions 1kg",
-    "emoji": "🧅",
+    "emoji": "\ud83e\uddc5",
     "type": "half",
     "bay": "3A",
     "aisle": "3",
@@ -428,7 +428,7 @@
    {
     "key": "6371_9",
     "name": "Mini watermelon",
-    "emoji": "🍉",
+    "emoji": "\ud83c\udf49",
     "type": "wrong",
     "bay": "3C",
     "aisle": "3",
@@ -437,7 +437,7 @@
    {
     "key": "6383_4",
     "name": "Portuguese cabbage",
-    "emoji": "🥬",
+    "emoji": "\ud83e\udd6c",
     "type": "wrong",
     "bay": "5A",
     "aisle": "5",
@@ -483,7 +483,7 @@
    {
     "key": "6215_8",
     "name": "Banana",
-    "emoji": "🍌",
+    "emoji": "\ud83c\udf4c",
     "type": "empty",
     "bay": "1B",
     "aisle": "1",
@@ -492,7 +492,7 @@
    {
     "key": "6215_3",
     "name": "Banana",
-    "emoji": "🍌",
+    "emoji": "\ud83c\udf4c",
     "type": "half",
     "bay": "1B",
     "aisle": "1",
@@ -501,7 +501,7 @@
    {
     "key": "6373_11",
     "name": "Packham pear",
-    "emoji": "🍐",
+    "emoji": "\ud83c\udf50",
     "type": "empty",
     "bay": "2A",
     "aisle": "2",
@@ -510,7 +510,7 @@
    {
     "key": "6468_11",
     "name": "Plantain",
-    "emoji": "🍌",
+    "emoji": "\ud83c\udf4c",
     "type": "half",
     "bay": "2C",
     "aisle": "2",
@@ -519,7 +519,7 @@
    {
     "key": "6468_4",
     "name": "Red pitaya 300g",
-    "emoji": "🍈",
+    "emoji": "\ud83c\udf48",
     "type": "empty",
     "bay": "2C",
     "aisle": "2",
@@ -528,7 +528,7 @@
    {
     "key": "6468_1",
     "name": "Pineapple",
-    "emoji": "🍍",
+    "emoji": "\ud83c\udf4d",
     "type": "half",
     "bay": "2C",
     "aisle": "2",
@@ -537,7 +537,7 @@
    {
     "key": "6468_10",
     "name": "Papaya",
-    "emoji": "🥭",
+    "emoji": "\ud83e\udd6d",
     "type": "empty",
     "bay": "2C",
     "aisle": "2",
@@ -546,7 +546,7 @@
    {
     "key": "6443_11",
     "name": "Chucha tomatoes",
-    "emoji": "🍅",
+    "emoji": "\ud83c\udf45",
     "type": "half",
     "bay": "3B",
     "aisle": "3",
@@ -555,7 +555,7 @@
    {
     "key": "6591_7",
     "name": "Ginger",
-    "emoji": "🫚",
+    "emoji": "\ud83e\udeda",
     "type": "empty",
     "bay": "4A",
     "aisle": "4",
@@ -564,7 +564,7 @@
    {
     "key": "6781_10",
     "name": "Red potatoes",
-    "emoji": "🥔",
+    "emoji": "\ud83e\udd54",
     "type": "half",
     "bay": "4B",
     "aisle": "4",
@@ -573,7 +573,7 @@
    {
     "key": "6376_13",
     "name": "Algarve oranges 1.5kg",
-    "emoji": "🍊",
+    "emoji": "\ud83c\udf4a",
     "type": "half",
     "bay": "4C",
     "aisle": "4",
@@ -582,7 +582,7 @@
    {
     "key": "6376_4",
     "name": "Zespri kiwi 500g",
-    "emoji": "🥝",
+    "emoji": "\ud83e\udd5d",
     "type": "half",
     "bay": "4C",
     "aisle": "4",
@@ -646,7 +646,7 @@
    {
     "key": "6462_4",
     "name": "Seedless white grapes",
-    "emoji": "🍇",
+    "emoji": "\ud83c\udf47",
     "type": "half",
     "bay": "1A",
     "aisle": "1",
@@ -655,7 +655,7 @@
    {
     "key": "6371_5",
     "name": "Green melon",
-    "emoji": "🍈",
+    "emoji": "\ud83c\udf48",
     "type": "half",
     "bay": "3C",
     "aisle": "3",
@@ -664,7 +664,7 @@
    {
     "key": "6376_16",
     "name": "Algarve oranges 1.5kg",
-    "emoji": "🍊",
+    "emoji": "\ud83c\udf4a",
     "type": "wrong",
     "bay": "4C",
     "aisle": "4",
@@ -673,7 +673,7 @@
    {
     "key": "6383_2",
     "name": "Hass avocado",
-    "emoji": "🥑",
+    "emoji": "\ud83e\udd51",
     "type": "empty",
     "bay": "5A",
     "aisle": "5",
@@ -682,7 +682,7 @@
    {
     "key": "6383_4",
     "name": "Portuguese cabbage",
-    "emoji": "🥬",
+    "emoji": "\ud83e\udd6c",
     "type": "half",
     "bay": "5A",
     "aisle": "5",
@@ -728,7 +728,7 @@
    {
     "key": "6462_6",
     "name": "Seedless white grapes 500g",
-    "emoji": "🍇",
+    "emoji": "\ud83c\udf47",
     "type": "half",
     "bay": "1A",
     "aisle": "1",
@@ -737,7 +737,7 @@
    {
     "key": "6591_4",
     "name": "Red potatoes 3kg",
-    "emoji": "🥔",
+    "emoji": "\ud83e\udd54",
     "type": "half",
     "bay": "4A",
     "aisle": "4",
@@ -746,7 +746,7 @@
    {
     "key": "6376_15",
     "name": "Algarve orange",
-    "emoji": "🍊",
+    "emoji": "\ud83c\udf4a",
     "type": "half",
     "bay": "4C",
     "aisle": "4",
@@ -755,7 +755,7 @@
    {
     "key": "6376_14",
     "name": "Clementine",
-    "emoji": "🍊",
+    "emoji": "\ud83c\udf4a",
     "type": "empty",
     "bay": "4C",
     "aisle": "4",
@@ -764,7 +764,7 @@
    {
     "key": "6376_10",
     "name": "Zespri kiwi",
-    "emoji": "🥝",
+    "emoji": "\ud83e\udd5d",
     "type": "half",
     "bay": "4C",
     "aisle": "4",
@@ -773,7 +773,7 @@
    {
     "key": "6386_5",
     "name": "Courgette",
-    "emoji": "🥒",
+    "emoji": "\ud83e\udd52",
     "type": "half",
     "bay": "5B",
     "aisle": "5",
@@ -819,7 +819,7 @@
    {
     "key": "6373_3",
     "name": "Pink Lady apple",
-    "emoji": "🍎",
+    "emoji": "\ud83c\udf4e",
     "type": "half",
     "bay": "2A",
     "aisle": "2",
@@ -828,7 +828,7 @@
    {
     "key": "6371_5",
     "name": "Green melon",
-    "emoji": "🍈",
+    "emoji": "\ud83c\udf48",
     "type": "half",
     "bay": "3C",
     "aisle": "3",
@@ -837,7 +837,7 @@
    {
     "key": "6371_7",
     "name": "Cantaloupe melon",
-    "emoji": "🍈",
+    "emoji": "\ud83c\udf48",
     "type": "empty",
     "bay": "3C",
     "aisle": "3",
@@ -846,7 +846,7 @@
    {
     "key": "6376_12",
     "name": "Clementine",
-    "emoji": "🍊",
+    "emoji": "\ud83c\udf4a",
     "type": "half",
     "bay": "4C",
     "aisle": "4",
@@ -855,7 +855,7 @@
    {
     "key": "6383_3",
     "name": "Green pepper",
-    "emoji": "🫑",
+    "emoji": "\ud83e\uded1",
     "type": "half",
     "bay": "5A",
     "aisle": "5",
@@ -864,7 +864,7 @@
    {
     "key": "6386_4",
     "name": "Cauliflower",
-    "emoji": "🥦",
+    "emoji": "\ud83e\udd66",
     "type": "empty",
     "bay": "5B",
     "aisle": "5",
@@ -873,7 +873,7 @@
    {
     "key": "6386_6",
     "name": "White cabbage",
-    "emoji": "🥬",
+    "emoji": "\ud83e\udd6c",
     "type": "half",
     "bay": "5B",
     "aisle": "5",
@@ -925,7 +925,7 @@
    {
     "key": "6215_3",
     "name": "Banana",
-    "emoji": "🍌",
+    "emoji": "\ud83c\udf4c",
     "type": "half",
     "bay": "1B",
     "aisle": "1",
@@ -934,7 +934,7 @@
    {
     "key": "6468_16",
     "name": "Palmer mango",
-    "emoji": "🥭",
+    "emoji": "\ud83e\udd6d",
     "type": "half",
     "bay": "2C",
     "aisle": "2",
@@ -943,7 +943,7 @@
    {
     "key": "6371_9",
     "name": "Mini watermelon",
-    "emoji": "🍉",
+    "emoji": "\ud83c\udf49",
     "type": "half",
     "bay": "3C",
     "aisle": "3",
@@ -952,7 +952,7 @@
    {
     "key": "6781_7",
     "name": "White potatoes 3kg",
-    "emoji": "🥔",
+    "emoji": "\ud83e\udd54",
     "type": "empty",
     "bay": "4B",
     "aisle": "4",
@@ -961,7 +961,7 @@
    {
     "key": "6376_5",
     "name": "Organic kiwi 400g",
-    "emoji": "🥝",
+    "emoji": "\ud83e\udd5d",
     "type": "half",
     "bay": "4C",
     "aisle": "4",
@@ -970,7 +970,7 @@
    {
     "key": "6383_3",
     "name": "Green pepper",
-    "emoji": "🫑",
+    "emoji": "\ud83e\uded1",
     "type": "half",
     "bay": "5A",
     "aisle": "5",
@@ -1028,7 +1028,7 @@
    {
     "key": "6468_15",
     "name": "Palmer mango",
-    "emoji": "🥭",
+    "emoji": "\ud83e\udd6d",
     "type": "empty",
     "bay": "2C",
     "aisle": "2",
@@ -1037,7 +1037,7 @@
    {
     "key": "6468_11",
     "name": "Plantain",
-    "emoji": "🍌",
+    "emoji": "\ud83c\udf4c",
     "type": "empty",
     "bay": "2C",
     "aisle": "2",
@@ -1046,7 +1046,7 @@
    {
     "key": "6594_4",
     "name": "Spring onion",
-    "emoji": "🧅",
+    "emoji": "\ud83e\uddc5",
     "type": "half",
     "bay": "3A",
     "aisle": "3",
@@ -1055,7 +1055,7 @@
    {
     "key": "6591_2",
     "name": "Roasting potatoes 2kg",
-    "emoji": "🥔",
+    "emoji": "\ud83e\udd54",
     "type": "half",
     "bay": "4A",
     "aisle": "4",
@@ -1064,7 +1064,7 @@
    {
     "key": "6781_7",
     "name": "White potatoes 3kg",
-    "emoji": "🥔",
+    "emoji": "\ud83e\udd54",
     "type": "half",
     "bay": "4B",
     "aisle": "4",
@@ -1073,7 +1073,7 @@
    {
     "key": "6386_6",
     "name": "White cabbage",
-    "emoji": "🥬",
+    "emoji": "\ud83e\udd6c",
     "type": "empty",
     "bay": "5B",
     "aisle": "5",
@@ -1125,7 +1125,7 @@
    {
     "key": "6462_1",
     "name": "Strawberries 500g",
-    "emoji": "🍓",
+    "emoji": "\ud83c\udf53",
     "type": "half",
     "bay": "1A",
     "aisle": "1",
@@ -1134,7 +1134,7 @@
    {
     "key": "6215_5",
     "name": "Banana",
-    "emoji": "🍌",
+    "emoji": "\ud83c\udf4c",
     "type": "half",
     "bay": "1B",
     "aisle": "1",
@@ -1143,7 +1143,7 @@
    {
     "key": "6373_8",
     "name": "Cosmic Crisp apple",
-    "emoji": "🍎",
+    "emoji": "\ud83c\udf4e",
     "type": "half",
     "bay": "2A",
     "aisle": "2",
@@ -1152,7 +1152,7 @@
    {
     "key": "6468_13",
     "name": "Palmer mango",
-    "emoji": "🥭",
+    "emoji": "\ud83e\udd6d",
     "type": "half",
     "bay": "2C",
     "aisle": "2",
@@ -1161,7 +1161,7 @@
    {
     "key": "6781_8",
     "name": "White potatoes 3kg",
-    "emoji": "🥔",
+    "emoji": "\ud83e\udd54",
     "type": "half",
     "bay": "4B",
     "aisle": "4",
@@ -1170,7 +1170,7 @@
    {
     "key": "6781_6",
     "name": "White potatoes 3kg",
-    "emoji": "🥔",
+    "emoji": "\ud83e\udd54",
     "type": "wrong",
     "bay": "4B",
     "aisle": "4",
@@ -1179,7 +1179,7 @@
    {
     "key": "6383_4",
     "name": "Portuguese cabbage",
-    "emoji": "🥬",
+    "emoji": "\ud83e\udd6c",
     "type": "half",
     "bay": "5A",
     "aisle": "5",
@@ -1237,7 +1237,7 @@
    {
     "key": "6215_4",
     "name": "Banana",
-    "emoji": "🍌",
+    "emoji": "\ud83c\udf4c",
     "type": "empty",
     "bay": "1B",
     "aisle": "1",
@@ -1246,7 +1246,7 @@
    {
     "key": "6468_3",
     "name": "Pineapple",
-    "emoji": "🍍",
+    "emoji": "\ud83c\udf4d",
     "type": "empty",
     "bay": "2C",
     "aisle": "2",
@@ -1255,7 +1255,7 @@
    {
     "key": "6591_7",
     "name": "Ginger",
-    "emoji": "🫚",
+    "emoji": "\ud83e\udeda",
     "type": "empty",
     "bay": "4A",
     "aisle": "4",
@@ -1264,7 +1264,7 @@
    {
     "key": "6781_2",
     "name": "Onions 1.5kg",
-    "emoji": "🧅",
+    "emoji": "\ud83e\uddc5",
     "type": "half",
     "bay": "4B",
     "aisle": "4",
@@ -1273,7 +1273,7 @@
    {
     "key": "6781_9",
     "name": "White potatoes 3kg",
-    "emoji": "🥔",
+    "emoji": "\ud83e\udd54",
     "type": "half",
     "bay": "4B",
     "aisle": "4",
@@ -1282,7 +1282,7 @@
    {
     "key": "6376_14",
     "name": "Clementine",
-    "emoji": "🍊",
+    "emoji": "\ud83c\udf4a",
     "type": "half",
     "bay": "4C",
     "aisle": "4",
@@ -1291,7 +1291,7 @@
    {
     "key": "6383_9",
     "name": "Cucumber",
-    "emoji": "🥒",
+    "emoji": "\ud83e\udd52",
     "type": "half",
     "bay": "5A",
     "aisle": "5",
@@ -1349,7 +1349,7 @@
    {
     "key": "6462_1",
     "name": "Strawberries 500g",
-    "emoji": "🍓",
+    "emoji": "\ud83c\udf53",
     "type": "empty",
     "bay": "1A",
     "aisle": "1",
@@ -1358,7 +1358,7 @@
    {
     "key": "6215_9",
     "name": "Algarve orange",
-    "emoji": "🍊",
+    "emoji": "\ud83c\udf4a",
     "type": "half",
     "bay": "1B",
     "aisle": "1",
@@ -1367,7 +1367,7 @@
    {
     "key": "6385_2",
     "name": "Fuji apple",
-    "emoji": "🍎",
+    "emoji": "\ud83c\udf4e",
     "type": "half",
     "bay": "1C",
     "aisle": "1",
@@ -1376,7 +1376,7 @@
    {
     "key": "6491_7",
     "name": "Nectarine",
-    "emoji": "🍑",
+    "emoji": "\ud83c\udf51",
     "type": "half",
     "bay": "2B",
     "aisle": "2",
@@ -1385,7 +1385,7 @@
    {
     "key": "6591_3",
     "name": "Zero-residue potatoes 4kg",
-    "emoji": "🥔",
+    "emoji": "\ud83e\udd54",
     "type": "wrong",
     "bay": "4A",
     "aisle": "4",
@@ -1394,7 +1394,7 @@
    {
     "key": "6376_13",
     "name": "Algarve oranges 1.5kg",
-    "emoji": "🍊",
+    "emoji": "\ud83c\udf4a",
     "type": "empty",
     "bay": "4C",
     "aisle": "4",
@@ -1403,7 +1403,7 @@
    {
     "key": "6383_3",
     "name": "Green pepper",
-    "emoji": "🫑",
+    "emoji": "\ud83e\uded1",
     "type": "empty",
     "bay": "5A",
     "aisle": "5",
@@ -1467,7 +1467,7 @@
    {
     "key": "6462_7",
     "name": "Red Globe grapes",
-    "emoji": "🍇",
+    "emoji": "\ud83c\udf47",
     "type": "empty",
     "bay": "1A",
     "aisle": "1",
@@ -1476,7 +1476,7 @@
    {
     "key": "6215_7",
     "name": "Algarve orange",
-    "emoji": "🍊",
+    "emoji": "\ud83c\udf4a",
     "type": "half",
     "bay": "1B",
     "aisle": "1",
@@ -1485,7 +1485,7 @@
    {
     "key": "6373_7",
     "name": "Cosmic Crisp apple",
-    "emoji": "🍎",
+    "emoji": "\ud83c\udf4e",
     "type": "empty",
     "bay": "2A",
     "aisle": "2",
@@ -1494,7 +1494,7 @@
    {
     "key": "6373_11",
     "name": "Packham pear",
-    "emoji": "🍐",
+    "emoji": "\ud83c\udf50",
     "type": "half",
     "bay": "2A",
     "aisle": "2",
@@ -1503,7 +1503,7 @@
    {
     "key": "6373_6",
     "name": "Golden apple (Portugal)",
-    "emoji": "🍏",
+    "emoji": "\ud83c\udf4f",
     "type": "half",
     "bay": "2A",
     "aisle": "2",
@@ -1512,7 +1512,7 @@
    {
     "key": "6443_10",
     "name": "Sweet mini tomatoes 200g",
-    "emoji": "🍅",
+    "emoji": "\ud83c\udf45",
     "type": "half",
     "bay": "3B",
     "aisle": "3",
@@ -1521,7 +1521,7 @@
    {
     "key": "6371_2",
     "name": "Black watermelon",
-    "emoji": "🍉",
+    "emoji": "\ud83c\udf49",
     "type": "half",
     "bay": "3C",
     "aisle": "3",
@@ -1530,7 +1530,7 @@
    {
     "key": "6371_3",
     "name": "Green melon",
-    "emoji": "🍈",
+    "emoji": "\ud83c\udf48",
     "type": "half",
     "bay": "3C",
     "aisle": "3",
@@ -1539,7 +1539,7 @@
    {
     "key": "6371_4",
     "name": "Black watermelon",
-    "emoji": "🍉",
+    "emoji": "\ud83c\udf49",
     "type": "half",
     "bay": "3C",
     "aisle": "3",
@@ -1591,7 +1591,7 @@
    {
     "key": "6215_3",
     "name": "Banana",
-    "emoji": "🍌",
+    "emoji": "\ud83c\udf4c",
     "type": "wrong",
     "bay": "1B",
     "aisle": "1",
@@ -1600,7 +1600,7 @@
    {
     "key": "6373_12",
     "name": "Conference pear",
-    "emoji": "🍐",
+    "emoji": "\ud83c\udf50",
     "type": "empty",
     "bay": "2A",
     "aisle": "2",
@@ -1609,7 +1609,7 @@
    {
     "key": "6376_12",
     "name": "Clementine",
-    "emoji": "🍊",
+    "emoji": "\ud83c\udf4a",
     "type": "half",
     "bay": "4C",
     "aisle": "4",
@@ -1618,7 +1618,7 @@
    {
     "key": "6383_6",
     "name": "Aubergine",
-    "emoji": "🍆",
+    "emoji": "\ud83c\udf46",
     "type": "empty",
     "bay": "5A",
     "aisle": "5",
@@ -1627,7 +1627,7 @@
    {
     "key": "6383_9",
     "name": "Cucumber",
-    "emoji": "🥒",
+    "emoji": "\ud83e\udd52",
     "type": "half",
     "bay": "5A",
     "aisle": "5",
@@ -1673,7 +1673,7 @@
    {
     "key": "6385_8",
     "name": "Fuji Carioca apple",
-    "emoji": "🍎",
+    "emoji": "\ud83c\udf4e",
     "type": "empty",
     "bay": "1C",
     "aisle": "1",
@@ -1682,7 +1682,7 @@
    {
     "key": "6468_9",
     "name": "Papaya (whole)",
-    "emoji": "🍈",
+    "emoji": "\ud83c\udf48",
     "type": "half",
     "bay": "2C",
     "aisle": "2",
@@ -1691,7 +1691,7 @@
    {
     "key": "6443_13",
     "name": "Round tomatoes",
-    "emoji": "🍅",
+    "emoji": "\ud83c\udf45",
     "type": "half",
     "bay": "3B",
     "aisle": "3",
@@ -1700,7 +1700,7 @@
    {
     "key": "6371_2",
     "name": "Black watermelon",
-    "emoji": "🍉",
+    "emoji": "\ud83c\udf49",
     "type": "half",
     "bay": "3C",
     "aisle": "3",
@@ -1709,7 +1709,7 @@
    {
     "key": "6591_6",
     "name": "Sweet potato",
-    "emoji": "🍠",
+    "emoji": "\ud83c\udf60",
     "type": "empty",
     "bay": "4A",
     "aisle": "4",
@@ -1718,7 +1718,7 @@
    {
     "key": "6591_8",
     "name": "Sweet potato",
-    "emoji": "🍠",
+    "emoji": "\ud83c\udf60",
     "type": "wrong",
     "bay": "4A",
     "aisle": "4",
@@ -1727,7 +1727,7 @@
    {
     "key": "6781_7",
     "name": "White potatoes 3kg",
-    "emoji": "🥔",
+    "emoji": "\ud83e\udd54",
     "type": "half",
     "bay": "4B",
     "aisle": "4",
@@ -1736,7 +1736,7 @@
    {
     "key": "6376_2",
     "name": "Galia melon",
-    "emoji": "🍈",
+    "emoji": "\ud83c\udf48",
     "type": "empty",
     "bay": "4C",
     "aisle": "4",
@@ -1745,7 +1745,7 @@
    {
     "key": "6386_1",
     "name": "Broccoli",
-    "emoji": "🥦",
+    "emoji": "\ud83e\udd66",
     "type": "half",
     "bay": "5B",
     "aisle": "5",
@@ -1815,7 +1815,7 @@
    {
     "key": "6462_6",
     "name": "Seedless white grapes 500g",
-    "emoji": "🍇",
+    "emoji": "\ud83c\udf47",
     "type": "half",
     "bay": "1A",
     "aisle": "1",
@@ -1824,7 +1824,7 @@
    {
     "key": "6385_8",
     "name": "Fuji Carioca apple",
-    "emoji": "🍎",
+    "emoji": "\ud83c\udf4e",
     "type": "half",
     "bay": "1C",
     "aisle": "1",
@@ -1833,7 +1833,7 @@
    {
     "key": "6373_10",
     "name": "Packham pear",
-    "emoji": "🍐",
+    "emoji": "\ud83c\udf50",
     "type": "half",
     "bay": "2A",
     "aisle": "2",
@@ -1842,7 +1842,7 @@
    {
     "key": "6491_9",
     "name": "Flat peach",
-    "emoji": "🍑",
+    "emoji": "\ud83c\udf51",
     "type": "half",
     "bay": "2B",
     "aisle": "2",
@@ -1851,7 +1851,7 @@
    {
     "key": "6491_6",
     "name": "Peach",
-    "emoji": "🍑",
+    "emoji": "\ud83c\udf51",
     "type": "half",
     "bay": "2B",
     "aisle": "2",
@@ -1860,7 +1860,7 @@
    {
     "key": "6468_15",
     "name": "Palmer mango",
-    "emoji": "🥭",
+    "emoji": "\ud83e\udd6d",
     "type": "wrong",
     "bay": "2C",
     "aisle": "2",
@@ -1869,7 +1869,7 @@
    {
     "key": "6594_4",
     "name": "Spring onion",
-    "emoji": "🧅",
+    "emoji": "\ud83e\uddc5",
     "type": "half",
     "bay": "3A",
     "aisle": "3",
@@ -1878,7 +1878,7 @@
    {
     "key": "6781_4",
     "name": "White potatoes 3kg",
-    "emoji": "🥔",
+    "emoji": "\ud83e\udd54",
     "type": "half",
     "bay": "4B",
     "aisle": "4",
@@ -1887,7 +1887,7 @@
    {
     "key": "6376_10",
     "name": "Zespri kiwi",
-    "emoji": "🥝",
+    "emoji": "\ud83e\udd5d",
     "type": "half",
     "bay": "4C",
     "aisle": "4",
@@ -1896,7 +1896,7 @@
    {
     "key": "6376_3",
     "name": "Gold kiwi 500g",
-    "emoji": "🥝",
+    "emoji": "\ud83e\udd5d",
     "type": "half",
     "bay": "4C",
     "aisle": "4",
@@ -1951,119 +1951,6 @@
     "aisle": "4",
     "seconds": 438,
     "tasks": 2
-   }
-  ]
- },
- {
-  "id": "r-1791714094033",
-  "demo": false,
-  "employee": "Worker 1",
-  "trip": 1,
-  "loadSeconds": 19,
-  "start": 1791714065,
-  "end": 1791714094,
-  "seconds": 29,
-  "stops": [
-   {
-    "bay": "1B",
-    "aisle": "1",
-    "seconds": 12,
-    "tasks": 2
-   },
-   {
-    "bay": "1C",
-    "aisle": "1",
-    "seconds": 11,
-    "tasks": 3
-   },
-   {
-    "bay": "2A",
-    "aisle": "2",
-    "seconds": 6,
-    "tasks": 4
-   }
-  ],
-  "tasks": [
-   {
-    "key": "6215_2",
-    "name": "Banana",
-    "emoji": "🍌",
-    "type": "empty",
-    "bay": "1B",
-    "aisle": "1",
-    "productId": "11908"
-   },
-   {
-    "key": "6215_7",
-    "name": "Algarve orange",
-    "emoji": "🍊",
-    "type": "wrong",
-    "bay": "1B",
-    "aisle": "1",
-    "productId": "11906"
-   },
-   {
-    "key": "6385_4",
-    "name": "Fuji Carioca apple",
-    "emoji": "🍎",
-    "type": "empty",
-    "bay": "1C",
-    "aisle": "1",
-    "productId": "20818"
-   },
-   {
-    "key": "6385_1",
-    "name": "Fuji apple",
-    "emoji": "🍎",
-    "type": "half",
-    "bay": "1C",
-    "aisle": "1",
-    "productId": "16633"
-   },
-   {
-    "key": "6385_3",
-    "name": "Organic red apple 500g",
-    "emoji": "🍎",
-    "type": "half",
-    "bay": "1C",
-    "aisle": "1",
-    "productId": "30491"
-   },
-   {
-    "key": "6373_2",
-    "name": "Gala apple 60/70",
-    "emoji": "🍎",
-    "type": "empty",
-    "bay": "2A",
-    "aisle": "2",
-    "productId": "32748"
-   },
-   {
-    "key": "6373_5",
-    "name": "Golden apple 65/70",
-    "emoji": "🍏",
-    "type": "empty",
-    "bay": "2A",
-    "aisle": "2",
-    "productId": "32749"
-   },
-   {
-    "key": "6373_1",
-    "name": "Gala apple",
-    "emoji": "🍎",
-    "type": "half",
-    "bay": "2A",
-    "aisle": "2",
-    "productId": "13702"
-   },
-   {
-    "key": "6373_9",
-    "name": "Cosmic Crisp apple",
-    "emoji": "🍎",
-    "type": "half",
-    "bay": "2A",
-    "aisle": "2",
-    "productId": "32262"
    }
   ]
  }
