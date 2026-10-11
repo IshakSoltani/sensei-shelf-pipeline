@@ -8,7 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600&display=swap" rel="stylesheet" media="print" onload="if(document.documentElement.classList.contains('embed'))this.media='all'">
 <style>
 /* same world as the viewer: dark leaf ground, the three stock colours, cyan for a wrong product;
-   plus straw for "the rule answered" and sage for "Opus answered" in the who-decided view */
+   plus straw for "the code rule answered" */
 :root{--bg:#10170f;--panel:#182116;--panel2:#1f2a1c;--ink:#edf1e6;--muted:#a3b19c;--line:#2b3828;
 --empty:#e0584a;--half:#e4a93e;--full:#6cbb76;--id:#5cc0cf;--rule:#e9dca6;--model:#8fa88b;color-scheme:dark}
 *{box-sizing:border-box}[hidden]{display:none!important}html{-webkit-text-size-adjust:100%}
@@ -91,11 +91,7 @@ li .more .chg{color:var(--half)}
 polygon{fill-opacity:.18;stroke-width:4}
 polygon.empty{fill:var(--empty);stroke:var(--empty)}polygon.half{fill:var(--half);stroke:var(--half)}polygon.full{fill:var(--full);stroke:var(--full)}
 polygon.wrong{stroke:var(--id);stroke-dasharray:12 7}
-body.who polygon{stroke-dasharray:none}
-body.who polygon.by-gate{fill:var(--rule);stroke:var(--rule);fill-opacity:.32}
-body.who polygon.by-opus{fill:var(--model);stroke:var(--model)}
-body.who polygon.by-fallback{fill:none;stroke:var(--empty);stroke-dasharray:6 8}
-polygon.lit,body.who polygon.lit{fill-opacity:.55}
+polygon.lit{fill-opacity:.55}
 .tag{font:700 34px system-ui,sans-serif;fill:#fff;paint-order:stroke;stroke:#000;stroke-width:7px}
 ol{list-style:none;margin:0;padding:0;max-height:560px;overflow:auto}
 li{display:grid;grid-template-columns:34px 1fr auto;gap:2px 10px;padding:8px 10px;border-radius:8px;align-items:baseline}
@@ -127,7 +123,7 @@ html.embed .seg{background:var(--panel2)}html.embed .seg button[aria-pressed=tru
 <body>
 <main>
   <h1>Test run and tuning</h1>
-  <p class="lead">Drop the validation folder (and <b>annotations.json</b> if you have it). Each area goes through the code rule first, then Opus. When the photos are in, tune the decision settings on the right: every photo is re-decided at once, and the download uses your settings. <a href="/">Staff view</a></p>
+  <p class="lead">Drop the validation folder (and <b>annotations.json</b> if you have it). Each area goes through the code rule first, then the model. When the photos are in, tune the decision settings on the right: every photo is re-decided at once, and the download uses your settings. <a href="/">Staff view</a></p>
 
   <div class="drop" id="drop">
     <p>Drop the validation folder here, or photos and annotations.json</p>
@@ -136,9 +132,9 @@ html.embed .seg{background:var(--panel2)}html.embed .seg button[aria-pressed=tru
     <input type="file" id="pickdir" webkitdirectory multiple>
     <input type="file" id="pick" multiple accept="image/*,.json,application/json">
     <div class="opts">
-      <label><input type="checkbox" id="fresh" checked><span><b>Fresh run:</b> Opus is asked again, ignoring answers saved earlier. A real test; about $0.01 per area. Untick to reuse saved answers where they exist (fast and free on training-day photos).</span></label>
-      <label><input type="checkbox" id="collect" checked><span><b>Ask Opus about every area,</b> also the ones the code rule answers, so every setting in the tuning panel can be changed afterwards without asking again. The verdicts are the same; about 15 % more cost.</span></label>
-      <div class="row"><span>Opus is asked with prompt</span><select id="version" aria-label="Prompt version"></select></div>
+      <label><input type="checkbox" id="fresh" checked><span><b>Fresh run:</b> the model checks every photo again, ignoring answers saved earlier. A real test; about $0.01 per area. Untick to reuse saved answers where they exist (fast and free on training-day photos).</span></label>
+      <label><input type="checkbox" id="collect" checked><span><b>Check every area with the model,</b> also the ones the code rule answers, so every setting in the tuning panel can be changed afterwards without asking again. The verdicts are the same; about 15 % more cost.</span></label>
+      <div class="row"><span>Model prompt</span><select id="version" aria-label="Prompt version"></select></div>
     </div>
   </div>
   <p class="status" id="status"></p>
@@ -151,14 +147,14 @@ html.embed .seg{background:var(--panel2)}html.embed .seg button[aria-pressed=tru
       <div class="grp"><h3>Code rule: clearly full <label><input type="checkbox" data-k="gate"> on</label></h3>
         <div class="ctl" data-dep="gate"><span>Floor changed from its emptiest picture, at least</span><output data-o="cov_min"></output><input type="range" data-k="cov_min" min="0.3" max="0.9" step="0.05"></div>
         <div class="ctl" data-dep="gate"><span>Colours this close to the usual product, at most</span><output data-o="fp_max"></output><input type="range" data-k="fp_max" min="0.05" max="0.5" step="0.05"></div></div>
-      <div class="grp"><h3>Stock level from Opus's fill estimate</h3>
+      <div class="grp"><h3>Stock level from the model's fill estimate</h3>
         <div class="ctl"><span>Empty below</span><output data-o="fill_empty"></output><input type="range" data-k="fill_empty" min="0" max="60" step="5"></div>
         <div class="ctl"><span>Half below (full from here)</span><output data-o="fill_half"></output><input type="range" data-k="fill_half" min="40" max="95" step="5"></div></div>
       <div class="grp"><h3>Two-customer test <label><input type="checkbox" data-k="two_customers"> on</label></h3>
         <div class="ctl" data-dep="two_customers" style="grid-template-columns:1fr auto"><span>Packs, bags and melons are counted: one left is empty, two or more at least half. "One or two bags" counts as</span>
           <div class="seg" role="group" aria-label="One or two bags counts as"><button type="button" data-k="one_or_two" data-v="1">1</button><button type="button" data-k="one_or_two" data-v="2">2</button></div></div></div>
       <div class="grp"><h3>Wrong product <label><input type="checkbox" data-k="flag"> flag it</label></h3>
-        <div class="ctl" data-dep="flag"><span>Flag when Opus says "not the planned product" and its confidence that it is, is at most</span><output data-o="flag_pmatch_max"></output><input type="range" data-k="flag_pmatch_max" min="0" max="60" step="5"></div>
+        <div class="ctl" data-dep="flag"><span>Flag when the model says "not the planned product" and its confidence that it is, is at most</span><output data-o="flag_pmatch_max"></output><input type="range" data-k="flag_pmatch_max" min="0" max="60" step="5"></div>
         <div class="ctl" data-dep="flag" style="grid-template-columns:auto 1fr;justify-content:start"><input type="checkbox" data-k="same_kind"><span>Another variety of the same fruit is not a wrong product (Gala where Golden is planned)</span></div></div>
       <div class="verdictline" id="tuneline">Change a setting to see its effect.</div>
       <button type="button" class="reset" id="reset">Back to the submitted settings</button>
@@ -166,14 +162,9 @@ html.embed .seg{background:var(--panel2)}html.embed .seg button[aria-pressed=tru
   </div>
 
   <div class="actions" id="actions" hidden>
-    <div class="seg" role="group" aria-label="Colour the areas by">
-      <button type="button" id="v-verdict" aria-pressed="true">Colour by verdict</button>
-      <button type="button" id="v-who" aria-pressed="false">Colour by who decided</button>
-    </div>
     <button type="button" class="dl" id="dl">Download submission.json</button>
   </div>
   <div class="legend" id="leg-verdict" hidden><span style="--sw:var(--empty)">empty</span><span style="--sw:var(--half)">half</span><span style="--sw:var(--full)">full</span><span class="dash" style="--sw:var(--id)">wrong product</span></div>
-  <div class="legend" id="leg-who" hidden><span style="--sw:var(--rule)">answered by the rule</span><span style="--sw:var(--model)">answered by Opus</span><span class="dash" style="--sw:var(--empty)">fallback, nobody judged it</span></div>
 
   <div id="cards"></div>
 </main>
@@ -226,7 +217,7 @@ async function applySettings(keys) {
     const ph = photos[`${x.camera}/${x.file}`], cur = x.submission[x.camera][x.file];
     for (const a of ph.o.areas) {
       const v = cur[a.area_id]; a.stock = v.stock_level; a.compliant = v.planogram_compliant; a.decided_by = x.decided_by[a.area_id];
-      if (a.decided_by === "fallback" && !ph.raw[a.area_id]?.opus) a.note = "no Opus answer collected for this area (tick \"Ask Opus about every area\" before the run)";
+      if (a.decided_by === "fallback" && !ph.raw[a.area_id]?.opus) a.note = "no model answer collected for this area (tick \"Check every area with the model\" before the run)";
     }
     Object.assign((subGates[x.camera] ??= {}), x.submission[x.camera]);
     show(ph.card, ph.o);
@@ -257,17 +248,11 @@ async function dropped(dt) {
   for (const e of entries) await walk(e, "");
   return out;
 }
-$("v-verdict").onclick = () => view(false); $("v-who").onclick = () => view(true);
 $("dl").onclick = () => {
   const b = new Blob([JSON.stringify(subGates, null, 1)], {type: "application/json"});
   const a = document.createElement("a"); a.href = URL.createObjectURL(b); a.download = "submission.json"; a.click(); URL.revokeObjectURL(a.href);
 };
 
-function view(who) {
-  document.body.classList.toggle("who", who);
-  $("v-who").setAttribute("aria-pressed", who); $("v-verdict").setAttribute("aria-pressed", !who);
-  $("leg-who").hidden = !who; $("leg-verdict").hidden = who;
-}
 function esc(s) { return String(s ?? "").replace(/[&<>"]/g, ch => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"}[ch])); }
 function say(html) { $("status").innerHTML = html; }
 
@@ -296,7 +281,7 @@ async function add(files) {
 function status() {
   if (!total && !ann) return say("");
   const what = ann ? `scoring against ${esc(annName)}` : "no annotations.json yet: scoring against our own hand labels where we have them";
-  say(`${done} of ${total} photos checked${running ? `, ${running} running` : ""} · $${spent.toFixed(2)} spent on Opus · ${what}`);
+  say(`${done} of ${total} photos checked${running ? `, ${running} running` : ""} · $${spent.toFixed(2)} spent · ${what}`);
 }
 
 function pump() {
@@ -336,7 +321,6 @@ function pts(p, l) {
 
 function show(card, o) {
   card._o = o;
-  const by = {gate: 0, opus: 0, fallback: 0}; o.areas.forEach(a => by[a.decided_by]++);
   const base = subBase[o.camera]?.[o.file] || {};
   const changed = a => base[a.area_id] && (base[a.area_id].stock_level !== a.stock || base[a.area_id].planogram_compliant !== a.compliant);
   const nChanged = o.areas.filter(changed).length;
@@ -344,7 +328,7 @@ function show(card, o) {
     const g = a.raw?.gate;
     if (!g) return "";
     if (!P.gate) return "code rule off";
-    if (P.two_customers && a.counts_units) return "sold per pack or large item: Opus counts what is left";
+    if (P.two_customers && a.counts_units) return "sold per pack or large item: the model counts what is left";
     if (g.fingerprint == null) return a.gate?.why || "no product fingerprint";
     if (g.coverage < P.cov_min) return `floor changed ${Math.round(g.coverage * 100)}%, under ${Math.round(P.cov_min * 100)}%`;
     if (g.fingerprint > P.fp_max) return `colours ${g.fingerprint.toFixed(2)} from the usual product (limit ${(+P.fp_max).toFixed(2)})`;
@@ -357,15 +341,15 @@ function show(card, o) {
     let how;
     const op = a.raw?.opus;
     if (a.decided_by === "gate") how = `<span class="by gate">rule</span>: ${esc(why(a))}`;
-    else if (a.decided_by === "opus") how = `<span class="by">Opus</span>${op?.fill_percent != null ? `: about ${op.fill_percent}% covered` : ""}, sees ${esc(op?.visible_product || "nothing")}${a.counts_units && a.units ? ` (${a.units === 1 ? "one unit" : a.units + " units"} left)` : ""}${!g ? "" : P.gate ? ` · rule passed it on: ${esc(why(a))}` : " · code rule off"}`;
-    else how = `<span class="by">fallback</span>: ${esc(a.api_error ? "Opus call failed (" + a.api_error + ")" : a.note || "nobody judged it")}`;
+    else if (a.decided_by === "opus") how = `<span class="by">model</span>${op?.fill_percent != null ? `: about ${op.fill_percent}% covered` : ""}, sees ${esc(op?.visible_product || "nothing")}${a.counts_units && a.units ? ` (${a.units === 1 ? "one unit" : a.units + " units"} left)` : ""}${!g ? "" : P.gate ? ` · rule passed it on: ${esc(why(a))}` : " · code rule off"}`;
+    else how = `<span class="by">fallback</span>: ${esc(a.api_error ? "model call failed (" + a.api_error + ")" : a.note || "nobody judged it")}`;
     const lab = l ? ` · label ${l.stock}${l.compliant ? "" : ", wrong product"}: <span class="${pts(a, l) === 2 ? "ok" : "bad"}">${pts(a, l) > 0 ? "+" : ""}${pts(a, l)}</span>` : "";
     const b = base[a.area_id], chg = changed(a) ? ` · <span class="chg">changed by your settings (submitted: ${b.stock_level}${b.planogram_compliant ? "" : ", wrong product"})</span>` : "";
     return `<li data-a="${esc(a.area_id)}" class="${changed(a) ? "changed" : ""}"><span class="n">${a.number}</span><span class="what">${esc(a.product)}</span><span class="lvl ${a.stock}${a.compliant ? "" : " wrong"}">${a.stock}</span>
       <span class="more">${how}${chg}${lab}</span></li>`;
   }).join("");
   card.innerHTML = `
-    <h2>${esc(o.file)} <span class="pts" data-pts></span> <span class="sub">camera ${esc(o.camera)}${o.camera_name ? " · " + esc(o.camera_name) : ""}${o.time_utc ? " · " + esc(o.time_utc) + " UTC" : ""} · ${o.areas.length} areas: ${by.gate} by the rule, ${by.opus} by Opus${by.fallback ? `, ${by.fallback} fallback` : ""}${nChanged ? `, ${nChanged} changed by your settings` : ""} · ${o.summary.seconds}s · $${(o.summary.api_cost_usd || 0).toFixed(3)}</span></h2>
+    <h2>${esc(o.file)} <span class="pts" data-pts></span> <span class="sub">camera ${esc(o.camera)}${o.camera_name ? " · " + esc(o.camera_name) : ""}${o.time_utc ? " · " + esc(o.time_utc) + " UTC" : ""} · ${o.areas.length} areas${nChanged ? `, ${nChanged} changed by your settings` : ""} · ${o.summary.seconds}s · $${(o.summary.api_cost_usd || 0).toFixed(3)}</span></h2>
     <div class="grid">
       <div class="shot"><img src="${o.image}" alt="${esc(o.file)} with every area outlined"><svg viewBox="0 0 1280 720" aria-hidden="true">${polys}${tags}</svg></div>
       <ol>${rows}</ol>
@@ -376,7 +360,7 @@ function show(card, o) {
     li.onmouseleave = () => { p?.classList.remove("lit"); li.classList.remove("lit"); };
     p && (p.onmouseenter = li.onmouseenter, p.onmouseleave = li.onmouseleave);
   });
-  if ($("actions").hidden) { $("actions").hidden = false; view(document.body.classList.contains("who")); }
+  if ($("actions").hidden) { $("actions").hidden = false; $("leg-verdict").hidden = false; }
 }
 
 async function score(sub) {
@@ -395,8 +379,6 @@ async function rescore() {
   $("tuneline").innerHTML = !tuned ? "These are the submitted settings. Change one to see its effect."
     : `${diff} ${diff === 1 ? "area differs" : "areas differ"} from the submitted settings` + (delta === null ? "." :
       ` · <b class="${delta > 0 ? "up" : delta < 0 ? "down" : ""}">${delta > 0 ? "+" : ""}${delta} points</b> (${g.points} against ${b.points})`);
-  const tally = {gate: 0, opus: 0, fallback: 0};
-  Object.values(photos).forEach(ph => ph.o.areas.forEach(a => tally[a.decided_by]++));
   if (!g || !g.areas) {
     $("board").hidden = false;
     $("side-gates").innerHTML = `<h2>Score</h2><p class="na">Nothing to score yet: these photos have no annotations and no hand labels. Drop annotations.json to score them; you can still tune and see which areas change.</p>`;
@@ -404,7 +386,7 @@ async function rescore() {
   }
   const final = ann && !running && !queue.length;
   $("board").hidden = false;
-  $("side-gates").innerHTML = side(tuned ? "Score with your settings" : "Score", g, final, `${tally.gate} areas by the code rule, ${tally.opus} by Opus${tally.fallback ? `, ${tally.fallback} fallback` : ""}`);
+  $("side-gates").innerHTML = side(tuned ? "Score with your settings" : "Score", g, final, "");
   for (const [k, c] of Object.entries(cards)) {
     const pg = g.per_photo?.[k], el = c.querySelector("[data-pts]");
     if (el) el.textContent = pg ? `${pg.points} of ${pg.max} points` : "";
@@ -428,7 +410,7 @@ function side(title, s, final, foot) {
   return `<h2>${title}</h2><p class="src">${s.source}, ${s.photos} photos, ${s.areas} areas${final ? "" : ", so far"}</p>
     <p class="big">${s.points} <span>of ${s.max} points</span></p>
     <table>${rows.map(r => `<tr><td>${r[0]}</td><td class="n">${r[1]}</td><td class="p">${r[3] > 0 ? "+" : ""}${r[3]}</td></tr>`).join("")}</table>
-    <p class="foot">${foot}</p>`;
+    ${foot ? `<p class="foot">${foot}</p>` : ""}`;
 }
 </script>
 </body>

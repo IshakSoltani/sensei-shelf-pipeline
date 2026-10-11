@@ -117,7 +117,7 @@ def gate(img, aid):
     cov_ok, fp_ok = cov >= COV_MIN, fpd is not None and fpd <= FP_MAX
     if sc.STOCK_TEST == "two_customers" and sc.counts_units(aid):   # coverage cannot count bags, packs or melons: Opus judges these
         return {"coverage": round(cov, 3), "fingerprint": None if fpd is None else round(fpd, 3), "coverage_ok": cov_ok,
-                "fingerprint_ok": fp_ok, "fired": False, "why": "sold per pack or large item: Opus counts what is left, coverage cannot"}
+                "fingerprint_ok": fp_ok, "fired": False, "why": "sold per pack or large item: the model counts what is left, coverage cannot"}
     if ref_fp is None:
         why = "no product fingerprint for this area"
     elif fpd is None:
@@ -243,7 +243,7 @@ async def run_photo(img, cam, name, allow_api=False, gates_on=True, fresh=False,
     calls, cost = 0, 0.0
     if ask and allow_api:
         if not sc.load_env():
-            raise RuntimeError("ANTHROPIC_API_KEY is missing (.env), so Opus cannot be asked")
+            raise RuntimeError("ANTHROPIC_API_KEY is missing (.env), so the model cannot be asked")
         import tempfile
         judge = sc.Judge(model=CFG["model"], concurrency=CFG["concurrency"], ramp_start=min(CFG["concurrency"], 16),
                          **({"cache": tempfile.mkdtemp(prefix="fresh_")} if fresh else {}))
@@ -264,7 +264,7 @@ async def run_photo(img, cam, name, allow_api=False, gates_on=True, fresh=False,
             a.update(fill=r.get("fill_percent"), seen=r.get("visible_product"), observation=r.get("observations"),
                      matches=r.get("matches_planned"), units=sc.units_seen(r.get("observations"), P["one_or_two"]))
         if who == "fallback":
-            a["note"] = "view blocked" if r else ("no saved Opus answer" + ("" if allow_api else " (Opus calls are off)"))
+            a["note"] = "view blocked" if r else ("no saved model answer" + ("" if allow_api else " (model calls are off)"))
         # what was collected, so the app can re-decide with other settings without asking again
         a["raw"] = {"opus": {k: v for k, v in r.items() if not k.startswith("_")} if r else None,
                     "gate": {"coverage": g["coverage"], "fingerprint": g["fingerprint"]} if (g := a["gate"]) else None}
