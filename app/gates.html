@@ -163,6 +163,7 @@ html.embed .seg{background:var(--panel2)}html.embed .seg button[aria-pressed=tru
 
   <div class="actions" id="actions" hidden>
     <button type="button" class="dl" id="dl">Download submission.json</button>
+    <button type="button" class="dl" id="clear">Clear all photos</button>
   </div>
   <div class="legend" id="leg-verdict" hidden><span style="--sw:var(--empty)">empty</span><span style="--sw:var(--half)">half</span><span style="--sw:var(--full)">full</span><span class="dash" style="--sw:var(--id)">wrong product</span></div>
 
@@ -171,7 +172,7 @@ html.embed .seg{background:var(--panel2)}html.embed .seg button[aria-pressed=tru
 <script>
 const $ = id => document.getElementById(id);
 const VAL = {empty: 0, half: 0.5, full: 1};
-const queue = []; let running = 0, done = 0, total = 0, ann = null, annName = "";
+const queue = []; let running = 0, done = 0, total = 0, ann = null, annName = "", gen = 0;   // gen: bumped by "Clear all photos"
 const subGates = {}, subBase = {}, cards = {}, photos = {};   // current settings / submitted settings / per photo
 let DEF = null, P = null, tuneTimer = null;
 const FMT = {cov_min: v => Math.round(v * 100) + "%", fp_max: v => (+v).toFixed(2), fill_empty: v => v + "%", fill_half: v => v + "%", flag_pmatch_max: v => v + "%"};
@@ -286,18 +287,19 @@ function status() {
 
 function pump() {
   while (running < 3 && queue.length) {
-    const job = queue.shift(); running++;
+    const job = queue.shift(), g = gen; running++;
     job.card.querySelector(".sub").textContent = "checking…";
-    check(job).finally(() => { running--; done++; status(); pump(); rescore(); });
+    check(job, g).finally(() => { if (g !== gen) return; running--; done++; status(); pump(); rescore(); });
   }
   status();
 }
 
-async function check({f, cam, card}) {
+async function check({f, cam, card}, g) {
   try {
     const q = `name=${encodeURIComponent(f.name)}&cam=${cam}&api=1&fresh=${$("fresh").checked ? 1 : 0}&collect=${$("collect").checked ? 1 : 0}&version=${$("version").value}`;
     const r = await fetch(`/analyze_gates?${q}`, {method: "POST", body: f, headers: {"Content-Type": "application/octet-stream"}});
     const o = await r.json();
+    if (g !== gen) return;   // cleared while this photo was being checked
     if (!r.ok) { card.querySelector(".sub").outerHTML = `<span class="sub err">${esc(o.error || r.statusText)}</span>`; return; }
     const key = `${o.camera}/${o.file}`;
     photos[key] = {o, card, raw: Object.fromEntries(o.areas.map(a => [a.area_id, a.raw]))};
@@ -307,6 +309,23 @@ async function check({f, cam, card}) {
     if (!same(P, DEF)) await applySettings([key]);
   } catch (e) { card.querySelector(".sub").outerHTML = `<span class="sub err">${esc(e.message)}</span>`; }
 }
+
+// "Clear all photos": a second click within 4 s confirms; photos still being checked are ignored when they come back
+let clearArmed = null;
+$("clear").onclick = () => {
+  const n = Object.keys(photos).length + queue.length + running;
+  if (!clearArmed) {
+    $("clear").textContent = `Click again to clear ${n} ${n === 1 ? "photo" : "photos"}`;
+    clearArmed = setTimeout(() => { clearArmed = null; $("clear").textContent = "Clear all photos"; }, 4000);
+    return;
+  }
+  clearTimeout(clearArmed); clearArmed = null; $("clear").textContent = "Clear all photos";
+  gen++; queue.length = 0; running = 0; done = 0; total = 0; ann = null; annName = "";
+  for (const o of [subGates, subBase, cards, photos]) for (const k of Object.keys(o)) delete o[k];
+  $("cards").innerHTML = ""; $("board").hidden = true; $("actions").hidden = true; $("leg-verdict").hidden = true;
+  $("tuneline").textContent = "Change a setting to see its effect.";
+  say("Cleared. Drop the next photos.");
+};
 
 function labelFor(o, a) {
   const l = ann?.[o.camera]?.[o.file]?.[a.area_id];
