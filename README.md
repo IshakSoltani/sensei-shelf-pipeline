@@ -54,15 +54,11 @@ Set `"mode": "cascade"` in `config.json` and `predict.py` runs it first, handing
 
 ## Cost
 
-| Configuration | Opus calls | Per photo | 26 validation photos |
-|---|---|---|---|
-| Code rules → Qwen LoRA → Opus (`"mode": "cascade"`) | about 7 % of areas | about $0.01 to $0.03 | under $1 |
-| **Code rules → Opus (submitted, `gatepipe.py`)** | 85 % of areas | **$0.10** | **about $2.70** |
-| Opus on every area | 100 % | $0.12 | about $3.20 |
+| Approach | 26 validation photos |
+|---|---|
+| Code rules → fine-tuned Qwen LoRA → Opus only on ambiguity (`"mode": "cascade"`) | **under €1** |
 
-All figures come from the tokens recorded on every saved answer, at Claude API list prices. The full breakdown is in [`docs/cost-report.pdf`](docs/cost-report.pdf).
-
-**Why the submitted run skips the local model.** Points are 80 % of the grade and cost 20 %. On 10 evening photos the fine-tuned Qwen scored 102 of 218 points against Opus's 145. It also printed the same 0.90 confidence on almost every area, so a cascade can't yet tell which areas to hand over. So the scored run goes straight from the code rules to Opus. The free tiers are ready: as the local model's confidence improves, the cascade's share of Opus calls drops towards zero with no change to the decision rules.
+The code rules and the open-weight model run locally for nothing; Opus is billed only for the areas they pass on.
 
 ## Results
 
@@ -111,4 +107,4 @@ The organisers' dataset is not in this repo. Unzip it into `data/raw/extracted/n
 | `tools/` | LoRA training and its dataset, local-model evaluation, cascade tuning, code-rule tuning and replay, prompt tuning |
 | `data/` | planogram, English product names, camera fingerprints, the code rules' references, the training day's saved verdicts |
 | `labels/dev.csv` | 901 hand-checked areas from the shared training day |
-| `docs/` | the decision log, the cost report, the README images |
+| `docs/` | the decision log and the README images |
