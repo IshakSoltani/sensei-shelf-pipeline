@@ -1,0 +1,6 @@
+# the fine-tuned local model (Apple silicon only): evaluation, cascade tests, LoRA training
+-r requirements.txt
+mlx==0.32.3
+mlx-vlm==0.7.6
+datasets==5.1.0
+pyarrow==26.0.0

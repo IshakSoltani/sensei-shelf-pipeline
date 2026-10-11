@@ -1,0 +1,6 @@
+# the submission pipeline and the viewer
+anthropic==1.13.0
+opencv-python==5.0.0.93
+numpy==2.5.3
+pillow==12.3.0
+scikit-learn==1.9.1

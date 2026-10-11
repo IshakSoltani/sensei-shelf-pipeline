@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Shelf Check viewer</title>
+<style>
+/* same world as the single-photo page: dark leaf ground, the three stock colours, cyan for a wrong product */
+:root{--bg:#10170f;--panel:#182116;--panel2:#1f2a1c;--ink:#edf1e6;--muted:#a3b19c;--line:#2b3828;
+--empty:#e0584a;--half:#e4a93e;--full:#6cbb76;--id:#5cc0cf;color-scheme:dark}
+*{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.5 system-ui,-apple-system,"Segoe UI",Helvetica,Arial,sans-serif}
+main{max-width:1180px;margin:0 auto;padding:24px 16px 64px;min-width:0}
+h1{font-size:clamp(30px,5vw,42px);line-height:1.05;margin:0 0 6px;letter-spacing:-0.02em}
+a{color:var(--ink)}
+.lead{color:var(--muted);margin:0 0 20px;max-width:64ch}
+.drop{background:var(--panel);border-radius:14px;padding:28px 20px;text-align:center}
+.drop.over{background:var(--panel2)}
+.drop p{margin:0 0 14px;font-size:18px}
+.btn{display:inline-block;background:var(--ink);color:var(--bg);padding:12px 20px;border-radius:8px;cursor:pointer;border:0;font:inherit;font-weight:650}
+.btn:hover{background:#d7dfd2}
+.btn:focus-visible{outline:2px solid var(--id);outline-offset:2px}
+input[type=file]{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden}
+.fresh{margin:16px 0 0;font-size:15px;color:var(--muted)}.fresh input{position:static;width:auto;height:auto;opacity:1;margin-right:8px;vertical-align:-1px}
+.status{color:var(--muted);margin:16px 0 0;min-height:1.5em}
+.legend{display:flex;flex-wrap:wrap;gap:8px 20px;margin:10px 0 0;font-size:15px;color:var(--muted)}
+.legend span::before{content:"";display:inline-block;width:14px;height:14px;border-radius:3px;margin-right:7px;vertical-align:-2px;background:var(--sw)}
+.legend span.dash::before{background:none;border:2px dashed var(--id);width:10px;height:10px}
+.card{background:var(--panel);border-radius:14px;padding:16px;margin-top:20px}
+.card h2{font-size:19px;margin:0 0 10px;display:flex;flex-wrap:wrap;gap:4px 14px;align-items:baseline}
+.card h2 .sub{color:var(--muted);font-weight:400;font-size:15px}
+.card .err{color:var(--empty)}
+.grid{display:grid;grid-template-columns:1fr;gap:16px;align-items:start}
+@media(min-width:900px){.grid{grid-template-columns:minmax(0,3fr) minmax(0,2fr)}}
+.shot{position:relative;background:#000;border-radius:10px;overflow:hidden}
+.shot img{display:block;width:100%;height:auto}
+.shot svg{position:absolute;inset:0;width:100%;height:100%}
+polygon{fill-opacity:.18;stroke-width:4}
+polygon.empty{fill:var(--empty);stroke:var(--empty)}polygon.half{fill:var(--half);stroke:var(--half)}polygon.full{fill:var(--full);stroke:var(--full)}
+polygon.wrong{stroke:var(--id);stroke-dasharray:12 7}
+polygon.lit{fill-opacity:.5}
+.tag{font:700 34px system-ui,sans-serif;fill:#fff;paint-order:stroke;stroke:#000;stroke-width:7px}
+ol{list-style:none;margin:0;padding:0;max-height:520px;overflow:auto}
+li{display:grid;grid-template-columns:34px 1fr auto;gap:2px 10px;padding:8px 10px;border-radius:8px;align-items:baseline}
+li:nth-child(even){background:var(--panel2)}
+li:hover{background:var(--line)}
+li .n{font-weight:700;font-variant-numeric:tabular-nums}
+li .what{font-weight:600}
+li .lvl{font-weight:700}
+li .lvl.empty{color:var(--empty)}li .lvl.half{color:var(--half)}li .lvl.full{color:var(--full)}
+li .more{grid-column:2 / 4;color:var(--muted);font-size:14px}
+li .more .bad{color:var(--id)}
+</style>
+</head>
+<body>
+<main>
+  <h1>Shelf Check viewer</h1>
+  <p class="lead">Drop up to 26 shelf photos. Each one is judged with the current setup, and you see the photo with every area outlined in the colour of its verdict, next to what it thinks is in each area. <a href="/">One photo, staff view</a></p>
+  <div class="drop" id="drop">
+    <p>Drop photos here</p>
+    <label class="btn" for="pick">Choose photos</label>
+    <input type="file" id="pick" multiple accept="image/*">
+    <p class="fresh"><label><input type="checkbox" id="fresh" checked> Fresh run: ask Opus again for every area, ignoring saved answers (about $0.12 per photo)</label></p>
+  </div>
+  <p class="status" id="status"></p>
+  <div class="legend"><span style="--sw:var(--empty)">empty</span><span style="--sw:var(--half)">half</span><span style="--sw:var(--full)">full</span><span class="dash">wrong product</span></div>
+  <div id="cards"></div>
+</main>
+<script>
+const $ = id => document.getElementById(id);
+const queue = []; let running = 0, done = 0, total = 0, cost = 0;
+const drop = $("drop");
+["dragenter", "dragover"].forEach(e => drop.addEventListener(e, ev => { ev.preventDefault(); drop.classList.add("over"); }));
+["dragleave", "drop"].forEach(e => drop.addEventListener(e, ev => { ev.preventDefault(); drop.classList.remove("over"); }));
+drop.addEventListener("drop", ev => add(ev.dataTransfer.files));
+$("pick").addEventListener("change", ev => { add(ev.target.files); ev.target.value = ""; });
+
+function esc(s) { return String(s ?? "").replace(/[&<>"]/g, ch => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"}[ch])); }
+
+function add(files) {
+  for (const f of files) {
+    if (!f.type.startsWith("image/")) continue;
+    const card = document.createElement("section"); card.className = "card";
+    card.innerHTML = `<h2>${esc(f.name)} <span class="sub">waiting</span></h2>`;
+    $("cards").appendChild(card); queue.push({f, card}); total++;
+  }
+  status(); pump();
+}
+
+function status() {
+  $("status").textContent = total ? `${done} of ${total} photos judged${running ? `, ${running} running` : ""} · $${cost.toFixed(2)} spent` : "";
+}
+
+function pump() {
+  while (running < 3 && queue.length) {
+    const job = queue.shift(); running++;
+    job.card.querySelector(".sub").textContent = "judging…";
+    judge(job).finally(() => { running--; done++; status(); pump(); });
+  }
+  status();
+}
+
+async function judge({f, card}) {
+  try {
+    const r = await fetch(`/analyze?name=${encodeURIComponent(f.name)}&fresh=${$("fresh").checked ? 1 : 0}`, {method: "POST", body: f, headers: {"Content-Type": "application/octet-stream"}});
+    const o = await r.json();
+    if (!r.ok) { card.querySelector(".sub").outerHTML = `<span class="sub err">${esc(o.error || r.statusText)}</span>`; return; }
+    cost += o.cost_usd || 0; show(card, o, f.name);
+  } catch (e) { card.querySelector(".sub").outerHTML = `<span class="sub err">${esc(e.message)}</span>`; }
+}
+
+function show(card, o, name) {
+  const cnt = k => o.areas.filter(a => a.stock === k).length, wrong = o.areas.filter(a => !a.compliant).length;
+  const polys = o.areas.map(a => `<polygon data-a="${esc(a.area_id)}" class="${a.stock}${a.compliant ? "" : " wrong"}" points="${a.quad.map(q => q.join(",")).join(" ")}"></polygon>`).join("");
+  const tags = o.areas.map(a => { const [x, y] = a.quad[0]; return `<text class="tag" x="${Math.max(4, Math.min(1220, x + 6))}" y="${Math.max(36, y + 38)}">${a.number}</text>`; }).join("");
+  const rows = o.areas.slice().sort((a, b) => a.number - b.number).map(a => `
+    <li data-a="${esc(a.area_id)}"><span class="n">${a.number}</span><span class="what">${esc(a.product)}</span><span class="lvl ${a.stock}">${a.stock}</span>
+      <span class="more">${a.compliant ? "right product" : `<span class="bad">wrong product</span>`} · sees ${esc(a.seen || "nothing")}${a.fill != null ? ` · about ${a.fill}% covered` : ""}${a.observation ? ` · ${esc(a.observation)}` : ""}</span></li>`).join("");
+  card.innerHTML = `
+    <h2>${esc(name)} <span class="sub">camera ${esc(o.camera)}${o.camera_name ? " · " + esc(o.camera_name) : ""} · ${o.areas.length} areas: ${cnt("empty")} empty, ${cnt("half")} half, ${cnt("full")} full, ${wrong} wrong product · ${o.seconds}s · $${(o.cost_usd || 0).toFixed(3)}</span></h2>
+    <div class="grid">
+      <div class="shot"><img src="${o.image}" alt="${esc(name)} with every area outlined"><svg viewBox="0 0 1280 720" aria-hidden="true">${polys}${tags}</svg></div>
+      <ol>${rows}</ol>
+    </div>`;
+  // hovering a row lights its area on the photo
+  card.querySelectorAll("li").forEach(li => {
+    const p = card.querySelector(`polygon[data-a="${li.dataset.a}"]`);
+    li.onmouseenter = () => p && p.classList.add("lit"); li.onmouseleave = () => p && p.classList.remove("lit");
+  });
+}
+</script>
+</body>
+</html>

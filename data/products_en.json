@@ -1,0 +1,660 @@
+{
+ "20923": {
+  "product_id": "20923",
+  "en": "Madeira bananas",
+  "unit": "loose",
+  "cues": "small yellow bananas, CNT store label",
+  "pt": "BANANA DA MADEIRA CNT KG"
+ },
+ "11908": {
+  "product_id": "11908",
+  "en": "Cat I bananas",
+  "unit": "loose",
+  "cues": "yellow bananas, CNT store label",
+  "pt": "BANANA CAT I CNT KG"
+ },
+ "11906": {
+  "product_id": "11906",
+  "en": "Algarve orange, 70/95 kg",
+  "unit": "loose",
+  "cues": "orange citrus, IGP Algarve origin sign",
+  "pt": "CITRINOS DO ALGARVE IGP LARANJA 70/95 KG"
+ },
+ "15600": {
+  "product_id": "15600",
+  "en": "striped watermelon, whole",
+  "unit": "loose",
+  "cues": "large green striped melon, whole, CNT label",
+  "pt": "MELANCIA RISCADA P/ SEMENTES INT CNT KG"
+ },
+ "16143": {
+  "product_id": "16143",
+  "en": "black watermelon, whole",
+  "unit": "loose",
+  "cues": "dark green near-black rind, whole, few seeds",
+  "pt": "MELANCIA PRETA POUCAS SEMENTES INT KG"
+ },
+ "16336": {
+  "product_id": "16336",
+  "en": "green melon, whole",
+  "unit": "loose",
+  "cues": "smooth pale green melon, whole, CNT label",
+  "pt": "MELAO VERDE INTEIRO CNT KG"
+ },
+ "30633": {
+  "product_id": "30633",
+  "en": "cantaloupe melon, whole",
+  "unit": "loose",
+  "cues": "netted beige rind, orange flesh, whole",
+  "pt": "MELOA CANTALUPE/CHARENTAIS INTEIR CNT KG"
+ },
+ "16137": {
+  "product_id": "16137",
+  "en": "mini watermelon, whole",
+  "unit": "loose",
+  "cues": "small round striped melon, whole",
+  "pt": "MELANCIA MINI INTEIRA CNT KG"
+ },
+ "13702": {
+  "product_id": "13702",
+  "en": "Gala apples, 70/80 kg",
+  "unit": "loose",
+  "cues": "red-yellow striped apples, imported, CNT size label",
+  "pt": "MAÇÃ GALA CNT CAL 70/80 KG IMP"
+ },
+ "32748": {
+  "product_id": "32748",
+  "en": "Gala apples, 60/70 1 kg",
+  "unit": "packaged",
+  "cues": "red-yellow apples in 1 kg bag, imported",
+  "pt": "MAÇÂ GALA CNT 60/70 1 KG IMP"
+ },
+ "19133": {
+  "product_id": "19133",
+  "en": "Pink Lady apples",
+  "unit": "loose",
+  "cues": "pink-blush green-yellow apples, CNT size 73/80",
+  "pt": "MACA PINK LADY CNT CAL.73/80 KG"
+ },
+ "26786": {
+  "product_id": "26786",
+  "en": "Golden apples, national",
+  "unit": "loose",
+  "cues": "yellow-gold apples, Portuguese origin, 75/85",
+  "pt": "MAÇA GOLDEN NACIONAL 75/85 KG"
+ },
+ "32749": {
+  "product_id": "32749",
+  "en": "Golden apples, 1 kg bag",
+  "unit": "packaged",
+  "cues": "yellow-gold apples in 1 kg bag, national",
+  "pt": "MAÇA GOLDEN NACIONAL CAL. 65/70 1 KG"
+ },
+ "32262": {
+  "product_id": "32262",
+  "en": "Cosmic Crisp apples",
+  "unit": "loose",
+  "cues": "large red-streaked apples, 75/85 size",
+  "pt": "MAÇÃ COSMIC CRISP 75/85 KG"
+ },
+ "11901": {
+  "product_id": "11901",
+  "en": "Packams pears",
+  "unit": "loose",
+  "cues": "green-yellow pears, CNT 65/75 size",
+  "pt": "PERA PACKAMS CNT CAL.65/75 KG"
+ },
+ "11909": {
+  "product_id": "11909",
+  "en": "Conference pears",
+  "unit": "loose",
+  "cues": "long brown-green pears, CNT 60/75 size",
+  "pt": "PERA CONFERENCE CAL 60/75 CNT KG"
+ },
+ "11889": {
+  "product_id": "11889",
+  "en": "lemons",
+  "unit": "loose",
+  "cues": "yellow oval lemons, CNT 60/75 size",
+  "pt": "LIMÃO CNT 60/75 KG"
+ },
+ "11891": {
+  "product_id": "11891",
+  "en": "Galia melon, whole",
+  "unit": "loose",
+  "cues": "netted green-yellow rind, whole, CNT label",
+  "pt": "MELOA GALIA INTEIRA CNT KG"
+ },
+ "15781": {
+  "product_id": "15781",
+  "en": "Zespri Gold kiwi, 500 g",
+  "unit": "packaged",
+  "cues": "golden kiwi in a yellow mesh net bag with a kraft Zespri label; from above it looks like a bag of lemons",
+  "pt": "KIWI GOLD ZESPRI 500 G"
+ },
+ "1164": {
+  "product_id": "1164",
+  "en": "Zespri kiwi, 500 g",
+  "unit": "packaged",
+  "cues": "brown fuzzy kiwi in a green mesh net bag or tray with a Zespri label",
+  "pt": "KIWI ZESPRI 500 GR"
+ },
+ "20508": {
+  "product_id": "20508",
+  "en": "organic kiwi, 400 g",
+  "unit": "packaged",
+  "cues": "brown kiwi in 400 g pack, BIO organic label",
+  "pt": "KIWI CNT BIO 400 G"
+ },
+ "11890": {
+  "product_id": "11890",
+  "en": "limes",
+  "unit": "loose",
+  "cues": "small bright green limes, CNT label",
+  "pt": "LIMA CNT KG"
+ },
+ "15730": {
+  "product_id": "15730",
+  "en": "Algarve orange, 6/7/8 3 kg",
+  "unit": "packaged",
+  "cues": "orange citrus in 3 kg bag, IGP Algarve label",
+  "pt": "CITRINOS ALGARVE IGP LARANJA 6/7/8 3KG"
+ },
+ "14646": {
+  "product_id": "14646",
+  "en": "Zespri kiwi, loose",
+  "unit": "loose",
+  "cues": "brown fuzzy kiwi, Zespri label, sold by weight",
+  "pt": "KIWI ZESPRI KG"
+ },
+ "12756": {
+  "product_id": "12756",
+  "en": "clementines, 60/75",
+  "unit": "loose",
+  "cues": "small orange loose clementines, CNT size 60/75",
+  "pt": "CLEMENTINA CAL 60/75 CNT KG"
+ },
+ "26600": {
+  "product_id": "26600",
+  "en": "Algarve orange, 1.5 kg bag",
+  "unit": "packaged",
+  "cues": "orange citrus in 1.5 kg bag, IGP Algarve label",
+  "pt": "CITR ALGARVE IGP LARANJA 3/4/5 1.5 KG"
+ },
+ "21254": {
+  "product_id": "21254",
+  "en": "curly lettuce, bagged",
+  "unit": "packaged",
+  "cues": "curly lettuce heads in clear plastic bags",
+  "pt": "ALFACE FRISADA SACO CNT KG"
+ },
+ "16429": {
+  "product_id": "16429",
+  "en": "Hass avocados",
+  "unit": "loose",
+  "cues": "dark pebbly-skin avocados, ready to eat, CNT label",
+  "pt": "ABACATE HASS PRONTO COMER CNT KG"
+ },
+ "11896": {
+  "product_id": "11896",
+  "en": "green peppers",
+  "unit": "loose",
+  "cues": "green bell peppers, CNT label",
+  "pt": "PIMENTO VERDE CNT KG"
+ },
+ "15651": {
+  "product_id": "15651",
+  "en": "Portuguese kale",
+  "unit": "loose",
+  "cues": "dark green kale bunches, CNT label",
+  "pt": "COUVE PORTUGUESA/PENCA CNT KG"
+ },
+ "11897": {
+  "product_id": "11897",
+  "en": "red peppers",
+  "unit": "loose",
+  "cues": "red bell peppers, CNT label",
+  "pt": "PIMENTO VERMELHO CNT KG"
+ },
+ "21208": {
+  "product_id": "21208",
+  "en": "aubergines",
+  "unit": "loose",
+  "cues": "glossy dark purple aubergines, CNT label",
+  "pt": "BERINGELA CNT KG"
+ },
+ "18329": {
+  "product_id": "18329",
+  "en": "chayote",
+  "unit": "loose",
+  "cues": "pale green pear-shaped chayote, CNT label",
+  "pt": "CHUCHU CNT KG"
+ },
+ "21413": {
+  "product_id": "21413",
+  "en": "green beans",
+  "unit": "loose",
+  "cues": "thin long green beans, CNT label",
+  "pt": "FEIJÃO VERDE CNT KG"
+ },
+ "11895": {
+  "product_id": "11895",
+  "en": "cucumbers",
+  "unit": "loose",
+  "cues": "long dark green cucumbers, CNT label",
+  "pt": "PEPINO CNT KG"
+ },
+ "16633": {
+  "product_id": "16633",
+  "en": "Fuji apples, 73/85",
+  "unit": "loose",
+  "cues": "red-yellow Fuji apples, imported, CNT size label",
+  "pt": "MACA FUJI CNT CAL. 73/85 KG IMP"
+ },
+ "30491": {
+  "product_id": "30491",
+  "en": "organic red apples, 500 g",
+  "unit": "packaged",
+  "cues": "red apples in 500 g pack, BIO organic label",
+  "pt": "MAÇA VERMELHA BIO 500 G"
+ },
+ "20818": {
+  "product_id": "20818",
+  "en": "Fuji Carioca apples, 1 kg",
+  "unit": "packaged",
+  "cues": "red-yellow Fuji apples in 1 kg bag, imported",
+  "pt": "MAÇA FUJI CARIOCA 65/75 1 KG IMP"
+ },
+ "11919": {
+  "product_id": "11919",
+  "en": "Granny Smith apples",
+  "unit": "loose",
+  "cues": "bright green apples, CNT 73/85 size",
+  "pt": "MACA GRANNY SMITH CNT CAL.73/85 KG"
+ },
+ "32170": {
+  "product_id": "32170",
+  "en": "Reineta apples",
+  "unit": "loose",
+  "cues": "greenish-yellow russeted apples, CNT 70/80",
+  "pt": "MACA REINETA CNT CAL 70/80 KG"
+ },
+ "21178": {
+  "product_id": "21178",
+  "en": "broccoli",
+  "unit": "loose",
+  "cues": "green flower-head broccoli, CNT label",
+  "pt": "COUVE BROCOLO CNT KG"
+ },
+ "21152": {
+  "product_id": "21152",
+  "en": "white cabbage",
+  "unit": "loose",
+  "cues": "pale green round cabbage, CNT label",
+  "pt": "COUVE BRANCA CNT KG"
+ },
+ "15653": {
+  "product_id": "15653",
+  "en": "red cabbage",
+  "unit": "loose",
+  "cues": "purple round cabbage, CNT label",
+  "pt": "COUVE ROXA CNT KG"
+ },
+ "21114": {
+  "product_id": "21114",
+  "en": "cauliflower",
+  "unit": "loose",
+  "cues": "white curd cauliflower, CNT label",
+  "pt": "COUVE FLOR CNT KG"
+ },
+ "11893": {
+  "product_id": "11893",
+  "en": "green courgettes",
+  "unit": "loose",
+  "cues": "dark green smooth courgettes, CNT label",
+  "pt": "CURGETE VERDE CNT KG"
+ },
+ "21134": {
+  "product_id": "21134",
+  "en": "round tomatoes",
+  "unit": "loose",
+  "cues": "round red tomatoes, CNT label",
+  "pt": "TOMATE REDONDO CNT KG"
+ },
+ "21120": {
+  "product_id": "21120",
+  "en": "vine tomatoes",
+  "unit": "loose",
+  "cues": "red tomatoes on vine cluster, CNT label",
+  "pt": "TOMATE CACHO CNT KG"
+ },
+ "1267": {
+  "product_id": "1267",
+  "en": "Tasty tomatoes, 400 g bag",
+  "unit": "packaged",
+  "cues": "red tomatoes in 400 g bag",
+  "pt": "TOMATE TASTY SC EMB 400G"
+ },
+ "22304": {
+  "product_id": "22304",
+  "en": "organic cherry tomatoes, 250 g",
+  "unit": "packaged",
+  "cues": "small red cherry tomatoes in 250 g pack, BIO label",
+  "pt": "TOMATE CHERRY BIO EMB. 250 GR"
+ },
+ "19959": {
+  "product_id": "19959",
+  "en": "zero residue tomatoes, 1 kg",
+  "unit": "packaged",
+  "cues": "red tomatoes in 1 kg bag, ZER0%D zero residue label",
+  "pt": "TOMATE ZER0%D 1KG"
+ },
+ "18514": {
+  "product_id": "18514",
+  "en": "beef heart tomatoes",
+  "unit": "loose",
+  "cues": "large heart-shaped ribbed red tomatoes, CNT label",
+  "pt": "TOMATE CORAÇÃO DE BOI CNT KG"
+ },
+ "18254": {
+  "product_id": "18254",
+  "en": "cherry tomatoes, 250 g",
+  "unit": "packaged",
+  "cues": "small red cherry tomatoes in 250 g punnet, CNT",
+  "pt": "TOMATE CHERRY VERMELHO CNT 250GR"
+ },
+ "21223": {
+  "product_id": "21223",
+  "en": "mini red plum tomatoes, 250 g",
+  "unit": "packaged",
+  "cues": "small red mini tomatoes in 250 g pack, CNT",
+  "pt": "TOMATE MINI CHUCHA VERMELHO CNT 250GR"
+ },
+ "23042": {
+  "product_id": "23042",
+  "en": "sweet mini tomatoes, 200 g bag",
+  "unit": "packaged",
+  "cues": "small sweet mini tomatoes in 200 g bag",
+  "pt": "TOMATE MINI CHUCHA SWEET SC 200G"
+ },
+ "11898": {
+  "product_id": "11898",
+  "en": "plum tomatoes",
+  "unit": "loose",
+  "cues": "elongated red plum tomatoes, CNT label",
+  "pt": "TOMATE CHUCHA CNT KG"
+ },
+ "18533": {
+  "product_id": "18533",
+  "en": "mini vine tomatoes, 500 g",
+  "unit": "packaged",
+  "cues": "small red tomatoes on vine in 500 g pack, CNT",
+  "pt": "MINI TOMATE CACHO CNT 500G"
+ },
+ "1156": {
+  "product_id": "1156",
+  "en": "strawberries, 500 g",
+  "unit": "packaged",
+  "cues": "red strawberries in 500 g punnet",
+  "pt": "MORANGO EMB. 500 GR"
+ },
+ "11913": {
+  "product_id": "11913",
+  "en": "mangoes",
+  "unit": "loose",
+  "cues": "yellow-red blushed mangoes, CNT label",
+  "pt": "MANGA CNT KG"
+ },
+ "21307": {
+  "product_id": "21307",
+  "en": "white seedless grapes",
+  "unit": "loose",
+  "cues": "white grapes in small brown paper bags",
+  "pt": "UVA BRANCA S/ GRAINHA CNT KG"
+ },
+ "19032": {
+  "product_id": "19032",
+  "en": "white seedless grapes, 500 g",
+  "unit": "packaged",
+  "cues": "pale green grapes in 500 g pack, CNT",
+  "pt": "UVA BRANCA S/GRAINHA CNT 500 G"
+ },
+ "15597": {
+  "product_id": "15597",
+  "en": "red globe grapes",
+  "unit": "loose",
+  "cues": "red grapes in small brown paper bags",
+  "pt": "UVA RED GLOBE CNT KG"
+ },
+ "3579": {
+  "product_id": "3579",
+  "en": "cherries, 24+ 500 g",
+  "unit": "packaged",
+  "cues": "dark red cherries in 500 g pack, 24+ size",
+  "pt": "CEREJA 24+ 500 GR"
+ },
+ "23366": {
+  "product_id": "23366",
+  "en": "super sweet pineapple",
+  "unit": "loose",
+  "cues": "golden pineapple with green crown",
+  "pt": "ABACAXI SUPER SWEET KG"
+ },
+ "15855": {
+  "product_id": "15855",
+  "en": "red dragon fruit, 300 g",
+  "unit": "loose",
+  "cues": "single red dragon fruit, sold by the piece",
+  "pt": "PITAYA VERMELHA 300G"
+ },
+ "15835": {
+  "product_id": "15835",
+  "en": "yellow dragon fruit, 200 g",
+  "unit": "loose",
+  "cues": "single yellow dragon fruit, sold by the piece",
+  "pt": "PITAYA AMARELA 200G"
+ },
+ "30368": {
+  "product_id": "30368",
+  "en": "guavas",
+  "unit": "loose",
+  "cues": "yellow-green round guavas, CNT label",
+  "pt": "GOIABA CNT KG"
+ },
+ "22108": {
+  "product_id": "22108",
+  "en": "purple passion fruit",
+  "unit": "loose",
+  "cues": "wrinkled dark purple passion fruit, CNT label",
+  "pt": "MARACUJA ROXO CNT KG"
+ },
+ "25211": {
+  "product_id": "25211",
+  "en": "granadilla, 80 g",
+  "unit": "loose",
+  "cues": "single orange-yellow granadilla fruit",
+  "pt": "GRANADILHA 80 G"
+ },
+ "21122": {
+  "product_id": "21122",
+  "en": "papayas, whole",
+  "unit": "loose",
+  "cues": "large orange-green papaya, whole, CNT label",
+  "pt": "MAMAO INTEIRO CNT KG"
+ },
+ "11892": {
+  "product_id": "11892",
+  "en": "papaya, whole",
+  "unit": "loose",
+  "cues": "oblong yellow-orange papaya, whole, CNT label",
+  "pt": "PAPAIA DE AVIÃO INTEIRA CNT KG"
+ },
+ "15591": {
+  "product_id": "15591",
+  "en": "plantains (banana-pao)",
+  "unit": "loose",
+  "cues": "small yellow bananas, CNT label",
+  "pt": "BANANA PAO CNT KG"
+ },
+ "21789": {
+  "product_id": "21789",
+  "en": "Palmer mango",
+  "unit": "loose",
+  "cues": "large green-red blushed mango, Palmer variety",
+  "pt": "MANGA AVIÃO PALMER KG"
+ },
+ "31228": {
+  "product_id": "31228",
+  "en": "apricots, 45/55",
+  "unit": "loose",
+  "cues": "small orange-yellow apricots, CNT size 45/55",
+  "pt": "ALPERCE CNT CAL. 45/55 KG"
+ },
+ "32533": {
+  "product_id": "32533",
+  "en": "Paraguayan peaches",
+  "unit": "loose",
+  "cues": "round yellow peaches with red blush, zero residue range",
+  "pt": "PESSEGO PARAGUAYO R0 A/AA/AAA KG"
+ },
+ "32530": {
+  "product_id": "32530",
+  "en": "peaches, A/AA",
+  "unit": "loose",
+  "cues": "round yellow-red peaches, zero residue range",
+  "pt": "PESSEGO R0 A/AA KG"
+ },
+ "32532": {
+  "product_id": "32532",
+  "en": "nectarines, A/AA",
+  "unit": "loose",
+  "cues": "smooth-skinned red-yellow nectarines, zero residue range",
+  "pt": "NECTARINA R0 A/AA KG"
+ },
+ "11912": {
+  "product_id": "11912",
+  "en": "red potatoes",
+  "unit": "loose",
+  "cues": "red-skinned potatoes, CNT label",
+  "pt": "BATATA VERMELHA CNT KG"
+ },
+ "22965": {
+  "product_id": "22965",
+  "en": "Assar potatoes, 2 kg bag",
+  "unit": "packaged",
+  "cues": "brown-skinned potatoes in 2 kg bag, CNT",
+  "pt": "BATATA ASSAR CNT EMB. 2 KG"
+ },
+ "19454": {
+  "product_id": "19454",
+  "en": "zero residue potatoes, 4 kg",
+  "unit": "packaged",
+  "cues": "potatoes in 4 kg bag, ZER0%D zero residue label",
+  "pt": "BATATA ZER0%D 4KG"
+ },
+ "21965": {
+  "product_id": "21965",
+  "en": "red potatoes, 3 kg bag",
+  "unit": "packaged",
+  "cues": "red-and-white Continente 3 kg bags; red potato skin through the window",
+  "pt": "BATATA VERMELHA CNT EMB. 3KG"
+ },
+ "12661": {
+  "product_id": "12661",
+  "en": "sweet potatoes",
+  "unit": "loose",
+  "cues": "elongated orange-skinned sweet potatoes, CNT label",
+  "pt": "BATATA DOCE CNT KG"
+ },
+ "22411": {
+  "product_id": "22411",
+  "en": "ginger",
+  "unit": "loose",
+  "cues": "knobby beige ginger root, CNT label",
+  "pt": "GENGIBRE CNT KG"
+ },
+ "22176": {
+  "product_id": "22176",
+  "en": "special cooking potatoes, 3 kg bag",
+  "unit": "packaged",
+  "cues": "potatoes in 3 kg bag, cooking variety label",
+  "pt": "BATATA ESPECIAL COZER SC EMB. 3KG"
+ },
+ "15816": {
+  "product_id": "15816",
+  "en": "Hokkaido pumpkin, zero residue",
+  "unit": "loose",
+  "cues": "orange squat pumpkin, zero residue range",
+  "pt": "ABÓBORA HOKAIDO R0 KG"
+ },
+ "15753": {
+  "product_id": "15753",
+  "en": "red potatoes, 5 kg bag",
+  "unit": "packaged",
+  "cues": "red-skinned potatoes in 5 kg bag",
+  "pt": "BATATA VERMELHA EMB:. 5 KG"
+ },
+ "11914": {
+  "product_id": "11914",
+  "en": "new onions",
+  "unit": "loose",
+  "cues": "small pale yellow-brown onions, CNT label",
+  "pt": "CEBOLA NOVA CNT KG"
+ },
+ "22083": {
+  "product_id": "22083",
+  "en": "onions, 1.5 kg bag",
+  "unit": "packaged",
+  "cues": "yellow-brown onions in 1.5 kg bag, CNT",
+  "pt": "CEBOLA CNT EMB. 1.5 KG"
+ },
+ "31119": {
+  "product_id": "31119",
+  "en": "dried garlic, 250 g",
+  "unit": "packaged",
+  "cues": "white papery garlic bulbs in 250 g pack, CNT",
+  "pt": "ALHO SECO CNT 250GR"
+ },
+ "11916": {
+  "product_id": "11916",
+  "en": "dried garlic",
+  "unit": "loose",
+  "cues": "white papery garlic bulbs, sold by weight",
+  "pt": "ALHO SECO KG"
+ },
+ "11917": {
+  "product_id": "11917",
+  "en": "red onions",
+  "unit": "loose",
+  "cues": "purple-red onions, CNT label",
+  "pt": "CEBOLA ROXA CNT KG"
+ },
+ "19127": {
+  "product_id": "19127",
+  "en": "red onions, 1 kg bag",
+  "unit": "packaged",
+  "cues": "purple-red onions in 1 kg bag, CNT",
+  "pt": "CEBOLA ROXA CNT 1KG"
+ },
+ "18090": {
+  "product_id": "18090",
+  "en": "small French onions, 500 g net",
+  "unit": "packaged",
+  "cues": "small golden-skinned onions (cebolinha) in a 500 g mesh net with a label, CNT; not chives",
+  "pt": "CEBOLINHA FRANCESA CNT 500G"
+ },
+ "21915": {
+  "product_id": "21915",
+  "en": "sweet onions, 1 kg bag",
+  "unit": "packaged",
+  "cues": "pale sweet onions in 1 kg bag, CNT",
+  "pt": "CEBOLA DOCE CNT EMB 1 KG"
+ },
+ "22193": {
+  "product_id": "22193",
+  "en": "white potatoes, 3 kg bag",
+  "unit": "packaged",
+  "cues": "red-and-white Continente 3 kg bags; white potato skin through the window",
+  "pt": "BATATA BRANCA CNT EMB. 3KG"
+ }
+}

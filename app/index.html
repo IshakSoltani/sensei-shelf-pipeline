@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Shelf Check</title>
+<style>
+/* one column of plain steps: drop a photo, read the verdict on the photo, read the to-do list */
+:root{--bg:#10170f;--panel:#182116;--panel2:#1f2a1c;--ink:#edf1e6;--muted:#a3b19c;--line:#2b3828;
+--empty:#e0584a;--half:#e4a93e;--full:#6cbb76;--id:#5cc0cf;color-scheme:dark}
+*{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.5 system-ui,-apple-system,"Segoe UI",Helvetica,Arial,sans-serif}
+main{max-width:1100px;margin:0 auto;padding:24px 16px 64px;min-width:0}
+h1{font-size:clamp(30px,5vw,42px);line-height:1.05;margin:0 0 6px;letter-spacing:-0.02em}
+h2{font-size:21px;margin:0 0 10px;letter-spacing:-0.01em}
+p{margin:6px 0}
+.lead{color:var(--muted);margin:0 0 22px;max-width:60ch}
+.drop{background:var(--panel);border-radius:14px;padding:28px 20px;text-align:center}
+.drop.over{background:var(--panel2)}
+.drop p{margin:0 0 14px;font-size:18px}
+.btn{display:inline-block;background:var(--ink);color:var(--bg);font-weight:650;padding:12px 20px;border-radius:8px;cursor:pointer;border:0;font:inherit;font-weight:650}
+.btn:hover{background:#d7dfd2}
+.btn:focus-visible,button:focus-visible,select:focus-visible,summary:focus-visible{outline:2px solid var(--id);outline-offset:2px}
+input[type=file]{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden}
+.samples{margin:18px 0 0}
+.samples p{color:var(--muted);margin:0 0 8px;font-size:15px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips button{background:var(--panel);color:var(--ink);border:0;border-radius:8px;padding:9px 13px;font:inherit;font-size:15px;cursor:pointer;text-align:left}
+.chips button:hover{background:var(--panel2)}
+.chips button span{color:var(--muted);font-variant-numeric:tabular-nums}
+.status{margin:18px 0 0;color:var(--muted);min-height:1.5em}
+.status.err{color:var(--empty)}
+.result{margin-top:26px}
+.where{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:baseline;margin:0 0 6px}
+.where .cam{font-size:15px;color:var(--muted)}
+.where button{background:none;border:0;color:var(--muted);text-decoration:underline;cursor:pointer;font:inherit;font-size:15px;padding:0}
+.where select{background:var(--panel2);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:6px 8px;font:inherit;font-size:15px}
+.summary{font-size:19px;margin:0 0 16px;max-width:70ch}
+.summary b{font-variant-numeric:tabular-nums}
+.shot{position:relative;background:#000;border-radius:10px;overflow:hidden;min-width:0}
+.shot img{display:block;width:100%;height:auto}
+.shot svg{position:absolute;inset:0;width:100%;height:100%}
+polygon{fill-opacity:.2;stroke-width:4;cursor:pointer;transition:fill-opacity .15s}
+polygon.empty{fill:var(--empty);stroke:var(--empty)}polygon.half{fill:var(--half);stroke:var(--half)}polygon.full{fill:var(--full);stroke:var(--full)}
+polygon.wrong{stroke:var(--id);stroke-dasharray:12 7}
+polygon:hover,polygon.lit{fill-opacity:.5}
+.tag{font:700 36px system-ui,sans-serif;fill:#fff;paint-order:stroke;stroke:#000;stroke-width:7px;pointer-events:none}
+.legend{display:flex;flex-wrap:wrap;gap:8px 20px;margin:12px 0 0;font-size:15px;color:var(--muted)}
+.legend span::before{content:"";display:inline-block;width:14px;height:14px;border-radius:3px;margin-right:7px;vertical-align:-2px;background:var(--sw)}
+.legend span.dash::before{background:none;border:2px dashed var(--id);width:10px;height:10px}
+.todo{margin-top:28px;display:grid;grid-template-columns:1fr;gap:22px}
+@media(min-width:860px){.todo{grid-template-columns:1fr 1fr}}
+.group h2{display:flex;align-items:baseline;gap:10px}
+.group h2 .n{color:var(--muted);font-weight:400;font-size:16px}
+.row{background:var(--panel);border-radius:10px;padding:12px 14px;margin-bottom:8px;cursor:pointer}
+.row:hover,.row.lit{background:var(--panel2)}
+.row .top{display:grid;grid-template-columns:46px 1fr;gap:4px 12px;align-items:baseline}
+.row .num{font:700 24px/1.1 ui-monospace,Menlo,monospace;font-variant-numeric:tabular-nums}
+.row .num.empty{color:var(--empty)}.row .num.half{color:var(--half)}.row .num.full{color:var(--full)}.row .num.wrong{color:var(--id)}
+.row .what{font-weight:650}
+.row .say{grid-column:2;color:var(--muted)}
+.row .say b{color:var(--ink);font-weight:600}
+.row details{grid-column:2;margin-top:6px;font-size:15px;color:var(--muted)}
+.row summary{cursor:pointer;color:var(--muted);list-style:none}
+.row summary::before{content:"Why? ";color:var(--ink)}
+.row details[open] summary::before{content:"Why: "}
+.row details p{margin:6px 0 0}
+.fine{color:var(--muted);font-size:16px}
+.fine b{color:var(--ink);font-weight:600}
+.foot{margin-top:30px;color:var(--muted);font-size:15px}
+.foot details{margin-top:10px}
+.foot summary{cursor:pointer}
+pre{background:var(--panel);border-radius:8px;padding:12px;overflow-x:auto;font:13px/1.45 ui-monospace,Menlo,monospace;max-height:360px;color:var(--ink)}
+.copy{margin:8px 0 0;background:var(--panel2);color:var(--ink);border:0;border-radius:6px;padding:7px 11px;font:inherit;font-size:15px;cursor:pointer}
+@media(prefers-reduced-motion:reduce){polygon{transition:none}}
+</style>
+</head>
+<body>
+<main>
+<h1>Shelf Check</h1>
+<p class="lead">Give it a photo from one of the shelf cameras. It tells you which areas need restocking, which are running low, and where the wrong product sits.</p>
+
+<section class="drop" id="drop">
+  <p>Drop a shelf photo here</p>
+  <label class="btn" for="file">Choose a photo</label>
+  <input type="file" id="file" accept="image/*">
+</section>
+<div class="samples" id="samples" hidden>
+  <p>Or try one of today's photos:</p>
+  <div class="chips" id="chips"></div>
+</div>
+<p class="status" id="msg"></p>
+
+<section class="result" id="result" hidden>
+  <div class="where">
+    <h2 id="title"></h2>
+    <span class="cam" id="camline"></span>
+    <button type="button" id="change">Wrong camera? Change it</button>
+    <select id="cam" hidden aria-label="camera"></select>
+  </div>
+  <p class="summary" id="summary"></p>
+  <div class="shot" id="shot"><img id="photo" alt="the shelf photo with every planogram area outlined"><svg id="overlay" viewBox="0 0 1280 720" aria-hidden="true"></svg></div>
+  <div class="legend"><span style="--sw:var(--full)">Stocked</span><span style="--sw:var(--half)">Running low</span><span style="--sw:var(--empty)">Needs restocking</span><span class="dash">Wrong product</span></div>
+  <div class="todo" id="todo"></div>
+  <div class="foot" id="foot"></div>
+</section>
+</main>
+
+<script>
+const $ = id => document.getElementById(id);
+const SAY = {
+  empty: a => a.compliant ? "<b>Empty.</b> Needs restocking." : `<b>Empty, and the leftovers are ${esc(a.seen || "another product")}.</b> Needs restocking and tidying.`,
+  half:  a => a.compliant ? `<b>Running low.</b> About ${pct(a)} of the area is covered.` : `<b>Wrong product.</b> This area holds ${esc(a.seen || "something else")}, about ${pct(a)} covered.`,
+  full:  a => a.compliant ? `<b>Stocked.</b> About ${pct(a)} covered.` : `<b>Wrong product.</b> This area is full of ${esc(a.seen || "something else")}.`
+};
+const pct = a => a.fill == null ? "most" : (a.fill >= 95 ? "all" : Math.round(a.fill / 5) * 5 + "%");
+const sure = a => a.confidence >= 0.75 ? "" : (a.confidence >= 0.55 ? " Fairly sure." : " Not sure, worth a look in person.");
+let busy = false, lastJson = "", cameraNames = {}, lastBlob = null, lastName = "";
+
+async function init() {
+  try {
+    const r = await (await fetch("/samples")).json();
+    cameraNames = r.camera_names || {};
+    for (const c of r.cameras) { const o = document.createElement("option"); o.value = c; o.textContent = `${cameraNames[c] || c} (${c})`; $("cam").appendChild(o); }
+    if (r.samples.length) {
+      $("samples").hidden = false;
+      for (const x of r.samples) {
+        const b = document.createElement("button"); b.type = "button";
+        b.innerHTML = `${esc(x.camera_name)} <span>· ${esc(x.hhmm)}</span>`;
+        b.onclick = async () => { const blob = await (await fetch(`/sample/${x.cam}/${x.name}`)).blob(); analyze(blob, x.name, x.cam); };
+        $("chips").appendChild(b);
+      }
+      const want = location.hash.slice(1);
+      const s = r.samples.find(x => x.cam === want);
+      if (s) { const blob = await (await fetch(`/sample/${s.cam}/${s.name}`)).blob(); analyze(blob, s.name, s.cam); }
+    }
+  } catch (e) { say("The server is not running. Start it with: .venv/bin/python app/server.py", true); }
+}
+
+function say(text, err) { $("msg").textContent = text; $("msg").className = "status" + (err ? " err" : ""); }
+
+$("file").addEventListener("change", e => { const f = e.target.files[0]; if (f) analyze(f, f.name, "auto"); });
+for (const ev of ["dragover", "dragenter"]) $("drop").addEventListener(ev, e => { e.preventDefault(); $("drop").classList.add("over"); });
+for (const ev of ["dragleave", "drop"]) $("drop").addEventListener(ev, e => { e.preventDefault(); $("drop").classList.remove("over"); });
+document.addEventListener("dragover", e => e.preventDefault());
+document.addEventListener("drop", e => { e.preventDefault(); const f = e.dataTransfer.files[0]; if (f) analyze(f, f.name, "auto"); });
+$("change").addEventListener("click", () => { $("cam").hidden = false; $("change").hidden = true; });
+$("cam").addEventListener("change", () => { if (lastBlob) analyze(lastBlob, lastName, $("cam").value); });
+
+async function analyze(blob, name, cam) {
+  if (busy) return; busy = true; lastBlob = blob; lastName = name;
+  say("Checking the photo… this takes about ten seconds.");
+  $("result").hidden = true;
+  try {
+    const r = await fetch(`/analyze?cam=${encodeURIComponent(cam)}&name=${encodeURIComponent(name)}`, {method: "POST", body: blob, headers: {"Content-Type": "application/octet-stream"}});
+    const d = await r.json();
+    if (!r.ok) {
+      say(d.error + (d.detected ? ` The closest match is ${cameraNames[d.detected] || d.detected}.` : ""), true);
+      if (d.detected !== undefined) { $("result").hidden = false; $("cam").hidden = false; $("change").hidden = true; $("summary").textContent = ""; $("todo").innerHTML = ""; $("foot").innerHTML = ""; }
+      return;
+    }
+    say("");
+    render(d, cam === "auto");
+  } catch (e) { say("Something went wrong talking to the server: " + e, true); }
+  finally { busy = false; }
+}
+
+function render(d, auto) {
+  $("title").textContent = d.camera_name;
+  $("camline").textContent = `camera ${d.camera}${d.time_utc ? ", photo taken at " + d.time_utc + " UTC" : ""}${auto ? ", recognised from the photo" : ""}`;
+  $("cam").value = d.camera; $("cam").hidden = true; $("change").hidden = false;
+  $("photo").src = d.image;
+  const svg = $("overlay"); svg.innerHTML = "";
+  for (const a of d.areas) {
+    const p = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+    p.setAttribute("points", a.quad.map(q => q.join(",")).join(" "));
+    p.setAttribute("class", a.stock + (a.compliant ? "" : " wrong")); p.dataset.area = a.area_id;
+    p.addEventListener("mouseenter", () => light(a.area_id, true)); p.addEventListener("mouseleave", () => light(a.area_id, false));
+    p.addEventListener("click", () => { const row = document.querySelector(`.row[data-area="${a.area_id}"]`); if (row) row.scrollIntoView({block: "center", behavior: "smooth"}); });
+    svg.appendChild(p);
+    const t = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    const [x, y] = a.quad[0]; t.setAttribute("x", Math.max(4, Math.min(1220, x + 6))); t.setAttribute("y", Math.max(36, y + 38)); t.setAttribute("class", "tag");
+    t.textContent = a.number; svg.appendChild(t);
+  }
+  const empty = d.areas.filter(a => a.stock === "empty"), wrong = d.areas.filter(a => !a.compliant),
+        low = d.areas.filter(a => a.stock === "half" && a.compliant), ok = d.areas.filter(a => a.stock === "full" && a.compliant);
+  const parts = [];
+  if (empty.length) parts.push(`<b>${empty.length}</b> ${empty.length === 1 ? "area needs" : "areas need"} restocking`);
+  if (wrong.length) parts.push(`<b>${wrong.length}</b> ${wrong.length === 1 ? "holds" : "hold"} the wrong product`);
+  if (low.length) parts.push(`<b>${low.length}</b> ${low.length === 1 ? "is" : "are"} running low`);
+  if (ok.length) parts.push(`<b>${ok.length}</b> ${ok.length === 1 ? "is" : "are"} stocked`);
+  $("summary").innerHTML = parts.length ? parts.join(", ") + "." : "";
+
+  const todo = $("todo"); todo.innerHTML = "";
+  const groups = [["Restock now", empty.filter(a => a.compliant)], ["Wrong product", wrong], ["Running low", low]];
+  const left = document.createElement("div"), right = document.createElement("div");
+  for (const [title, items] of groups) {
+    if (!items.length) continue;
+    const g = document.createElement("section"); g.className = "group";
+    g.innerHTML = `<h2>${title} <span class="n">${items.length}</span></h2>`;
+    for (const a of items) g.appendChild(rowFor(a));
+    (title === "Running low" ? right : left).appendChild(g);
+  }
+  if (ok.length) {
+    const g = document.createElement("section"); g.className = "group";
+    g.innerHTML = `<h2>Stocked <span class="n">${ok.length}</span></h2><p class="fine">${ok.map(a => `<b>${a.number}</b> ${esc(a.product)}`).join(" · ")}</p>`;
+    right.appendChild(g);
+  }
+  todo.appendChild(left); todo.appendChild(right);
+  lastJson = JSON.stringify(d.submission, null, 1);
+  $("foot").innerHTML = `Checked in ${d.seconds} s${d.calls ? `, each area judged ${d.samples} times by Claude, cost $${d.cost_usd.toFixed(2)}` : " from saved answers"}.` +
+    `<details><summary>Result file for the competition (JSON)</summary><pre id="jsonpre"></pre><button class="copy" id="copy" type="button">Copy</button></details>`;
+  $("jsonpre").textContent = lastJson;
+  $("copy").addEventListener("click", copyJson);
+  $("result").hidden = false;
+}
+
+function rowFor(a) {
+  const row = document.createElement("div"); row.className = "row"; row.dataset.area = a.area_id;
+  const cls = a.compliant ? a.stock : "wrong";
+  row.innerHTML = `<div class="top"><div class="num ${cls}">${a.number}</div><div class="what">${esc(a.product)}</div>` +
+    `<div class="say">${SAY[a.stock](a)}${sure(a)}${a.note ? " (view blocked, taken from the previous photo)" : ""}</div>` +
+    (a.observation ? `<details><summary></summary><p>${esc(a.observation)}</p></details>` : "") + `</div>`;
+  row.addEventListener("mouseenter", () => light(a.area_id, true)); row.addEventListener("mouseleave", () => light(a.area_id, false));
+  row.addEventListener("click", e => { if (e.target.closest("details")) return; $("shot").scrollIntoView({block: "nearest", behavior: "smooth"}); });
+  return row;
+}
+
+function light(area, on) { document.querySelectorAll(`[data-area="${area}"]`).forEach(el => el.classList.toggle("lit", on)); }
+function esc(s) { return String(s).replace(/[&<>"]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"}[c])); }
+async function copyJson() {
+  const b = $("copy");
+  try { await navigator.clipboard.writeText(lastJson); b.textContent = "Copied"; }
+  catch (e) { const r = document.createRange(); r.selectNodeContents($("jsonpre")); const s = getSelection(); s.removeAllRanges(); s.addRange(r); b.textContent = "Selected, press ⌘C"; }
+  setTimeout(() => b.textContent = "Copy", 2000);
+}
+init();
+</script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+{
+  "model": "claude-opus-5-5",
+  "fallback_models": [
+    "claude-sonnet-5-5",
+    "claude-haiku-5-5"
+  ],
+  "version": "v5",
+  "effort": "low",
+  "samples": 1,
+  "stock_rule": "fill:35:65",
+  "alpha": 1.0,
+  "flag_rule": "unanimous_no",
+  "use_references": false,
+  "use_time": false,
+  "prev_from_run_photos": false,
+  "concurrency": 32,
+  "ramp_start": 8,
+  "ramp_seconds": 30,
+  "mode": "opus",
+  "cascade": {
+    "first": "local:mlx-community/Qwen3.5-4B-MLX-4bit",
+    "adapter": "models/qwen3.5-4b-shelf-lora",
+    "first_samples": 1,
+    "escalate": {
+      "empty": 0.9,
+      "half": 0.9,
+      "full": 0.9
+    },
+    "local_time_budget_seconds": 2400
+  },
+  "time_budget_seconds": 720,
+  "first_pass_by_seconds": 300,
+  "stop_new_calls_seconds": 600,
+  "notes": "11 Oct 00:45: Opus v5 x1, image only; stock level from Opus's own fill estimate (empty < 35 %, half < 65 %, else full), chosen by grouped CV: 1349/1802 on 901 labels (argmax 1269), 567/812 clean. Flag on a confident 'no'. $0.12 per photo. See docs/decisions.md."
+}
