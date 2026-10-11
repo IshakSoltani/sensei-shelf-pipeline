@@ -261,6 +261,18 @@ const server = http.createServer(async (req, res) => {
     const p = decodeURIComponent(url.pathname);
     if (req.method === 'OPTIONS') return send(res, 204, '');
 
+    // the model's validation page (test run, score, tuning, download), served through the bridge for the Settings tab
+    const MODEL_ROUTES = ['/gates', '/settings', '/samples', '/analyze_gates', '/score', '/redecide'];
+    if (MODEL_ROUTES.includes(p) || p.startsWith('/sample/')) {
+      try {
+        const r = await fetch(SHELF_MODEL + req.url, {
+          method: req.method, headers: req.headers['content-type'] ? { 'Content-Type': req.headers['content-type'] } : {},
+          body: ['POST', 'PUT'].includes(req.method) ? await body(req) : undefined, signal: AbortSignal.timeout(300000),
+        });
+        res.writeHead(r.status, { 'Content-Type': r.headers.get('content-type') || 'application/octet-stream', 'Cache-Control': 'no-store' });
+        return res.end(Buffer.from(await r.arrayBuffer()));
+      } catch (e) { return send(res, 502, { error: `The shelf-check model is not reachable at ${SHELF_MODEL}. Start it with ./start.sh` }); }
+    }
     if (p === '/api/status') return send(res, 200, status());
     if (p === '/api/results' && req.method === 'GET') return send(res, 200, readResults());
     if (p === '/api/planogram') return send(res, 200, { planogram, areas });

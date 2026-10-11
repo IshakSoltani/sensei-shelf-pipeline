@@ -18,6 +18,8 @@
   nav a:hover { background:#eaeef2; color:var(--ink); }
   .clock { color:var(--ink2); font-size:14px; }
   main { max-width:1280px; margin:0 auto; padding:40px 32px 100px; }
+  main.tight { padding-bottom:18px; }
+  a.pill { text-decoration:none; display:inline-block; }
   .eyebrow { color:var(--ink2); font-size:15px; }
   h1 { font-weight:300; font-size:48px; letter-spacing:-1.6px; line-height:1.08; margin:10px 0 6px; }
   h2 { font-weight:400; font-size:30px; letter-spacing:-.9px; margin:0 0 6px; }
@@ -163,6 +165,8 @@
   <div class="clock" id="clock"></div>
 </div></header>
 <main id="app"></main>
+<!-- Settings > Validation run: the model's working test page, kept outside #app so the 15-second refresh never reloads a run -->
+<div id="valwrap" hidden style="max-width:1280px;margin:0 auto;padding:0 32px 100px"><iframe id="valframe" title="Validation run" style="width:100%;height:900px;border:0;display:block;background:transparent"></iframe></div>
 <script>
 const $ = (id) => document.getElementById(id);
 const COL = { empty:'var(--empty)', wrong:'var(--wrong)', half:'var(--half)', ok:'var(--ok)', unknown:'var(--grey)' };
@@ -236,9 +240,12 @@ function route() {
   const parts = location.hash.replace(/^#\/?/, '').split('/'), top = parts[0] || '';
   $('nav').innerHTML = NAV.map(([h, l]) => `<a href="#/${h}" class="${h === top ? 'on' : ''}">${l}</a>`).join('');
   $('clock').textContent = D.newest ? `Latest picture ${hhmm(D.newest)} · Lisbon` : 'No pictures yet';
-  const pages = { '': pageHome, staff: pageStaff, cameras: () => (parts[1] ? (parts[2] ? pageCamera(parts[1], parts[2]) : pageAisle(parts[1])) : pageCameras()), insights: pageInsights, settings: pageSettings };
+  const pages = { '': pageHome, staff: pageStaff, cameras: () => (parts[1] ? (parts[2] ? pageCamera(parts[1], parts[2]) : pageAisle(parts[1])) : pageCameras()), insights: pageInsights, settings: () => (parts[1] === 'validation' ? pageValidation() : pageSettings()) };
   const html = (pages[top] || pageHome)();
   $('app').innerHTML = html;
+  const val = top === 'settings' && parts[1] === 'validation' && !window.__SNAPSHOT;
+  $('valwrap').hidden = !val; $('app').classList.toggle('tight', val);
+  if (val && !$('valframe').getAttribute('src')) $('valframe').setAttribute('src', '/gates?embed=1');
   afterRender();
 }
 addEventListener('hashchange', () => { selected = null; route(); scrollTo(0, 0); });
@@ -332,6 +339,7 @@ function pageSettings() {
   return `<div class="home"><div class="eyebrow" style="font-size:14px">Settings · Training playground</div>
   <h1>Teach the model your shelves.</h1>
   <p class="sub">Every photo you drop trains the next version of our open model.</p>
+  ${settingsTabs('')}
   <div class="grid tiles">${[['dark', T.photos || 0, 'Photos collected'], ['', T.areas || 0, 'Shelf areas learned'], ['', `${covered}/${cams.length}`, 'Cameras covered'], ['', mine ? mine.photos : 0, 'Your photos']]
     .map(([c, n, l]) => `<div class="card tile ${c}"><div class="n">${n}</div><div class="l">${l}</div></div>`).join('')}</div>
   <div class="grid rowB">
@@ -353,6 +361,15 @@ function pageSettings() {
       ${(T.contributors || []).slice(0, 5).map((e, i) => `<div class="mini">${rankMedal(i)}<div class="grow"><div class="who" style="font-size:15px">${e.name.replace(/</g, '&lt;')}</div></div><b>${e.photos}<span class="muted" style="font-weight:400;font-size:12px"> photos</span></b></div>`).join('') || '<div class="muted">Be the first: drop a photo.</div>'}</div>
   </div></div>`;
 }
+const settingsTabs = (on) => `<div class="tabs">${[['', 'Training playground'], ['validation', 'Validation run']].map(([k, l]) => `<a class="pill ${k === on ? 'on' : ''}" href="#/settings${k ? '/' + k : ''}">${l}</a>`).join('')}</div>`;
+function pageValidation() {
+  return `<div class="home"><div class="eyebrow" style="font-size:14px">Settings · Validation run</div>
+  <h1>Score the validation set.</h1>
+  <p class="sub">Drop the validation folder with annotations.json, tune, then download the submission.</p>
+  ${settingsTabs('validation')}
+  ${window.__SNAPSHOT ? '<div class="card pcard"><div class="muted">Open the live dashboard to run the validation set.</div></div>' : ''}</div>`;
+}
+addEventListener('message', (e) => { if (e.data && e.data.shelfFrameHeight) $('valframe').style.height = `${Math.max(600, e.data.shelfFrameHeight + 8)}px`; });
 function wireSettings() {
   const z = $('dropz'); if (!z) return;
   const save = () => { try { localStorage.setItem('sr-name', $('who').value.trim()); } catch (e) { /* private window */ } };

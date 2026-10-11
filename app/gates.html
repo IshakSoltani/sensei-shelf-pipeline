@@ -4,6 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Test Run and Tuning</title>
+<script>if (new URLSearchParams(location.search).has("embed")) document.documentElement.classList.add("embed");</script>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600&display=swap" rel="stylesheet" media="print" onload="if(document.documentElement.classList.contains('embed'))this.media='all'">
 <style>
 /* same world as the viewer: dark leaf ground, the three stock colours, cyan for a wrong product;
    plus straw for "the rule answered" and sage for "Opus answered" in the who-decided view */
@@ -108,6 +110,18 @@ li .more{grid-column:2 / 4;color:var(--muted);font-size:14px}
 li .more .by{color:var(--ink)}
 li .more .by.gate{color:var(--rule)}
 li .more .ok{color:var(--full)}li .more .bad{color:var(--empty)}
+/* inside the manager dashboard (Settings > Validation run): its light palette and font, no page title */
+html.embed{--bg:#f7f8fa;--panel:#fff;--panel2:#f3f5f7;--ink:#3a4756;--muted:#7d8998;--line:#e3e7ec;--empty:#e9776c;--half:#d9a520;--full:#5fae82;--id:#2f8fa3;--rule:#a9741f;--model:#5f8a6e;color-scheme:light}
+html.embed body{font-family:'Figtree',system-ui,sans-serif;font-size:16px}
+html.embed main{max-width:none;padding:0 0 24px}
+html.embed h1,html.embed .lead{display:none}
+html.embed .drop,html.embed .side,html.embed .card{border-radius:24px}
+html.embed .btn{background:#34463f;color:#fff;border-radius:14px}html.embed .btn:hover{background:#2a3a34}
+html.embed .btn.quiet{background:var(--panel2);color:var(--ink)}
+html.embed .opts input,html.embed .tune input{accent-color:#34463f}
+html.embed .ctl input[type=range]{accent-color:#34463f}
+html.embed .tag{fill:#fff}
+html.embed .seg{background:var(--panel2)}html.embed .seg button[aria-pressed=true]{background:#fff}
 </style>
 </head>
 <body>
@@ -399,6 +413,11 @@ async function rescore() {
 }
 
 initSettings();
+// embedded in the dashboard: tell it how tall the page is, so it can size the frame with no inner scrollbar
+if (document.documentElement.classList.contains("embed") && parent !== window) {
+  const tell = () => parent.postMessage({shelfFrameHeight: document.documentElement.scrollHeight}, "*");
+  new ResizeObserver(tell).observe(document.body); addEventListener("load", tell);
+}
 
 function side(title, s, final, foot) {
   const c = s.counts;
