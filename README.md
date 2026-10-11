@@ -30,7 +30,7 @@ The dashboard also **plans the people**: from a full day of camera verdicts it c
 
 New pictures keep coming in while a round is running. If a shelf turns empty or gets the wrong product, the phone buzzes ("Aisle 2 needs you") and adds it to the next round; the plan in hand never changes under the worker. Staff can also report a problem themselves (empty, wrong, half or damaged, with an optional photo), and it joins the next round.
 
-**Send to phone.** From the manager dashboard (Settings, Send to phone), drop one photo: the model checks it straight away (the camera is recognised from the picture), and the phone opens that photo's result on its own: the shelves outlined on the picture, each one's status, and the points when the photo has hand labels. In the middle of a round it waits until the worker is back on the home screen.
+**Update shelves.** From the manager dashboard (Settings, Update shelves), drop the camera folders: every photo is checked by the model (three at a time, with progress), and the phone's home page, round and pick list update live within seconds. "Replace the current shelves" starts from a clean store, so older photos are not hidden behind newer ones.
 
 ## The learning loop
 

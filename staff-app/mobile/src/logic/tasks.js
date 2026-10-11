@@ -31,8 +31,8 @@ export function newestPhotos(res = results) {
 }
 // base = bridge address (for photo urls); null goes back to the demo data
 export function setResults(obj, base) {
-  if (obj && Object.keys(obj).length) { results = obj; source = { live: true, base }; }
-  else { results = resultsDemo; source = { live: false, base: null }; }
+  if (obj && (Object.keys(obj).length || base)) { results = obj; source = { live: true, base }; }   // the bridge answered (even with no pictures yet)
+  else { results = resultsDemo; source = { live: false, base: null }; }                             // no bridge: demo data
 }
 
 const productById = Object.fromEntries(products.map((p) => [String(p.product_id), p]));

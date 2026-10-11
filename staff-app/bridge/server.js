@@ -194,6 +194,15 @@ async function analyzeWithShelfModel(camera, name) {
   const j = await askShelfModel(fs.readFileSync(path.join(PHOTOS, camera, name)), camera, name);
   return keepModelAnswer(j, camera, name);
 }
+// judge a photo with the model (camera may be 'auto'), keep it with the other pictures and write its results
+async function judgeAndKeep(bytes, cam, name) {
+  const j = await askShelfModel(bytes, cam, name), camera = j.camera;
+  fs.mkdirSync(path.join(PHOTOS, camera), { recursive: true });
+  fs.writeFileSync(path.join(PHOTOS, camera, name), bytes);
+  const out = keepModelAnswer(j, camera, name);
+  const results = readResults(); (results[camera] = results[camera] || {})[name] = out; writeResults(results);
+  return { camera, out };
+}
 function keepModelAnswer(j, camera, name) {
   const out = j.submission[j.camera][j.file];
   const det = readDetails();
@@ -351,12 +360,7 @@ const server = http.createServer(async (req, res) => {
       if (cam !== 'auto' && !planogram[cam]) return send(res, 400, { error: `unknown camera ${cam}` });
       if (!shelfModelOnline && !(await checkShelfModel())) return send(res, 503, { error: 'The shelf-check model is not running. Start it with ./start.sh' });
       try {
-        const bytes = await body(req);
-        const j = await askShelfModel(bytes, cam, name), camera = j.camera;
-        fs.mkdirSync(path.join(PHOTOS, camera), { recursive: true });
-        fs.writeFileSync(path.join(PHOTOS, camera, name), bytes);
-        const out = keepModelAnswer(j, camera, name);
-        const results = readResults(); (results[camera] = results[camera] || {})[name] = out; writeResults(results);
+        const { camera, out } = await judgeAndKeep(await body(req), cam, name);
         let score = null;
         try {
           const sr = await fetch(`${SHELF_MODEL}/score`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ submission: { [camera]: { [name]: out } } }) });
@@ -367,6 +371,21 @@ const server = http.createServer(async (req, res) => {
         console.log(`sent to the phone: ${camera}/${name}` + (score ? ` (${score.points} of ${score.max} points)` : ' (no labels, no score)'));
         return send(res, 200, focus);
       } catch (e) { return send(res, 500, { error: e.message }); }
+    }
+    // Settings > Update shelves: one photo of an uploaded folder, judged now and kept; the phone picks it up on its next look
+    if (p === '/api/photo' && req.method === 'POST') {
+      const name = url.searchParams.get('name'), cam = url.searchParams.get('camera') || 'auto';
+      if (!safeName(name)) return send(res, 400, { error: 'bad file name' });
+      if (cam !== 'auto' && !planogram[cam]) return send(res, 400, { error: `unknown camera ${cam}` });
+      if (!shelfModelOnline && !(await checkShelfModel())) return send(res, 503, { error: 'The shelf-check model is not running. Start it with ./start.sh' });
+      try { const { camera } = await judgeAndKeep(await body(req), cam, name); return send(res, 200, { ok: true, camera, name }); }
+      catch (e) { return send(res, 500, { error: e.message }); }
+    }
+    // start fresh: remove the shelf pictures and their results (the training contributors and the rounds stay)
+    if (p === '/api/clear-shelves' && req.method === 'POST') {
+      fs.rmSync(PHOTOS, { recursive: true, force: true }); fs.mkdirSync(PHOTOS, { recursive: true });
+      writeResults({}); fs.rmSync(DETAILS, { force: true }); fs.rmSync(FOCUS, { force: true });
+      return send(res, 200, { ok: true });
     }
     if (p === '/api/upload' && req.method === 'POST') {
       const camera = url.searchParams.get('camera'), name = url.searchParams.get('name');

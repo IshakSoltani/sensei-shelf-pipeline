@@ -173,7 +173,7 @@ const COL = { empty:'var(--empty)', wrong:'var(--wrong)', half:'var(--half)', ok
 const HEX = { empty:'#e9776c', wrong:'#f0a05a', half:'#efd352', ok:'#5fae82', unknown:'#8f9aa3' };
 const WORD = { empty:'Empty', wrong:'Wrong product', half:'Half', ok:'Full', unknown:'Not checked' };
 const ORDER = ['empty', 'wrong', 'half', 'ok', 'unknown'];
-let D = null, rankBy = 'speed', tab = 'products', selected = null, demoPref = null;
+let D = null, rankBy = 'speed', tab = 'products', selected = null, demoPref = null, lastHtml = null;
 
 const pimg = (pid, emoji, size = 30) => {
   const src = (window.__SNAPSHOT && window.__SNAPSHOT.product && window.__SNAPSHOT.product[pid]) || `/product-images/${pid}.jpg`;
@@ -242,10 +242,12 @@ function route() {
   $('clock').textContent = D.newest ? `Latest picture ${hhmm(D.newest)} · Lisbon` : 'No pictures yet';
   const pages = { '': pageHome, staff: pageStaff, cameras: () => (parts[1] ? (parts[2] ? pageCamera(parts[1], parts[2]) : pageAisle(parts[1])) : pageCameras()), insights: pageInsights, settings: () => (parts[1] === 'validation' ? pageValidation() : parts[1] === 'phone' ? pagePhone() : pageSettings()) };
   const html = (pages[top] || pageHome)();
-  $('app').innerHTML = html;
   const val = top === 'settings' && parts[1] === 'validation' && !window.__SNAPSHOT;
   $('valwrap').hidden = !val; $('app').classList.toggle('tight', val);
   if (val && !$('valframe').getAttribute('src')) $('valframe').setAttribute('src', '/gates?embed=1');
+  if (html === lastHtml) return;   // nothing changed since the last refresh: keep the page as it is (open pickers, focus, inputs)
+  lastHtml = html;
+  $('app').innerHTML = html;
   afterRender();
 }
 addEventListener('hashchange', () => { selected = null; route(); scrollTo(0, 0); });
@@ -361,45 +363,64 @@ function pageSettings() {
       ${(T.contributors || []).slice(0, 5).map((e, i) => `<div class="mini">${rankMedal(i)}<div class="grow"><div class="who" style="font-size:15px">${e.name.replace(/</g, '&lt;')}</div></div><b>${e.photos}<span class="muted" style="font-weight:400;font-size:12px"> photos</span></b></div>`).join('') || '<div class="muted">Be the first: drop a photo.</div>'}</div>
   </div></div>`;
 }
-const settingsTabs = (on) => `<div class="tabs">${[['', 'Training playground'], ['validation', 'Validation run'], ['phone', 'Send to phone']].map(([k, l]) => `<a class="pill ${k === on ? 'on' : ''}" href="#/settings${k ? '/' + k : ''}">${l}</a>`).join('')}</div>`;
-// ---------- Settings > Send to phone: one photo, judged now; the phone app opens straight onto its result and score ----------
-let ph1 = { msg: '', cam: 'auto' };
+const settingsTabs = (on) => `<div class="tabs">${[['', 'Training playground'], ['validation', 'Validation run'], ['phone', 'Update shelves']].map(([k, l]) => `<a class="pill ${k === on ? 'on' : ''}" href="#/settings${k ? '/' + k : ''}">${l}</a>`).join('')}</div>`;
+// ---------- Settings > Update shelves: drop the camera folder(s); every photo is judged by the model and the phone's
+// home page (counts, stops, pick list) updates on its own within seconds ----------
+let ph1 = { msg: '', busy: false, fresh: true };
 function pagePhone() {
-  const F = D.focus || {}, cams = Object.keys(D.planogram), bayOf = (c) => (D.cams.find((x) => x.cam === c) || {}).bay || '';
-  const now = F.camera ? `<div class="mini" style="padding-top:0"><div class="grow"><div class="who" style="font-size:15px">${bayOf(F.camera)} · ${(D.cams.find((x) => x.cam === F.camera) || {}).bayName || ''}</div>
-      <div class="muted" style="font-size:13px">Camera ${F.camera} · ${F.name}</div></div>${F.score ? `<b style="font-weight:300;font-size:26px;letter-spacing:-.8px">${F.score.points}<span class="muted" style="font-size:14px;letter-spacing:0"> of ${F.score.max} points</span></b>` : '<span class="muted" style="font-size:14px">No labels, no score</span>'}</div>` : '<div class="muted">Nothing sent yet.</div>';
-  return `<div class="home"><div class="eyebrow" style="font-size:14px">Settings · Send to phone</div>
-  <h1>Show one photo on the phone.</h1>
-  <p class="sub">Drop a photo: the model checks it and the phone opens its result and score.</p>
+  const t = D.tot, bad = t.empty + t.wrong + t.half;
+  return `<div class="home"><div class="eyebrow" style="font-size:14px">Settings · Update shelves</div>
+  <h1>Upload today's shelf photos.</h1>
+  <p class="sub">Drop the camera folders: every photo is checked and the phone's round updates live.</p>
   ${settingsTabs('phone')}
   <div class="grid rowB">
-    <div class="card pcard"><h3>Drop one photo</h3>
-      ${window.__SNAPSHOT ? '<div class="muted">Open the live dashboard to send a photo.</div>' : `<label class="dropz" id="dropp"><div class="big">Drop a photo</div><div class="muted" style="font-size:14px">or click to choose</div>
-        <input type="file" id="pickp" accept="image/*" hidden></label>
-      <div class="field"><select id="camp" aria-label="Camera"><option value="auto">Recognise the camera</option>${cams.map((c) => `<option value="${c}" ${c === ph1.cam ? 'selected' : ''}>${bayOf(c)} · ${c}</option>`).join('')}</select></div>
+    <div class="card pcard"><h3>Drop photos or camera folders</h3>
+      ${window.__SNAPSHOT ? '<div class="muted">Open the live dashboard to upload photos.</div>' : `<label class="dropz" id="dropp"><div class="big">Drop the folder</div><div class="muted" style="font-size:14px">or click to choose photos</div>
+        <input type="file" id="pickp" accept="image/*" multiple hidden></label>
+      <label class="field" style="cursor:pointer"><input type="checkbox" id="freshp" ${ph1.fresh ? 'checked' : ''} style="flex:none;min-width:0;accent-color:var(--dark)"> Replace the current shelves</label>
       <div style="margin-top:12px;min-height:1.4em;font-size:14px" id="phmsg">${ph1.msg}</div>`}</div>
-    <div class="card pcard"><h3>On the phone now</h3>${now}</div>
+    <div class="card pcard"><h3>On the phone now</h3>
+      <div class="big">${bad} <span class="muted" style="font-size:16px;letter-spacing:0">shelves need attention</span></div>
+      ${stackBar(t)}${legend(t)}
+      <div class="muted" style="font-size:13px;margin-top:10px">${D.pictures} pictures</div></div>
   </div></div>`;
 }
 function wirePhone() {
   const z = $('dropp'); if (!z) return;
-  $('camp').addEventListener('change', () => { ph1.cam = $('camp').value; });
-  const go = async (file) => {
-    if (!file) return;
-    const say = (m) => { ph1.msg = m; if ($('phmsg')) $('phmsg').innerHTML = m; };
-    say('Checking the photo…');
-    try {
-      const r = await fetch(`/api/show?camera=${$('camp').value}&name=${encodeURIComponent(file.name)}`, { method: 'POST', body: file });
-      const j = await r.json();
-      if (!r.ok) { say(`<span style="color:var(--empty)">${j.error}</span>`); return; }
-      say(`<span class="gain">Sent to the phone.</span>${j.score ? ` ${j.score.points} of ${j.score.max} points.` : ''}`);
-      await load();
-    } catch (e) { say(`<span style="color:var(--empty)">${e.message}</span>`); }
-  };
+  $('freshp').addEventListener('change', () => { ph1.fresh = $('freshp').checked; });
+  const isImg = (n) => /\.(jpe?g|png)$/i.test(n);
+  const walk = (entry, p = '') => new Promise((ok) => {
+    if (entry.isFile) entry.file((f) => ok(isImg(f.name) ? [{ file: f, path: p + f.name }] : []), () => ok([]));
+    else if (entry.isDirectory) { const rd = entry.createReader(), all = []; const next = () => rd.readEntries(async (l) => { if (!l.length) return ok((await Promise.all(all.map((e) => walk(e, p + entry.name + '/')))).flat()); all.push(...l); next(); }, () => ok([])); next(); }
+    else ok([]);
+  });
+  const say = (m) => { ph1.msg = m; if ($('phmsg')) $('phmsg').innerHTML = m; };
+  async function send(items) {
+    if (ph1.busy || !items.length) return;
+    ph1.busy = true;
+    const cams = Object.keys(D.planogram);
+    if (ph1.fresh) await fetch('/api/clear-shelves', { method: 'POST' });
+    let done = 0, failed = 0, next = 0;
+    say(`Checking 0 of ${items.length} photos…`);
+    const worker = async () => {
+      while (next < items.length) {
+        const { file, path } = items[next++];
+        const cam = path.split('/').find((x) => cams.includes(x)) || 'auto';
+        try { const r = await fetch(`/api/photo?camera=${cam}&name=${encodeURIComponent(file.name)}`, { method: 'POST', body: file }); if (!r.ok) failed++; }
+        catch (e) { failed++; }
+        done++; say(`Checking ${done} of ${items.length} photos…`);
+        if (done % 3 === 0) load();
+      }
+    };
+    await Promise.all([worker(), worker(), worker()]);
+    ph1.busy = false;
+    say(`<span class="gain">${done - failed} photos checked.</span> The phone is up to date.${failed ? ` ${failed} could not be read.` : ''}`);
+    await load();
+  }
   z.addEventListener('dragover', (e) => { e.preventDefault(); z.classList.add('over'); });
   z.addEventListener('dragleave', () => z.classList.remove('over'));
-  z.addEventListener('drop', (e) => { e.preventDefault(); z.classList.remove('over'); go([...e.dataTransfer.files].find((f) => /\.(jpe?g|png)$/i.test(f.name))); });
-  $('pickp').addEventListener('change', () => go($('pickp').files[0]));
+  z.addEventListener('drop', async (e) => { e.preventDefault(); z.classList.remove('over'); const en = [...e.dataTransfer.items].map((i) => i.webkitGetAsEntry && i.webkitGetAsEntry()).filter(Boolean); send((await Promise.all(en.map((x) => walk(x)))).flat()); });
+  $('pickp').addEventListener('change', (e) => send([...e.target.files].map((f) => ({ file: f, path: f.webkitRelativePath || f.name }))));   // the field that was used, even if the page redrew meanwhile
 }
 
 function pageValidation() {
@@ -424,7 +445,7 @@ function wireSettings() {
   z.addEventListener('dragover', (e) => { e.preventDefault(); z.classList.add('over'); });
   z.addEventListener('dragleave', () => z.classList.remove('over'));
   z.addEventListener('drop', async (e) => { e.preventDefault(); z.classList.remove('over'); const en = [...e.dataTransfer.items].map((i) => i.webkitGetAsEntry && i.webkitGetAsEntry()).filter(Boolean); send((await Promise.all(en.map((x) => walk(x)))).flat()); });
-  $('pickz').addEventListener('change', () => send([...$('pickz').files].map((f) => ({ file: f, path: f.name }))));
+  $('pickz').addEventListener('change', (e) => send([...e.target.files].map((f) => ({ file: f, path: f.name }))));
   async function send(items) {
     save();
     const cams = Object.keys(D.planogram), by = $('who').value.trim(), fallback = $('camz').value;

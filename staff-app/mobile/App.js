@@ -15,9 +15,8 @@ import ProductThumb from './src/ui/ProductThumb';
 import PeekCard from './src/ui/PeekCard';
 import Live from './src/screens/Live';
 import Report from './src/screens/Report';
-import Result from './src/screens/Result';
 import { announce, ask, cancel, converse, isOn, onStatus, register, registerDefault, setBridge, setOn } from './src/voice';
-import { alertBuzz, choose, confirm, menuLayout, smoothLayout, soft, success, tap } from './src/feel';
+import { alertBuzz, choose, confirm, menuLayout, smoothLayout, soft, tap } from './src/feel';
 import { CONFIG, WORDS, newAlerts, bayByCode, dataInfo, newestPhotos, setResults, autoTrips, oneTrip, bayRank, buildTasks, colorOf, fmtCrates, planRound, splitTrips } from './src/logic/tasks';
 
 // The bridge runs on the same computer as the Expo server (port 8787)
@@ -79,9 +78,6 @@ function Shell() {
   const [peek, setPeek] = useState(null); // product held on the pick list
   const [reports, setReports] = useState([]); // problems reported by staff, joined to the next round
   const [lastDone, setLastDone] = useState({ tasks: [], seconds: 0 });
-  const [focusView, setFocusView] = useState(null); // a photo sent from the dashboard (Settings > Send to phone)
-  const [pendingFocus, setPendingFocus] = useState(null);
-  const lastFocus = useRef(undefined);
   useEffect(() => { setBridge(bridgeBase()); return onStatus(setVoiceStatus); }, []);
   const toggleVoice = () => {
     const v = !isOn();
@@ -125,20 +121,13 @@ function Shell() {
     let stop = false;
     const tick = async () => {
       try {
-        // a photo sent from the dashboard opens its result; the first look is only the starting point
-        let sent = false;
-        try {
-          const f = await (await fetch(`${base}/api/focus`)).json();
-          if (lastFocus.current === undefined) lastFocus.current = (f && f.at) || 0;
-          else if (!stop && f && f.at > lastFocus.current) { lastFocus.current = f.at; sent = true; setPendingFocus(f); }
-        } catch (e) { /* an older bridge without /api/focus */ }
         const r = await fetch(`${base}/api/results`);
         const j = await r.json();
         if (!stop && Object.keys(j).length) {
           // first look is only the starting point; after that, anything newly empty or wrong buzzes the phone
           const fresh = lastJ.current === undefined ? [] : newAlerts(lastJ.current, j);
           lastJ.current = j;
-          if (fresh.length && !sent) showAlert(fresh);   // a sent photo shows its own result instead
+          if (fresh.length) showAlert(fresh);
         }
         if (!stop) { latest.current = { j, base }; setBridgeNote(''); setPoll((n) => n + 1); }
       } catch (e) {
@@ -167,21 +156,13 @@ function Shell() {
     setVersion((v) => v + 1);
   }, [poll, screen]);
 
-  // open a sent photo's result, but never in the middle of a round (it waits until the worker is back home)
-  useEffect(() => {
-    if (!pendingFocus || screen === 'pick' || screen === 'route') return;
-    success(); smoothLayout();
-    setFocusView(pendingFocus); setPendingFocus(null); setOpen(false); setTab('result');
-  }, [pendingFocus, screen]);
-
   const goHome = () => { smoothLayout(); setRound(null); setScreen('home'); };
   const setMenu = (v) => { menuLayout(); setOpen(v); };
   const pick = (key) => { setPresetBay(null); choose(); menuLayout(); setTab(key); setOpen(false); };
   return (
     <View style={s.root}>
       <View style={s.screen}>
-        {tab === 'result' && focusView ? <Result focus={focusView} base={bridgeBase()} onClose={() => { smoothLayout(); setTab('round'); }} />
-          : tab === 'live' ? <Live key={`live-${version}`} fixed={fixed} onReport={(bay) => { setPresetBay(bay); setTab('report'); }} />
+        {tab === 'live' ? <Live key={`live-${version}`} fixed={fixed} onReport={(bay) => { setPresetBay(bay); setTab('report'); }} />
           : tab === 'report' ? <Report key={presetBay || 'none'} preset={presetBay} reports={reports} onSend={(r) => setReports((x) => [...x, r])} />
           : screen === 'pick' ? (
             <Pick key={round.t} fixed={fixed} onPeek={setPeek} trips={round.trips} t={round.t} mode={round.mode}
