@@ -30,6 +30,8 @@ The dashboard also **plans the people**: from a full day of camera verdicts it c
 
 New pictures keep coming in while a round is running. If a shelf turns empty or gets the wrong product, the phone buzzes ("Aisle 2 needs you") and adds it to the next round; the plan in hand never changes under the worker. Staff can also report a problem themselves (empty, wrong, half or damaged, with an optional photo), and it joins the next round.
 
+**Send to phone.** From the manager dashboard (Settings, Send to phone), drop one photo: the model checks it straight away (the camera is recognised from the picture), and the phone opens that photo's result on its own: the shelves outlined on the picture, each one's status, and the points when the photo has hand labels. In the middle of a round it waits until the worker is back on the home screen.
+
 ## The learning loop
 
 <p align="center"><img src="docs/img/loop.svg" alt="Learning loop: collect photos through the staff app, the teacher model labels every area, the labels become a training set, a LoRA fine-tune updates the open-weight student, the student answers more areas locally, and the next photos start the loop again" width="100%"></p>

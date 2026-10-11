@@ -13,7 +13,8 @@ const DATA = path.join(__dirname, 'data');
 const PHOTOS = path.join(DATA, 'photos');
 const RESULTS = path.join(DATA, 'results.json');
 const ROUNDS = path.join(DATA, 'rounds.json'); // finished restock rounds sent by the phone app (and demo shifts)
-const CONTRIB = path.join(DATA, 'contributions.json'); // who dropped which photo on the Settings page (training playground)
+const CONTRIB = path.join(DATA, 'contributions.json');
+const FOCUS = path.join(DATA, 'focus.json'); // the photo sent to the phone from Settings > Send to phone // who dropped which photo on the Settings page (training playground)
 const MILESTONES = [25, 50, 100, 250, 500, 1000, 2500]; // photos collected before each training round of the open model
 const APP_DATA = path.join(__dirname, '..', 'mobile', 'src', 'data');
 const planogram = JSON.parse(fs.readFileSync(path.join(APP_DATA, 'planogram.json'), 'utf8')); // camera -> area -> 4 corners
@@ -181,14 +182,19 @@ function status() {
 // ---- analysis with the shelf-check model: the photo goes to the model service, the verdicts come back per area ----
 const DETAILS = path.join(DATA, 'details.json'); // per area: who decided (code rule / model), what was seen, the fill
 const readDetails = () => { try { return JSON.parse(fs.readFileSync(DETAILS, 'utf8')); } catch (e) { return {}; } };
-async function analyzeWithShelfModel(camera, name) {
-  const file = path.join(PHOTOS, camera, name);
+async function askShelfModel(bytes, camera, name) {   // camera may be 'auto': the model recognises it from the photo
   const r = await fetch(`${SHELF_MODEL}/analyze_gates?cam=${camera}&name=${encodeURIComponent(name)}&api=1`, {
-    method: 'POST', headers: { 'Content-Type': 'application/octet-stream' }, body: fs.readFileSync(file),
-    signal: AbortSignal.timeout(180000),
+    method: 'POST', headers: { 'Content-Type': 'application/octet-stream' }, body: bytes, signal: AbortSignal.timeout(180000),
   });
   const j = await r.json();
   if (!r.ok) throw new Error(j.error || `model ${r.status}`);
+  return j;
+}
+async function analyzeWithShelfModel(camera, name) {
+  const j = await askShelfModel(fs.readFileSync(path.join(PHOTOS, camera, name)), camera, name);
+  return keepModelAnswer(j, camera, name);
+}
+function keepModelAnswer(j, camera, name) {
   const out = j.submission[j.camera][j.file];
   const det = readDetails();
   (det[camera] = det[camera] || {})[name] = Object.fromEntries(j.areas.map((a) => [a.area_id, {
@@ -336,6 +342,31 @@ const server = http.createServer(async (req, res) => {
       const next = MILESTONES.find((m) => m > photos) || photos + 1000, level = MILESTONES.filter((m) => m <= photos).length + 1;
       return send(res, 200, { photos, areas: areasDone, cameras: cams, contributors: Object.entries(by).map(([name, n]) => ({ name, photos: n })).sort((a, b) => b.photos - a.photos),
         level, next, prev: MILESTONES.filter((m) => m <= photos).pop() || 0, milestones: MILESTONES });
+    }
+    // Settings > Send to phone: one photo, judged now, scored against the hand labels when it has them; the phone opens it
+    if (p === '/api/focus') { try { return send(res, 200, fs.readFileSync(FOCUS, 'utf8')); } catch (e) { return send(res, 200, {}); } }
+    if (p === '/api/show' && req.method === 'POST') {
+      const name = url.searchParams.get('name'), cam = url.searchParams.get('camera') || 'auto';
+      if (!safeName(name)) return send(res, 400, { error: 'bad file name' });
+      if (cam !== 'auto' && !planogram[cam]) return send(res, 400, { error: `unknown camera ${cam}` });
+      if (!shelfModelOnline && !(await checkShelfModel())) return send(res, 503, { error: 'The shelf-check model is not running. Start it with ./start.sh' });
+      try {
+        const bytes = await body(req);
+        const j = await askShelfModel(bytes, cam, name), camera = j.camera;
+        fs.mkdirSync(path.join(PHOTOS, camera), { recursive: true });
+        fs.writeFileSync(path.join(PHOTOS, camera, name), bytes);
+        const out = keepModelAnswer(j, camera, name);
+        const results = readResults(); (results[camera] = results[camera] || {})[name] = out; writeResults(results);
+        let score = null;
+        try {
+          const sr = await fetch(`${SHELF_MODEL}/score`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ submission: { [camera]: { [name]: out } } }) });
+          const sj = await sr.json(); if (sj.areas) score = { points: sj.points, max: sj.max, counts: sj.counts };
+        } catch (e) { /* no score */ }
+        const focus = { camera, name, at: Date.now(), verdicts: out, score };
+        fs.writeFileSync(FOCUS, JSON.stringify(focus));
+        console.log(`sent to the phone: ${camera}/${name}` + (score ? ` (${score.points} of ${score.max} points)` : ' (no labels, no score)'));
+        return send(res, 200, focus);
+      } catch (e) { return send(res, 500, { error: e.message }); }
     }
     if (p === '/api/upload' && req.method === 'POST') {
       const camera = url.searchParams.get('camera'), name = url.searchParams.get('name');
