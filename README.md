@@ -10,9 +10,11 @@ The idea: **spend nothing on the easy areas.** Code rules and an open-weight mod
 
 A camera picture lands on the **bridge** (`staff-app/bridge`). The bridge sends it to the **shelf-check model** (`app/server.py`) and stores the verdict for every area. The **phone app** (`staff-app/mobile`) asks the bridge every few seconds and plans the round: every empty shelf on the first trip, wrong products next, half shelves to fill the rest of the cart. Finished rounds go back to the bridge, and the **manager dashboard** ranks the store, the staff and the products from them.
 
+The dashboard also **plans the people**: from a full day of camera verdicts it counts, hour by hour, how many shelves ran empty or got the wrong product, and recommends how many people to put on restocking. On the training day that is 3 to 4 at opening (85 shelves left from the night), 2 for the peaks at 14:00 and 17:00 to 20:00, and 1 in the quiet hours (`tools/staffing_forecast.py`).
+
 <p align="center"><img src="docs/img/manager.jpg" alt="Shelf Round manager dashboard: shelves to fix, staff on the floor, every shelf's state by aisle, what needs attention, top staff, products that sold out and products in the wrong place" width="100%"></p>
 
-<sub>The manager dashboard (demo shifts). The phone app and the dashboard are described in [`staff-app/README.md`](staff-app/README.md).</sub>
+<sub>The manager dashboard (demo shifts), with the hour-by-hour staffing plan. The phone app and the dashboard are described in [`staff-app/README.md`](staff-app/README.md).</sub>
 
 ## The shelf-check model
 
@@ -121,7 +123,7 @@ The organisers' dataset is not in this repo. Unzip it into `data/raw/extracted/n
 | `staff-app/` | Shelf Round: the phone app (`mobile/`, Expo), the bridge and the manager dashboard (`bridge/`) |
 | `start.sh` | starts the model and the bridge together |
 | `models/qwen3.5-4b-shelf-lora/` | the LoRA adapter's config (weights in the release) |
-| `tools/` | LoRA training and its dataset, local-model evaluation, cascade tuning, code-rule tuning and replay, prompt tuning |
+| `tools/` | LoRA training and its dataset, local-model evaluation, cascade tuning, code-rule tuning and replay, prompt tuning, the staffing forecast |
 | `data/` | planogram, English product names, camera fingerprints, the code rules' references, the training day's saved verdicts |
 | `labels/dev.csv` | 901 hand-checked areas from the shared training day |
 | `docs/` | the decision log and the README images |

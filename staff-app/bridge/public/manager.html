@@ -121,7 +121,21 @@
   .badge { border-radius:99px; padding:6px 14px; font-weight:500; font-size:14px; color:#3a4756; }
   .al { cursor:pointer; border-radius:12px; padding:7px 8px; } .al:hover { background:#f3f5f7; } .al.on { background:var(--soft); }
   canvas.hit { cursor:pointer; }
-  @media (max-width:1000px) { .three, .cams2, .detail, .rowB, .rowC, .tiles { grid-template-columns:1fr; } .kpis { grid-template-columns:repeat(2,1fr); } .two, .cams { grid-template-columns:1fr; } .sheet .cols { grid-template-columns:1fr; } }
+  .plan { display:grid; grid-template-columns:1fr 1.25fr; gap:28px; align-items:end; margin-top:12px; }
+  .rec { display:grid; grid-template-columns:104px 1fr; gap:14px; align-items:baseline; padding:12px 0; border-top:1px solid var(--line); }
+  .rec:first-of-type { border-top:0; }
+  .rec .ppl { font-weight:300; font-size:30px; letter-spacing:-1px; line-height:1; white-space:nowrap; }
+  .rec .ppl span { font-size:13px; letter-spacing:0; color:var(--ink2); margin-left:3px; }
+  .rec .when { font-weight:500; font-size:15px; } .rec .why { color:var(--ink2); font-size:13px; margin-top:2px; }
+  .hours { display:flex; align-items:flex-end; gap:6px; height:150px; }
+  .hcol { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%; cursor:default; }
+  .hcol .np { font-size:13px; font-weight:500; color:var(--ink); margin-bottom:6px; }
+  .hcol .hb { width:100%; max-width:30px; border-radius:6px 6px 3px 3px; background:#cfd8d2; display:flex; flex-direction:column; justify-content:flex-end; overflow:hidden; }
+  .hcol .hb i { display:block; width:100%; background:#e5ebe7; }
+  .hcol.busy .hb { background:var(--dark); } .hcol.busy .hb i { background:#7b8c84; }
+  .hcol .hl { font-size:12px; color:var(--ink2); margin-top:7px; }
+  .hcol:hover .hb { filter:brightness(1.08); }
+  @media (max-width:1000px) { .plan { grid-template-columns:1fr; } .three, .cams2, .detail, .rowB, .rowC, .tiles { grid-template-columns:1fr; } .kpis { grid-template-columns:repeat(2,1fr); } .two, .cams { grid-template-columns:1fr; } .sheet .cols { grid-template-columns:1fr; } }
 </style>
 </head>
 <body>
@@ -150,11 +164,11 @@ const dur = (s) => { s = Math.round(s); const h = Math.floor(s / 3600), m = Math
 const mmss = (s) => `${Math.floor(s / 60)}:${String(Math.round(s % 60)).padStart(2, '0')}`;
 
 async function load() {
-  const [results, plan, rounds] = await Promise.all(['/api/results', '/api/planogram', '/api/rounds'].map((u) => fetch(u).then((r) => r.json())));
+  const [results, plan, rounds, staffing] = await Promise.all(['/api/results', '/api/planogram', '/api/rounds', '/api/staffing'].map((u) => fetch(u).then((r) => r.json()).catch(() => ({}))));
   const real = rounds.filter((r) => !r.demo), demo = rounds.filter((r) => r.demo);
   // with only a few real rounds the demo crew stays, so the page is not empty; the toggle overrides
   const showDemo = demoPref === null ? real.length < 3 : demoPref;
-  D = { results, planogram: plan.planogram, areas: plan.areas, rounds: showDemo ? [...demo, ...real] : real, hasDemo: demo.length > 0, hasReal: real.length > 0, showDemo };
+  D = { staffing, results, planogram: plan.planogram, areas: plan.areas, rounds: showDemo ? [...demo, ...real] : real, hasDemo: demo.length > 0, hasReal: real.length > 0, showDemo };
   derive(); route();
 }
 
@@ -246,6 +260,8 @@ function pageHome() {
     <div class="card pcard"><h3>Needs your attention</h3>${att.length ? att.map((a) => `<a class="att" href="${a.h}" ${a.tab ? `onclick="tab='${a.tab}'"` : ''}><span class="dot" style="background:${COL[a.k]};margin:0"></span><div style="flex:1"><div class="t">${a.t}</div><div class="s">${a.s}</div></div><span class="muted">→</span></a>`).join('') : '<div class="muted">Nothing urgent. All good.</div>'}</div>
   </div>
 
+  ${planCard()}
+
   <div class="grid rowC">
     <div class="card pcard"><h3>Top of the floor</h3>
       ${top.length ? top.map((e, i) => `<div class="mini">${rankMedal(i)}<div class="grow"><div class="who" style="font-size:15px">${e.name}</div></div><span class="muted" style="font-size:13px">${e.tasks} jobs</span><b>${e.perHour.toFixed(1)}<span class="muted" style="font-weight:400;font-size:12px">/h</span></b></div>`).join('') : '<div class="muted">No finished rounds yet.</div>'}
@@ -257,6 +273,33 @@ function pageHome() {
       ${D.wrongList.slice(0, 3).map((p) => `<div class="mini">${pimg(p.pid, p.emoji, 34)}<div class="grow"><div class="who" style="font-size:15px">${p.name}</div><div class="muted" style="font-size:12px">Bay ${p.bay}</div></div><b>${p.wrong}×</b></div>`).join('') || '<div class="muted">No mismatches seen.</div>'}
       <a class="more" href="#/insights" onclick="tab='products'">See all →</a></div>
   </div></div>`;
+}
+
+// How many people to put on restocking, hour by hour (tools/staffing_forecast.py, from a day of camera verdicts)
+function planCard() {
+  const S = D.staffing;
+  if (!S || !S.hours || !S.hours.length) return '';
+  const max = Math.max(...S.hours.map((h) => h.jobs));
+  const busy = new Set((S.busiest || []).flatMap((b) => S.hours.filter((h) => h.label >= b.from && h.label < b.to).map((h) => h.hour)));
+  const ppl = (n) => `${n}<span>${n === 1 ? 'person' : 'people'}</span>`;
+  const span = (b) => `${b.from}–${b.to}`;
+  const top = (S.busiest || []).slice().sort((a, b) => (parseInt(b.to) - parseInt(b.from)) - (parseInt(a.to) - parseInt(a.from)) || b.jobs_per_hour - a.jobs_per_hour);
+  const quiet = S.quiet || [];
+  const o = S.opening || {}, openPeople = S.hours.filter((h) => h.opening_backlog).map((h) => h.people);
+  const recs = [];
+  if (top.length) recs.push({ n: ppl(top[0].people), w: `${top.map(span).join(' and ')}: busiest`, y: `About ${top[0].jobs_per_hour} shelves an hour run empty or get the wrong product.` });
+  if (o.backlog) recs.push({ n: `${Math.min(...openPeople)}–${Math.max(...openPeople)}<span>people</span>`.replace(/^(\d)–\1/, '$1'), w: `${o.from}–${o.to}: opening`, y: `${o.backlog} shelves not full in the first pictures of the day.` });
+  if (quiet.length) recs.push({ n: ppl(1), w: `${quiet.map(span).join(', ')}: quiet`, y: `${Math.min(...quiet.map((q) => q.jobs_per_hour))} to ${Math.max(...quiet.map((q) => q.jobs_per_hour))} jobs an hour; one person keeps up.` });
+  const cols = S.hours.map((h) => {
+    const back = h.opening_backlog || 0, tip = `${h.label}: ${h.new_problems} new problems${back ? ` + ${back} from the night` : ''} · plan ${h.people} ${h.people === 1 ? 'person' : 'people'}`;
+    return `<div class="hcol ${busy.has(h.hour) ? 'busy' : ''}" title="${tip}"><div class="np">${h.people}</div>
+      <div class="hb" style="height:${Math.max(6, (h.jobs / max) * 100)}%">${back ? `<i style="height:${(back / h.jobs) * 100}%"></i>` : ''}</div><div class="hl">${String(h.hour).padStart(2, '0')}</div></div>`;
+  }).join('');
+  return `<div class="card pcard" style="margin-top:12px"><h3>Plan your people <span class="muted" style="font-weight:400">· restocking, hour by hour</span></h3>
+    <div class="muted" style="font-size:13px">From the cameras: ${S.source}.</div>
+    <div class="plan"><div>${recs.map((r) => `<div class="rec"><div class="ppl">${r.n}</div><div><div class="when">${r.w}</div><div class="why">${r.y}</div></div></div>`).join('')}</div>
+      <div><div class="hours">${cols}</div>
+        <div class="legend" style="margin-top:12px"><span><i style="background:var(--dark)"></i>Busiest hours</span><span><i style="background:#cfd8d2"></i>Other hours</span><span><i style="background:#e5ebe7"></i>Left from the night</span><span class="muted">Number above a bar: people to plan</span></div></div></div></div>`;
 }
 
 function pageStaff() {

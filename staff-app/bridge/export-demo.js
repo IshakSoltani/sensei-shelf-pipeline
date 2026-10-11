@@ -11,6 +11,7 @@ const rounds = read(path.join(root, 'data', 'rounds.json'), []);
 const appData = path.join(root, '..', 'mobile', 'src', 'data');
 const planogram = read(path.join(appData, 'planogram.json'), {});
 const areas = read(path.join(appData, 'areas.json'), {});
+const staffing = read(path.join(root, 'data', 'staffing.json'), {});
 
 // only the newest picture of each camera is shown, so only those go in
 const photos = {};
@@ -25,7 +26,7 @@ const product = {};
 const pdir = path.join(root, 'public', 'product-images');
 if (fs.existsSync(pdir)) for (const f of fs.readdirSync(pdir)) if (f.endsWith('.jpg')) product[f.slice(0, -4)] = 'data:image/jpeg;base64,' + fs.readFileSync(path.join(pdir, f)).toString('base64');
 
-const snapshot = { results, rounds, planogram: { planogram, areas }, photos, product, made: new Date().toISOString() };
+const snapshot = { results, rounds, staffing, planogram: { planogram, areas }, photos, product, made: new Date().toISOString() };
 const shim = `<script>
 // Snapshot mode: answer the dashboard's data requests from inside this file.
 window.__SNAPSHOT = ${JSON.stringify(snapshot)};
@@ -35,6 +36,7 @@ window.fetch = (url, opts) => {
   if (u.startsWith('/api/results')) return ok(S.results);
   if (u.startsWith('/api/planogram')) return ok(S.planogram);
   if (u.startsWith('/api/rounds')) return ok(S.rounds);
+  if (u.startsWith('/api/staffing')) return ok(S.staffing || {});
   if (u.startsWith('/api/')) return ok({ ok: true });
   return __realFetch(url, opts);
 };

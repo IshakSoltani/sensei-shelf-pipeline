@@ -1,0 +1,235 @@
+{
+ "source": "14 cameras, 179 pictures, Friday 27 June 2025 (Lisbon time)",
+ "method": "New problems per hour (shelves that got worse since the camera's previous picture), about 2.25 min per job with walking, so one person clears about 20 jobs an hour.",
+ "jobs_per_person_hour": 20,
+ "hours": [
+  {
+   "hour": 6,
+   "label": "06:00",
+   "new_problems": 0,
+   "kinds": {},
+   "opening_backlog": 42,
+   "jobs": 42,
+   "people": 3
+  },
+  {
+   "hour": 7,
+   "label": "07:00",
+   "new_problems": 18,
+   "kinds": {
+    "empty": 6,
+    "wrong": 8,
+    "half": 4
+   },
+   "opening_backlog": 42,
+   "jobs": 60,
+   "people": 4
+  },
+  {
+   "hour": 8,
+   "label": "08:00",
+   "new_problems": 16,
+   "kinds": {
+    "wrong": 10,
+    "empty": 4,
+    "half": 2
+   },
+   "opening_backlog": 0,
+   "jobs": 16,
+   "people": 1
+  },
+  {
+   "hour": 9,
+   "label": "09:00",
+   "new_problems": 16,
+   "kinds": {
+    "empty": 8,
+    "half": 3,
+    "wrong": 5
+   },
+   "opening_backlog": 0,
+   "jobs": 16,
+   "people": 1
+  },
+  {
+   "hour": 10,
+   "label": "10:00",
+   "new_problems": 12,
+   "kinds": {
+    "empty": 4,
+    "half": 5,
+    "wrong": 3
+   },
+   "opening_backlog": 0,
+   "jobs": 12,
+   "people": 1
+  },
+  {
+   "hour": 11,
+   "label": "11:00",
+   "new_problems": 22,
+   "kinds": {
+    "half": 8,
+    "empty": 9,
+    "wrong": 5
+   },
+   "opening_backlog": 0,
+   "jobs": 22,
+   "people": 2
+  },
+  {
+   "hour": 12,
+   "label": "12:00",
+   "new_problems": 18,
+   "kinds": {
+    "empty": 10,
+    "half": 7,
+    "wrong": 1
+   },
+   "opening_backlog": 0,
+   "jobs": 18,
+   "people": 1
+  },
+  {
+   "hour": 13,
+   "label": "13:00",
+   "new_problems": 22,
+   "kinds": {
+    "half": 7,
+    "wrong": 6,
+    "empty": 10
+   },
+   "opening_backlog": 0,
+   "jobs": 22,
+   "people": 2
+  },
+  {
+   "hour": 14,
+   "label": "14:00",
+   "new_problems": 29,
+   "kinds": {
+    "half": 9,
+    "empty": 11,
+    "wrong": 9
+   },
+   "opening_backlog": 0,
+   "jobs": 29,
+   "people": 2
+  },
+  {
+   "hour": 15,
+   "label": "15:00",
+   "new_problems": 26,
+   "kinds": {
+    "empty": 14,
+    "half": 6,
+    "wrong": 6
+   },
+   "opening_backlog": 0,
+   "jobs": 26,
+   "people": 2
+  },
+  {
+   "hour": 16,
+   "label": "16:00",
+   "new_problems": 19,
+   "kinds": {
+    "half": 3,
+    "wrong": 5,
+    "empty": 10
+   },
+   "opening_backlog": 0,
+   "jobs": 19,
+   "people": 1
+  },
+  {
+   "hour": 17,
+   "label": "17:00",
+   "new_problems": 28,
+   "kinds": {
+    "empty": 13,
+    "half": 11,
+    "wrong": 4
+   },
+   "opening_backlog": 0,
+   "jobs": 28,
+   "people": 2
+  },
+  {
+   "hour": 18,
+   "label": "18:00",
+   "new_problems": 29,
+   "kinds": {
+    "half": 13,
+    "empty": 6,
+    "wrong": 10
+   },
+   "opening_backlog": 0,
+   "jobs": 29,
+   "people": 2
+  },
+  {
+   "hour": 19,
+   "label": "19:00",
+   "new_problems": 31,
+   "kinds": {
+    "empty": 13,
+    "half": 9,
+    "wrong": 8
+   },
+   "opening_backlog": 0,
+   "jobs": 31,
+   "people": 2
+  }
+ ],
+ "opening": {
+  "from": "06:00",
+  "to": "08:00",
+  "backlog": 85,
+  "kinds": {
+   "empty": 37,
+   "wrong": 24,
+   "half": 24
+  },
+  "people": 4
+ },
+ "busiest": [
+  {
+   "from": "14:00",
+   "to": "15:00",
+   "people": 2,
+   "jobs_per_hour": 29,
+   "why": "most shelves running empty or getting the wrong product"
+  },
+  {
+   "from": "17:00",
+   "to": "20:00",
+   "people": 2,
+   "jobs_per_hour": 29,
+   "why": "most shelves running empty or getting the wrong product"
+  }
+ ],
+ "quiet": [
+  {
+   "from": "08:00",
+   "to": "11:00",
+   "people": 1,
+   "jobs_per_hour": 15,
+   "why": "few new problems"
+  },
+  {
+   "from": "12:00",
+   "to": "13:00",
+   "people": 1,
+   "jobs_per_hour": 18,
+   "why": "few new problems"
+  },
+  {
+   "from": "16:00",
+   "to": "17:00",
+   "people": 1,
+   "jobs_per_hour": 19,
+   "why": "few new problems"
+  }
+ ]
+}

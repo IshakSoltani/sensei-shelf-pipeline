@@ -262,6 +262,8 @@ const server = http.createServer(async (req, res) => {
     if (p === '/api/status') return send(res, 200, status());
     if (p === '/api/results' && req.method === 'GET') return send(res, 200, readResults());
     if (p === '/api/planogram') return send(res, 200, { planogram, areas });
+    // staffing plan by hour, worked out from a day of camera verdicts (tools/staffing_forecast.py)
+    if (p === '/api/staffing') { try { return send(res, 200, fs.readFileSync(path.join(DATA, 'staffing.json'), 'utf8')); } catch (e) { return send(res, 200, {}); } }
 
     // ---- voice: text -> speech, speech -> text (ElevenLabs). The phone falls back to its own voice if this fails ----
     if (p === '/api/log') { console.log(`  [phone] ${url.searchParams.get('m')}`); return send(res, 200, { ok: true }); }
