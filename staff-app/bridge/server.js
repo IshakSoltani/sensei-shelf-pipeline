@@ -13,6 +13,8 @@ const DATA = path.join(__dirname, 'data');
 const PHOTOS = path.join(DATA, 'photos');
 const RESULTS = path.join(DATA, 'results.json');
 const ROUNDS = path.join(DATA, 'rounds.json'); // finished restock rounds sent by the phone app (and demo shifts)
+const CONTRIB = path.join(DATA, 'contributions.json'); // who dropped which photo on the Settings page (training playground)
+const MILESTONES = [25, 50, 100, 250, 500, 1000, 2500]; // photos collected before each training round of the open model
 const APP_DATA = path.join(__dirname, '..', 'mobile', 'src', 'data');
 const planogram = JSON.parse(fs.readFileSync(path.join(APP_DATA, 'planogram.json'), 'utf8')); // camera -> area -> 4 corners
 const areas = JSON.parse(fs.readFileSync(path.join(APP_DATA, 'areas.json'), 'utf8'));       // area -> product info
@@ -309,12 +311,31 @@ const server = http.createServer(async (req, res) => {
       return send(res, 200, { text: j.text || '' });
     }
 
+    // training playground: what has been collected so far, for the open model's next training round
+    if (p === '/api/training') {
+      const results = readResults(), contrib = (() => { try { return JSON.parse(fs.readFileSync(CONTRIB, 'utf8')); } catch (e) { return []; } })();
+      const cams = {}; let photos = 0, areasDone = 0;
+      for (const cam of Object.keys(planogram)) {
+        const dir = path.join(PHOTOS, cam), n = fs.existsSync(dir) ? fs.readdirSync(dir).filter(safeName).length : 0;
+        cams[cam] = n; photos += n;
+        for (const r of Object.values(results[cam] || {})) areasDone += Object.keys(r).length;
+      }
+      const by = {}; for (const c of contrib) by[c.by] = (by[c.by] || 0) + 1;
+      const next = MILESTONES.find((m) => m > photos) || photos + 1000, level = MILESTONES.filter((m) => m <= photos).length + 1;
+      return send(res, 200, { photos, areas: areasDone, cameras: cams, contributors: Object.entries(by).map(([name, n]) => ({ name, photos: n })).sort((a, b) => b.photos - a.photos),
+        level, next, prev: MILESTONES.filter((m) => m <= photos).pop() || 0, milestones: MILESTONES });
+    }
     if (p === '/api/upload' && req.method === 'POST') {
       const camera = url.searchParams.get('camera'), name = url.searchParams.get('name');
       if (!planogram[camera]) return send(res, 400, { error: `unknown camera ${camera}` });
       if (!safeName(name)) return send(res, 400, { error: 'bad file name' });
       fs.mkdirSync(path.join(PHOTOS, camera), { recursive: true });
       fs.writeFileSync(path.join(PHOTOS, camera, name), await body(req));
+      const by = (url.searchParams.get('by') || '').trim().slice(0, 40);
+      if (by) {
+        let c = []; try { c = JSON.parse(fs.readFileSync(CONTRIB, 'utf8')); } catch (e) { /* first one */ }
+        if (!c.some((x) => x.camera === camera && x.name === name)) { c.push({ camera, name, by, at: Date.now() }); fs.writeFileSync(CONTRIB, JSON.stringify(c, null, 1)); }
+      }
       autoAnalyze(camera, name);
       return send(res, 200, { ok: true });
     }
@@ -346,7 +367,7 @@ const server = http.createServer(async (req, res) => {
     }
     if (p === '/api/clear-demo' && req.method === 'POST') { writeRounds(readRounds().filter((r) => !r.demo)); return send(res, 200, { ok: true }); }
     if (p === '/api/clear' && req.method === 'POST') {
-      fs.rmSync(PHOTOS, { recursive: true, force: true }); fs.mkdirSync(PHOTOS, { recursive: true }); writeResults({}); fs.rmSync(DETAILS, { force: true });
+      fs.rmSync(PHOTOS, { recursive: true, force: true }); fs.mkdirSync(PHOTOS, { recursive: true }); writeResults({}); fs.rmSync(DETAILS, { force: true }); fs.rmSync(CONTRIB, { force: true });
       return send(res, 200, { ok: true });
     }
 

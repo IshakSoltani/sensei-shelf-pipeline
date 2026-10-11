@@ -121,6 +121,24 @@
   .badge { border-radius:99px; padding:6px 14px; font-weight:500; font-size:14px; color:#3a4756; }
   .al { cursor:pointer; border-radius:12px; padding:7px 8px; } .al:hover { background:#f3f5f7; } .al.on { background:var(--soft); }
   canvas.hit { cursor:pointer; }
+  .dropz { display:block; border:2px dashed #cfd8d2; border-radius:20px; padding:30px 20px; text-align:center; cursor:pointer; transition:background .15s, border-color .15s; }
+  .dropz:hover, .dropz.over { background:var(--soft); border-color:var(--ok); }
+  .dropz .big { margin-bottom:4px; }
+  .field { display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-top:14px; font-size:14px; color:var(--ink2); }
+  .field input, .field select { font:inherit; font-size:15px; color:var(--ink); border:1.5px solid var(--line); border-radius:12px; padding:8px 12px; background:#fff; }
+  .field input { flex:1; min-width:160px; }
+  .lvl { display:flex; justify-content:space-between; align-items:baseline; gap:12px; }
+  .meter { height:14px; border-radius:7px; background:#eef1f4; margin-top:14px; position:relative; overflow:hidden; }
+  .meter > div { position:absolute; left:0; top:0; bottom:0; border-radius:7px; background:var(--dark); transition:width .8s cubic-bezier(.2,.8,.2,1); }
+  .steps { display:flex; justify-content:space-between; margin-top:10px; font-size:12px; color:var(--ink2); }
+  .steps b { font-weight:500; color:var(--ink); }
+  .camgrid { display:grid; grid-template-columns:repeat(7,1fr); gap:8px; margin-top:6px; }
+  .camc { background:#f3f5f7; border-radius:14px; padding:10px 8px; text-align:center; }
+  .camc b { display:block; font-weight:300; font-size:22px; letter-spacing:-.6px; line-height:1.1; }
+  .camc span { font-size:12px; color:var(--ink2); }
+  .camc.on { background:var(--soft); }
+  .camc.on b { color:var(--dark); font-weight:400; }
+  .gain { color:var(--ok); font-weight:500; }
   .plan { display:grid; grid-template-columns:1fr 1.25fr; gap:28px; align-items:end; margin-top:12px; }
   .rec { display:grid; grid-template-columns:104px 1fr; gap:14px; align-items:baseline; padding:12px 0; border-top:1px solid var(--line); }
   .rec:first-of-type { border-top:0; }
@@ -135,7 +153,7 @@
   .hcol.busy .hb { background:var(--dark); } .hcol.busy .hb i { background:#7b8c84; }
   .hcol .hl { font-size:12px; color:var(--ink2); margin-top:7px; }
   .hcol:hover .hb { filter:brightness(1.08); }
-  @media (max-width:1000px) { .plan { grid-template-columns:1fr; } .three, .cams2, .detail, .rowB, .rowC, .tiles { grid-template-columns:1fr; } .kpis { grid-template-columns:repeat(2,1fr); } .two, .cams { grid-template-columns:1fr; } .sheet .cols { grid-template-columns:1fr; } }
+  @media (max-width:1000px) { .camgrid { grid-template-columns:repeat(4,1fr); } .plan { grid-template-columns:1fr; } .three, .cams2, .detail, .rowB, .rowC, .tiles { grid-template-columns:1fr; } .kpis { grid-template-columns:repeat(2,1fr); } .two, .cams { grid-template-columns:1fr; } .sheet .cols { grid-template-columns:1fr; } }
 </style>
 </head>
 <body>
@@ -178,11 +196,11 @@ const dur = (s) => { s = Math.round(s); const h = Math.floor(s / 3600), m = Math
 const mmss = (s) => `${Math.floor(s / 60)}:${String(Math.round(s % 60)).padStart(2, '0')}`;
 
 async function load() {
-  const [results, plan, rounds, staffing] = await Promise.all(['/api/results', '/api/planogram', '/api/rounds', '/api/staffing'].map((u) => fetch(u).then((r) => r.json()).catch(() => ({}))));
+  const [results, plan, rounds, staffing, training] = await Promise.all(['/api/results', '/api/planogram', '/api/rounds', '/api/staffing', '/api/training'].map((u) => fetch(u).then((r) => r.json()).catch(() => ({}))));
   const real = rounds.filter((r) => !r.demo), demo = rounds.filter((r) => r.demo);
   // with only a few real rounds the demo crew stays, so the page is not empty; the toggle overrides
   const showDemo = demoPref === null ? real.length < 3 : demoPref;
-  D = { staffing, results, planogram: plan.planogram, areas: plan.areas, rounds: showDemo ? [...demo, ...real] : real, hasDemo: demo.length > 0, hasReal: real.length > 0, showDemo };
+  D = { training, staffing, results, planogram: plan.planogram, areas: plan.areas, rounds: showDemo ? [...demo, ...real] : real, hasDemo: demo.length > 0, hasReal: real.length > 0, showDemo };
   derive(); route();
 }
 
@@ -226,13 +244,13 @@ function derive() {
 }
 
 // ---------- pages ----------
-const NAV = [['', 'Home'], ['staff', 'Staff'], ['cameras', 'Cameras'], ['insights', 'Insights']];
+const NAV = [['', 'Home'], ['staff', 'Staff'], ['cameras', 'Cameras'], ['insights', 'Insights'], ['settings', 'Settings']];
 function route() {
   if (!D) return;
   const parts = location.hash.replace(/^#\/?/, '').split('/'), top = parts[0] || '';
   $('nav').innerHTML = NAV.map(([h, l]) => `<a href="#/${h}" class="${h === top ? 'on' : ''}">${l}</a>`).join('');
   $('clock').textContent = D.newest ? `Latest picture ${hhmm(D.newest)} · Lisbon` : 'No pictures yet';
-  const pages = { '': pageHome, staff: pageStaff, cameras: () => (parts[1] ? (parts[2] ? pageCamera(parts[1], parts[2]) : pageAisle(parts[1])) : pageCameras()), insights: pageInsights };
+  const pages = { '': pageHome, staff: pageStaff, cameras: () => (parts[1] ? (parts[2] ? pageCamera(parts[1], parts[2]) : pageAisle(parts[1])) : pageCameras()), insights: pageInsights, settings: pageSettings };
   const html = (pages[top] || pageHome)();
   $('app').innerHTML = html;
   afterRender();
@@ -314,6 +332,71 @@ function planCard() {
     <div class="plan"><div>${recs.map((r) => `<div class="rec"><div class="ppl">${r.n}</div><div><div class="when">${r.w}</div><div class="why">${r.y}</div></div></div>`).join('')}</div>
       <div><div class="hours">${cols}</div>
         <div class="legend" style="margin-top:12px"><span><i style="background:var(--dark)"></i>Busiest hours</span><span><i style="background:#cfd8d2"></i>Other hours</span><span><i style="background:#e5ebe7"></i>Left from the night</span><span class="muted">Number above a bar: people to plan</span></div></div></div></div>`;
+}
+
+// ---------- Settings: the training playground. Every photo dropped here is analysed and kept for the open model's next training round ----------
+let up = { msg: '', gain: 0, cam: '' };
+const myName = () => { try { return localStorage.getItem('sr-name') || ''; } catch (e) { return ''; } };
+function pageSettings() {
+  const T = D.training || {}, cams = Object.keys(D.planogram), counts = T.cameras || {};
+  const covered = cams.filter((c) => counts[c]).length, mine = (T.contributors || []).find((c) => c.name === myName());
+  const pct = T.next ? Math.min(100, ((T.photos - T.prev) / (T.next - T.prev)) * 100) : 0;
+  const bayOf = (c) => (D.cams.find((x) => x.cam === c) || {}).bay || '';
+  const snap = !!window.__SNAPSHOT;
+  return `<div class="home"><div class="eyebrow" style="font-size:14px">Settings · Training playground</div>
+  <h1>Teach the model your shelves.</h1>
+  <p class="sub">Every photo you drop trains the next version of our open model.</p>
+  <div class="grid tiles">${[['dark', T.photos || 0, 'Photos collected'], ['', T.areas || 0, 'Shelf areas learned'], ['', `${covered}/${cams.length}`, 'Cameras covered'], ['', mine ? mine.photos : 0, 'Your photos']]
+    .map(([c, n, l]) => `<div class="card tile ${c}"><div class="n">${n}</div><div class="l">${l}</div></div>`).join('')}</div>
+  <div class="grid rowB">
+    <div class="card pcard"><h3>Drop photos</h3>
+      ${snap ? '<div class="muted">Open the live dashboard to add photos.</div>' : `<label class="dropz" id="dropz"><div class="big">Drop photos or camera folders</div><div class="muted" style="font-size:14px">or click to choose</div>
+        <input type="file" id="pickz" multiple accept="image/*" hidden></label>
+      <div class="field"><input id="who" placeholder="Your name" value="${myName().replace(/"/g, '&quot;')}" aria-label="Your name">
+        <select id="camz" aria-label="Camera for loose photos"><option value="">Camera…</option>${cams.map((c) => `<option value="${c}" ${c === up.cam ? 'selected' : ''}>${bayOf(c)} · ${c}</option>`).join('')}</select></div>
+      <div style="margin-top:12px;min-height:1.4em;font-size:14px" id="upmsg">${up.msg}</div>`}</div>
+    <div class="card pcard"><h3>Next training round</h3>
+      <div class="big" style="margin-top:4px">${T.photos || 0} <span class="muted" style="font-size:16px;letter-spacing:0">of ${T.next || 25} photos</span>${up.gain ? ` <span class="gain" style="font-size:16px;letter-spacing:0">+${up.gain}</span>` : ''}</div>
+      <div class="meter"><div id="meterbar" style="width:${pct}%"></div></div>
+      <div class="steps"><span>Level ${T.level || 1} · ${T.prev || 0}</span><span>Level ${(T.level || 1) + 1} · ${T.next || 25}</span></div></div>
+  </div>
+  <div class="grid rowB">
+    <div class="card pcard"><h3>Collect every camera <span class="muted" style="font-weight:400">· ${covered} of ${cams.length}</span></h3>
+      <div class="camgrid">${cams.slice().sort((a, b) => bayOf(a).localeCompare(bayOf(b))).map((c) => `<div class="camc ${counts[c] ? 'on' : ''}" title="Camera ${c}"><b>${counts[c] || 0}</b><span>${bayOf(c)}</span></div>`).join('')}</div></div>
+    <div class="card pcard"><h3>Top contributors</h3>
+      ${(T.contributors || []).slice(0, 5).map((e, i) => `<div class="mini">${rankMedal(i)}<div class="grow"><div class="who" style="font-size:15px">${e.name.replace(/</g, '&lt;')}</div></div><b>${e.photos}<span class="muted" style="font-weight:400;font-size:12px"> photos</span></b></div>`).join('') || '<div class="muted">Be the first: drop a photo.</div>'}</div>
+  </div></div>`;
+}
+function wireSettings() {
+  const z = $('dropz'); if (!z) return;
+  const save = () => { try { localStorage.setItem('sr-name', $('who').value.trim()); } catch (e) { /* private window */ } };
+  $('who').addEventListener('input', save);
+  $('camz').addEventListener('change', () => { up.cam = $('camz').value; });
+  const isImg = (n) => /\.(jpe?g|png)$/i.test(n);
+  const walk = (entry, p = '') => new Promise((ok) => {
+    if (entry.isFile) entry.file((f) => ok(isImg(f.name) ? [{ file: f, path: p + f.name }] : []), () => ok([]));
+    else if (entry.isDirectory) { const rd = entry.createReader(), all = []; const next = () => rd.readEntries(async (l) => { if (!l.length) return ok((await Promise.all(all.map((e) => walk(e, p + entry.name + '/')))).flat()); all.push(...l); next(); }, () => ok([])); next(); }
+    else ok([]);
+  });
+  z.addEventListener('dragover', (e) => { e.preventDefault(); z.classList.add('over'); });
+  z.addEventListener('dragleave', () => z.classList.remove('over'));
+  z.addEventListener('drop', async (e) => { e.preventDefault(); z.classList.remove('over'); const en = [...e.dataTransfer.items].map((i) => i.webkitGetAsEntry && i.webkitGetAsEntry()).filter(Boolean); send((await Promise.all(en.map((x) => walk(x)))).flat()); });
+  $('pickz').addEventListener('change', () => send([...$('pickz').files].map((f) => ({ file: f, path: f.name }))));
+  async function send(items) {
+    save();
+    const cams = Object.keys(D.planogram), by = $('who').value.trim(), fallback = $('camz').value;
+    let done = 0, skipped = 0;
+    for (const { file, path } of items) {
+      const cam = path.split('/').find((s) => cams.includes(s)) || fallback;
+      if (!cam) { skipped++; continue; }
+      up.msg = `Sending ${done + 1} of ${items.length}…`; if ($('upmsg')) $('upmsg').textContent = up.msg;
+      await fetch(`/api/upload?camera=${cam}&name=${encodeURIComponent(file.name)}&by=${encodeURIComponent(by)}`, { method: 'POST', body: file });
+      done++;
+    }
+    up = { cam: up.cam, gain: done, msg: done ? `<span class="gain">+${done} ${done === 1 ? 'photo' : 'photos'}</span> for the next training round.${skipped ? ` ${skipped} skipped: choose a camera.` : ''}` : skipped ? `Choose a camera for loose photos.` : '' };
+    await load();
+    setTimeout(() => { up.gain = 0; }, 6000);
+  }
 }
 
 function pageStaff() {
@@ -417,6 +500,7 @@ function draw(canvas, c, labels, sel) {
   const im = new Image(); im.onload = () => { ctx.drawImage(im, 0, 0, W, H); paint(); }; im.src = (window.__SNAPSHOT && window.__SNAPSHOT.photos[`${c.cam}/${c.name}`]) || `/photos/${c.cam}/${c.name}`;
 }
 function afterRender() {
+  wireSettings();
   document.querySelectorAll('canvas.th').forEach((cv) => { if (!cv.dataset.labels) draw(cv, D.cams.find((x) => x.cam === cv.dataset.cam), false); });
   const big = $('big');
   if (big) {

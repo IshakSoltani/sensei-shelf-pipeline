@@ -13,3 +13,4 @@ bridge/data/tts/
 bridge/data/*.before-test
 mobile/app 2.json
 bridge/data/details.json
+bridge/data/contributions.json
