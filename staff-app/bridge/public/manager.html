@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shelf Round · Store manager</title>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root { --bg:#f7f8fa; --ink:#3a4756; --ink2:#7d8998; --line:#e3e7ec; --dark:#34463f; --card:#fff; --soft:#e6f1ea;
+          --empty:#e9776c; --wrong:#f0a05a; --half:#efd352; --ok:#5fae82; --grey:#8f9aa3; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font-family:'Figtree',system-ui,sans-serif; font-weight:400; }
+  header { position:sticky; top:0; z-index:5; background:rgba(247,248,250,.92); backdrop-filter:blur(8px); border-bottom:1px solid var(--line); }
+  .bar { max-width:1280px; margin:0 auto; padding:14px 32px; display:flex; align-items:center; gap:28px; }
+  .brand { font-weight:500; font-size:18px; letter-spacing:-.3px; }
+  nav { display:flex; gap:6px; flex:1; }
+  nav a { color:var(--ink2); text-decoration:none; padding:8px 16px; border-radius:99px; font-weight:500; font-size:15px; }
+  nav a:hover { background:#eaeef2; color:var(--ink); }
+  .clock { color:var(--ink2); font-size:14px; }
+  main { max-width:1280px; margin:0 auto; padding:40px 32px 100px; }
+  .eyebrow { color:var(--ink2); font-size:15px; }
+  h1 { font-weight:300; font-size:48px; letter-spacing:-1.6px; line-height:1.08; margin:10px 0 6px; }
+  h2 { font-weight:400; font-size:30px; letter-spacing:-.9px; margin:0 0 6px; }
+  .sub { color:var(--ink2); font-size:16px; margin:0 0 22px; }
+  section { margin-top:64px; scroll-margin-top:80px; }
+  .grid { display:grid; gap:16px; }
+  .kpis { grid-template-columns:repeat(4,1fr); margin-top:28px; }
+  .card { background:var(--card); border-radius:28px; padding:24px; }
+  .kpi .n { font-weight:300; font-size:46px; letter-spacing:-1.6px; line-height:1; }
+  .kpi .l { color:var(--ink2); margin-top:8px; font-size:15px; }
+  .kpi.dark { background:var(--dark); color:#fff; } .kpi.dark .l { color:rgba(255,255,255,.72); }
+  .two { grid-template-columns:1.25fr 1fr; align-items:start; }
+  .stack { display:flex; height:16px; border-radius:8px; overflow:hidden; gap:2px; margin-top:18px; }
+  .legend { display:flex; gap:18px; flex-wrap:wrap; margin-top:12px; font-size:14px; }
+  .legend i, .dot { display:inline-block; width:11px; height:11px; border-radius:50%; margin-right:7px; vertical-align:-1px; }
+  table { width:100%; border-collapse:collapse; }
+  th { text-align:left; font-weight:500; font-size:12px; letter-spacing:1.1px; text-transform:uppercase; color:var(--ink2); padding:0 12px 10px 0; }
+  td { padding:12px 12px 12px 0; border-top:1px solid var(--line); vertical-align:middle; font-size:15px; }
+  td.r, th.r { text-align:right; }
+  .rank { width:34px; height:34px; border-radius:50%; background:#eef1f4; display:inline-flex; align-items:center; justify-content:center; font-weight:500; }
+  .rank.g1 { background:#f3dd7a; } .rank.g2 { background:#dfe3e8; } .rank.g3 { background:#e8c3a0; }
+  .who { font-weight:500; font-size:16px; }
+  .muted { color:var(--ink2); }
+  .tabs { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px; }
+  .pill { border:1.5px solid var(--line); background:transparent; color:var(--ink2); border-radius:99px; padding:8px 16px; font:inherit; font-weight:500; font-size:14px; cursor:pointer; }
+  .pill.on { background:var(--dark); border-color:var(--dark); color:#fff; }
+  .btn { background:var(--dark); color:#fff; border:0; border-radius:14px; padding:10px 18px; font:inherit; font-weight:500; cursor:pointer; }
+  .ghost { background:none; border:0; color:var(--ink2); text-decoration:underline; cursor:pointer; font:inherit; padding:0; }
+  .tag { display:inline-block; font-size:12px; border-radius:99px; padding:3px 10px; background:#fbf3df; color:#a9741f; margin-left:10px; vertical-align:middle; font-weight:500; }
+  .line { position:relative; height:30px; border-top:1px solid var(--line); }
+  .line b { position:absolute; left:0; top:4px; font-weight:500; font-size:14px; width:120px; }
+  .track { position:absolute; left:130px; right:0; top:0; bottom:0; }
+  .seg { position:absolute; top:7px; height:16px; border-radius:8px; background:var(--dark); opacity:.85; }
+  .cams { grid-template-columns:repeat(3,1fr); }
+  .cam { padding:14px; cursor:pointer; transition:.15s; }
+  .cam:hover { transform:translateY(-2px); }
+  .cam canvas { width:100%; aspect-ratio:16/9; border-radius:18px; background:#56655d; display:block; }
+  .cam .t { display:flex; justify-content:space-between; align-items:center; margin:12px 4px 2px; }
+  .chips { display:flex; gap:8px; flex-wrap:wrap; margin:6px 4px 4px; }
+  .chip { display:inline-flex; align-items:center; font-size:13px; background:#eef1f4; border-radius:99px; padding:3px 10px; }
+  .bars .row { display:grid; grid-template-columns:34px 1fr 90px; gap:12px; align-items:center; padding:9px 0; border-top:1px solid var(--line); }
+  .bars .row:first-child { border-top:0; }
+  .bars .name { font-weight:500; } .bars .small { color:var(--ink2); font-size:13px; }
+  .bar2 { height:10px; border-radius:5px; background:#eef1f4; margin-top:6px; overflow:hidden; }
+  .bar2 > div { height:100%; border-radius:5px; background:var(--empty); }
+  .em { font-size:26px; text-align:center; }
+  .modal { position:fixed; inset:0; background:rgba(52,70,63,.55); display:none; align-items:center; justify-content:center; z-index:20; padding:24px; }
+  .modal.on { display:flex; }
+  .sheet { background:var(--bg); border-radius:32px; padding:24px; max-width:1180px; width:100%; max-height:92vh; overflow:auto; }
+  .sheet canvas { width:100%; border-radius:22px; display:block; background:#222; }
+  .sheet .cols { display:grid; grid-template-columns:1fr 280px; gap:20px; margin-top:16px; }
+  .al { display:flex; gap:10px; align-items:center; padding:7px 0; border-top:1px solid var(--line); font-size:14px; }
+  .al:first-child { border-top:0; }
+  nav a.on { background:var(--dark); color:#fff; }
+  .back { display:inline-flex; align-items:center; gap:6px; color:var(--ink2); text-decoration:none; font-weight:500; font-size:15px; margin-bottom:18px; }
+  .back:hover { color:var(--ink); }
+  
+  .cardlink { display:flex; justify-content:space-between; align-items:center; margin-top:18px; padding-top:16px; border-top:1px solid var(--line); color:var(--dark); text-decoration:none; font-weight:500; font-size:15px; }
+  .cardlink:hover { text-decoration:underline; }
+  .mini { display:flex; align-items:center; gap:14px; padding:12px 0; border-top:1px solid var(--line); }
+  .mini:first-of-type { border-top:0; }
+  .mini .grow { flex:1; min-width:0; }
+  .aislecard { display:block; text-decoration:none; color:inherit; padding:22px; transition:.15s; }
+  .aislecard:hover { transform:translateY(-3px); }
+  .aislecard .thumbs { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:16px; }
+  .aislecard canvas { width:100%; aspect-ratio:16/9; border-radius:12px; display:block; background:#56655d; }
+  .big { font-weight:300; font-size:26px; letter-spacing:-.8px; }
+  .cams2 { grid-template-columns:repeat(2,1fr); }
+  .pager { display:flex; gap:10px; align-items:center; }
+  .arrow { width:46px; height:46px; border-radius:50%; background:#fff; border:0; font-size:20px; cursor:pointer; color:var(--ink); }
+  .arrow[disabled] { opacity:.3; cursor:default; }
+  .detail { grid-template-columns:1fr 340px; align-items:start; }
+  .three { grid-template-columns:repeat(3,1fr); }
+  .home h1 { font-size:38px; letter-spacing:-1.2px; margin:6px 0 4px; }
+  .home .sub { margin:0 0 16px; font-size:15px; }
+  .home main, main.home { padding-top:26px; }
+  .tiles { grid-template-columns:repeat(4,1fr); gap:12px; }
+  .tile { padding:16px 20px; border-radius:22px; }
+  .tile .n { font-weight:300; font-size:34px; letter-spacing:-1.2px; line-height:1; }
+  .tile .l { color:var(--ink2); font-size:14px; margin-top:6px; }
+  .tile.dark { background:var(--dark); color:#fff; } .tile.dark .l { color:rgba(255,255,255,.72); }
+  .rowB { grid-template-columns:1.1fr 1fr; gap:12px; margin-top:12px; }
+  .rowC { grid-template-columns:repeat(3,1fr); gap:12px; margin-top:12px; }
+  .pcard { padding:20px 22px; border-radius:24px; }
+  .pcard h3 { margin:0 0 8px; font-weight:500; font-size:16px; }
+  .strip { display:grid; grid-template-columns:repeat(5,1fr); gap:8px; margin-top:16px; }
+  .cell { display:block; text-decoration:none; color:inherit; background:#f3f5f7; border-radius:16px; padding:10px 12px; }
+  .cell:hover { background:#e9edf1; }
+  .cell b { font-weight:500; font-size:13px; color:var(--ink2); }
+  .cell .c { font-weight:300; font-size:24px; letter-spacing:-.8px; line-height:1.1; }
+  .cell .stack { height:6px; margin-top:6px; border-radius:3px; }
+  .att { display:flex; gap:12px; align-items:center; padding:9px 0; border-top:1px solid var(--line); text-decoration:none; color:inherit; }
+  .att:first-of-type { border-top:0; }
+  .att:hover .t { text-decoration:underline; }
+  .att .t { font-weight:500; font-size:15px; } .att .s { color:var(--ink2); font-size:13px; }
+  .more { display:inline-block; margin-top:6px; color:var(--dark); text-decoration:none; font-weight:500; font-size:14px; }
+  .more:hover { text-decoration:underline; }
+  .mini { padding:8px 0; gap:12px; }
+  .sel { background:var(--soft); border-radius:22px; padding:16px 18px; margin-bottom:14px; }
+  .sel .row1 { display:flex; align-items:center; gap:14px; }
+  .badge { border-radius:99px; padding:6px 14px; font-weight:500; font-size:14px; color:#3a4756; }
+  .al { cursor:pointer; border-radius:12px; padding:7px 8px; } .al:hover { background:#f3f5f7; } .al.on { background:var(--soft); }
+  canvas.hit { cursor:pointer; }
+  @media (max-width:1000px) { .three, .cams2, .detail, .rowB, .rowC, .tiles { grid-template-columns:1fr; } .kpis { grid-template-columns:repeat(2,1fr); } .two, .cams { grid-template-columns:1fr; } .sheet .cols { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<header><div class="bar">
+  <div class="brand">Shelf Round · Manager</div>
+  <nav id="nav"></nav>
+  <div class="clock" id="clock"></div>
+</div></header>
+<main id="app"></main>
+<script>
+const $ = (id) => document.getElementById(id);
+const COL = { empty:'var(--empty)', wrong:'var(--wrong)', half:'var(--half)', ok:'var(--ok)', unknown:'var(--grey)' };
+const HEX = { empty:'#e9776c', wrong:'#f0a05a', half:'#efd352', ok:'#5fae82', unknown:'#8f9aa3' };
+const WORD = { empty:'Empty', wrong:'Wrong product', half:'Half', ok:'Full', unknown:'Not checked' };
+const ORDER = ['empty', 'wrong', 'half', 'ok', 'unknown'];
+let D = null, rankBy = 'speed', tab = 'products', selected = null, demoPref = null;
+
+const pimg = (pid, emoji, size = 30) => {
+  const src = (window.__SNAPSHOT && window.__SNAPSHOT.product && window.__SNAPSHOT.product[pid]) || `/product-images/${pid}.jpg`;
+  return `<img src="${src}" width="${size}" height="${size}" style="object-fit:contain;border-radius:8px;background:#fff;vertical-align:middle" onerror="this.replaceWith(document.createTextNode('${emoji}'))">`;
+};
+const statusOf = (r) => !r ? 'unknown' : r.planogram_compliant === false ? 'wrong' : r.stock_level === 'empty' ? 'empty' : r.stock_level === 'half' ? 'half' : 'ok';
+const lisbon = (t, o) => new Date(t * 1000).toLocaleString('en-GB', Object.assign({ timeZone: 'Europe/Lisbon' }, o));
+const hhmm = (t) => lisbon(t, { hour: '2-digit', minute: '2-digit' });
+const dur = (s) => { s = Math.round(s); const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60); return h ? `${h} h ${m} min` : m ? `${m} min` : `${s} s`; };
+const mmss = (s) => `${Math.floor(s / 60)}:${String(Math.round(s % 60)).padStart(2, '0')}`;
+
+async function load() {
+  const [results, plan, rounds] = await Promise.all(['/api/results', '/api/planogram', '/api/rounds'].map((u) => fetch(u).then((r) => r.json())));
+  const real = rounds.filter((r) => !r.demo), demo = rounds.filter((r) => r.demo);
+  // with only a few real rounds the demo crew stays, so the page is not empty; the toggle overrides
+  const showDemo = demoPref === null ? real.length < 3 : demoPref;
+  D = { results, planogram: plan.planogram, areas: plan.areas, rounds: showDemo ? [...demo, ...real] : real, hasDemo: demo.length > 0, hasReal: real.length > 0, showDemo };
+  derive(); route();
+}
+
+function derive() {
+  const { results, planogram, areas, rounds } = D;
+  D.cams = Object.keys(planogram).map((cam) => {
+    const names = Object.keys(results[cam] || {}).sort((a, b) => parseInt(b) - parseInt(a));
+    const name = names[0] || null, res = name ? results[cam][name] : null;
+    const items = Object.keys(planogram[cam]).map((id) => ({ id, ...areas[id], status: statusOf(res && res[id]), pts: planogram[cam][id] }));
+    const counts = { empty: 0, wrong: 0, half: 0, ok: 0, unknown: 0 };
+    items.forEach((i) => counts[i.status]++);
+    return { cam, name, time: name ? parseInt(name) : 0, items, counts, bay: items.map((i) => i.location_code).sort()[0], bayName: items[0].bay_name, aisle: String(items[0].aisle) };
+  }).sort((a, b) => a.bay.localeCompare(b.bay));
+  D.newest = Math.max(0, ...D.cams.map((c) => c.time));
+  D.aisles = [...new Set(D.cams.map((c) => c.aisle))].sort().map((a) => {
+    const cams = D.cams.filter((c) => c.aisle === a), counts = { empty: 0, wrong: 0, half: 0, ok: 0, unknown: 0 };
+    cams.forEach((c) => ORDER.forEach((k) => (counts[k] += c.counts[k])));
+    return { aisle: a, cams, counts, bad: counts.empty + counts.wrong + counts.half };
+  });
+
+  const by = {};
+  rounds.forEach((r) => { const e = (by[r.employee] = by[r.employee] || { name: r.employee, rounds: [], seconds: 0, route: 0, load: 0, tasks: 0 }); e.rounds.push(r); e.route += r.seconds; e.load += r.loadSeconds || 0; e.seconds += r.seconds + (r.loadSeconds || 0); e.tasks += r.tasks.length; });
+  D.staff = Object.values(by).map((e) => ({ ...e, perHour: e.seconds ? e.tasks / (e.seconds / 3600) : 0, secPerTask: e.tasks ? e.seconds / e.tasks : 0 }));
+
+  const prod = {};
+  for (const cam of Object.keys(results)) for (const name of Object.keys(results[cam])) for (const [id, r] of Object.entries(results[cam][name])) {
+    const a = areas[id]; if (!a) continue;
+    const p = (prod[a.product_id] = prod[a.product_id] || { pid: a.product_id, name: a.name_en, emoji: a.emoji, bay: a.location_code, obs: 0, empty: 0, half: 0, wrong: 0 });
+    p.obs++; const st = statusOf(r); if (st === 'empty') p.empty++; else if (st === 'half') p.half++; else if (st === 'wrong') p.wrong++;
+  }
+  D.prod = Object.values(prod);
+  D.pictures = Object.values(results).reduce((n, p) => n + Object.keys(p).length, 0);
+  const shrunk = (p) => (p.empty + 0.5) / (p.obs + 4); // one lucky observation should not top the list
+  D.sold = D.prod.filter((p) => p.empty).sort((a, b) => shrunk(b) - shrunk(a));
+  D.wrongList = D.prod.filter((p) => p.wrong).sort((a, b) => b.wrong - a.wrong);
+  const per = {};
+  rounds.forEach((r) => (r.stops || []).forEach((s) => { const p = (per[s.aisle] = per[s.aisle] || { s: 0, t: 0 }); p.s += s.seconds; p.t += s.tasks; }));
+  D.slow = Object.entries(per).filter(([, p]) => p.t).map(([a, p]) => ({ a, v: p.s / p.t })).sort((x, y) => y.v - x.v);
+  D.tot = { empty: 0, wrong: 0, half: 0, ok: 0, unknown: 0 };
+  D.cams.forEach((c) => ORDER.forEach((k) => (D.tot[k] += c.counts[k])));
+}
+
+// ---------- pages ----------
+const NAV = [['', 'Home'], ['staff', 'Staff'], ['cameras', 'Cameras'], ['insights', 'Insights']];
+function route() {
+  if (!D) return;
+  const parts = location.hash.replace(/^#\/?/, '').split('/'), top = parts[0] || '';
+  $('nav').innerHTML = NAV.map(([h, l]) => `<a href="#/${h}" class="${h === top ? 'on' : ''}">${l}</a>`).join('');
+  $('clock').textContent = D.newest ? `Latest picture ${hhmm(D.newest)} · Lisbon` : 'No pictures yet';
+  const pages = { '': pageHome, staff: pageStaff, cameras: () => (parts[1] ? (parts[2] ? pageCamera(parts[1], parts[2]) : pageAisle(parts[1])) : pageCameras()), insights: pageInsights };
+  const html = (pages[top] || pageHome)();
+  $('app').innerHTML = html;
+  afterRender();
+}
+addEventListener('hashchange', () => { selected = null; route(); scrollTo(0, 0); });
+
+const stackBar = (t) => `<div class="stack">${ORDER.filter((k) => t[k]).map((k) => `<div style="flex:${t[k]};background:${COL[k]}"></div>`).join('')}</div>`;
+const legend = (t) => `<div class="legend">${ORDER.filter((k) => t[k] || k !== 'unknown').map((k) => `<span><i style="background:${COL[k]}"></i>${t[k]} ${WORD[k]}</span>`).join('')}</div>`;
+const rankMedal = (i) => `<span class="rank ${i < 3 ? 'g' + (i + 1) : ''}">${i + 1}</span>`;
+
+function pageHome() {
+  const t = D.tot, bad = t.empty + t.wrong + t.half, camsBad = D.cams.filter((c) => c.counts.empty + c.counts.wrong + c.counts.half).length;
+  const tasks = D.staff.reduce((n, e) => n + e.tasks, 0), secs = D.staff.reduce((n, e) => n + e.seconds, 0);
+  const seen = t.empty + t.wrong + t.half + t.ok;
+  const top = D.staff.slice().sort((a, b) => b.perHour - a.perHour).slice(0, 3);
+
+  // what the manager should look at first, worked out from the data
+  const att = [];
+  D.cams.map((c) => ({ c, w: c.counts.empty * 3 + c.counts.wrong * 2 + c.counts.half })).filter((x) => x.w >= 3).sort((a, b) => b.w - a.w).slice(0, 3).forEach(({ c }) => {
+    const parts = ['empty', 'wrong', 'half'].filter((k) => c.counts[k]).map((k) => `${c.counts[k]} ${WORD[k].toLowerCase()}`).join(' · ');
+    att.push({ k: c.counts.empty ? 'empty' : c.counts.wrong ? 'wrong' : 'half', t: `${c.bay} · ${c.bayName}`, s: parts, h: `#/cameras/${c.aisle}/${c.cam}` });
+  });
+  if (D.slow.length > 1) {
+    const avg = D.slow.reduce((n, r) => n + r.v, 0) / D.slow.length;
+    if (D.slow[0].v > avg * 1.2) att.push({ k: 'wrong', t: `Aisle ${D.slow[0].a} is slow`, s: `${mmss(D.slow[0].v)} per task, ${Math.round((D.slow[0].v / avg - 1) * 100)}% above average`, h: '#/insights', tab: 'efficiency' });
+  }
+  const stale = D.cams.filter((c) => !c.time || D.newest - c.time >= 3 * 3600).length;
+  if (stale) att.push({ k: 'unknown', t: `${stale} ${stale === 1 ? 'camera' : 'cameras'} not up to date`, s: 'No picture, or 3 h+ behind the newest', h: '#/insights', tab: 'efficiency' });
+
+  return `<div class="home"><div class="eyebrow" style="font-size:14px">Store overview · Continente Bom Dia S. Romão</div>
+  <h1>${bad ? `${bad} shelves need attention across ${camsBad} cameras.` : D.pictures ? 'Every shelf looks full.' : 'Waiting for pictures.'}</h1>
+  <p class="sub">${D.pictures} camera pictures · ${D.rounds.length} finished rounds${D.showDemo && D.hasDemo ? ' <span class="tag">Demo shifts</span>' : ''}</p>
+  <div class="grid tiles">${[['dark', bad, 'Shelves to fix'], ['', D.staff.length, 'Staff on the floor'], ['', tasks, 'Jobs fixed'], ['', tasks ? mmss(secs / tasks) : '–', 'Avg time per job']]
+    .map(([c, n, l]) => `<div class="card tile ${c}"><div class="n">${n}</div><div class="l">${l}</div></div>`).join('')}</div>
+
+  <div class="grid rowB">
+    <div class="card pcard"><h3>All shelves right now <span class="muted" style="font-weight:400">· ${seen} of ${seen + t.unknown} checked</span></h3>${stackBar(t)}${legend(t)}
+      <div class="strip">${D.aisles.map((a) => `<a class="cell" href="#/cameras/${a.aisle}"><b>Aisle ${a.aisle}</b><div class="c">${a.bad || '–'}</div>${stackBar(a.counts)}</a>`).join('')}</div></div>
+    <div class="card pcard"><h3>Needs your attention</h3>${att.length ? att.map((a) => `<a class="att" href="${a.h}" ${a.tab ? `onclick="tab='${a.tab}'"` : ''}><span class="dot" style="background:${COL[a.k]};margin:0"></span><div style="flex:1"><div class="t">${a.t}</div><div class="s">${a.s}</div></div><span class="muted">→</span></a>`).join('') : '<div class="muted">Nothing urgent. All good.</div>'}</div>
+  </div>
+
+  <div class="grid rowC">
+    <div class="card pcard"><h3>Top of the floor</h3>
+      ${top.length ? top.map((e, i) => `<div class="mini">${rankMedal(i)}<div class="grow"><div class="who" style="font-size:15px">${e.name}</div></div><span class="muted" style="font-size:13px">${e.tasks} jobs</span><b>${e.perHour.toFixed(1)}<span class="muted" style="font-weight:400;font-size:12px">/h</span></b></div>`).join('') : '<div class="muted">No finished rounds yet.</div>'}
+      <a class="more" href="#/staff">All staff →</a></div>
+    <div class="card pcard"><h3>Sold out the most</h3>
+      ${D.sold.slice(0, 3).map((p) => `<div class="mini">${pimg(p.pid, p.emoji, 34)}<div class="grow"><div class="who" style="font-size:15px">${p.name}</div></div><span class="muted" style="font-size:13px">${p.empty} of ${p.obs}</span><b>${Math.round((p.empty / p.obs) * 100)}%</b></div>`).join('') || '<div class="muted">Nothing empty so far.</div>'}
+      <a class="more" href="#/insights" onclick="tab='products'">All insights →</a></div>
+    <div class="card pcard"><h3>Wrong place</h3>
+      ${D.wrongList.slice(0, 3).map((p) => `<div class="mini">${pimg(p.pid, p.emoji, 34)}<div class="grow"><div class="who" style="font-size:15px">${p.name}</div><div class="muted" style="font-size:12px">Bay ${p.bay}</div></div><b>${p.wrong}×</b></div>`).join('') || '<div class="muted">No mismatches seen.</div>'}
+      <a class="more" href="#/insights" onclick="tab='products'">See all →</a></div>
+  </div></div>`;
+}
+
+function pageStaff() {
+  const modes = { speed: ['Speed', 'perHour'], tasks: ['Jobs fixed', 'tasks'], time: ['Time on the floor', 'seconds'] };
+  const key = modes[rankBy][1], list = D.staff.slice().sort((a, b) => b[key] - a[key]), max = Math.max(1, ...list.map((e) => e[key]));
+  let tl = '';
+  if (D.rounds.length) {
+    const mins = (t) => { const p = new Date(t * 1000).toLocaleTimeString('en-GB', { timeZone: 'Europe/Lisbon', hour: '2-digit', minute: '2-digit' }).split(':'); return +p[0] * 60 + +p[1]; };
+    const a = 6 * 60, b = 22 * 60, span = b - a; // the shop day, 06:00 to 22:00
+    const ticks = [6, 10, 14, 18, 22].map((h) => `<span style="position:absolute;left:${((h * 60 - a) / span) * 100}%;transform:translateX(-50%);font-size:12px;color:var(--ink2)">${String(h).padStart(2, '0')}:00</span>`).join('');
+    tl = `<div class="card" style="margin-top:16px;padding:28px"><div class="who">Shifts across the day <span class="muted" style="font-weight:400">· by time of day</span></div><div style="margin-top:14px"><div class="line" style="height:20px;border:0"><div class="track" style="left:130px">${ticks}</div></div>${list.map((e) => `<div class="line"><b>${e.name.split(' ')[0]}</b><div class="track">${e.rounds.map((r) => {
+      const s0 = Math.min(Math.max(mins(r.start), a), b), w = Math.max(0.8, ((r.seconds + (r.loadSeconds || 0)) / 60 / span) * 100);
+      return `<div class="seg" title="${hhmm(r.start)} · ${dur(r.seconds + (r.loadSeconds || 0))} · ${r.tasks.length} jobs" style="left:${((s0 - a) / span) * 100}%;width:${w}%"></div>`; }).join('')}</div></div>`).join('')}</div></div>`;
+  }
+  return `<a class="back" href="#/">← Home</a><h2 style="font-size:40px;letter-spacing:-1.3px;font-weight:300">Staff ${D.showDemo && D.hasDemo ? '<span class="tag">Demo shifts</span>' : ''}</h2>
+  <p class="sub">Everyone who restocked today, ranked. Time counts loading the trolley plus the route.</p>
+  ${D.staff.length ? `<div class="card" style="padding:28px"><div class="tabs">${Object.entries(modes).map(([k, v]) => `<button class="pill ${k === rankBy ? 'on' : ''}" onclick="rankBy='${k}';route()">${v[0]}</button>`).join('')}</div>
+  <table><tr><th></th><th>Employee</th><th class="r">Rounds</th><th class="r">Jobs</th><th class="r">Loading</th><th class="r">Route</th><th class="r">Per job</th><th class="r">Jobs / hour</th></tr>${list.map((e, i) => `<tr><td>${rankMedal(i)}</td>
+    <td><div class="who">${e.name}</div><div class="bar2" style="width:200px"><div style="width:${(e[key] / max) * 100}%;background:var(--ok)"></div></div></td>
+    <td class="r">${e.rounds.length}</td><td class="r">${e.tasks}</td><td class="r">${dur(e.load)}</td><td class="r">${dur(e.route)}</td><td class="r">${mmss(e.secPerTask)}</td><td class="r"><b>${e.perHour.toFixed(1)}</b></td></tr>`).join('')}</table></div>${tl}
+  <div style="margin-top:18px">${D.hasDemo ? `<button class="ghost" onclick="demoPref=${!D.showDemo};load()">${D.showDemo ? 'Hide' : 'Show'} demo shifts</button> &nbsp;·&nbsp; <button class="ghost" onclick="clearDemo()">Remove demo shifts</button>` : ''}</div>`
+  : `<div class="card" style="padding:28px"><div class="muted">No finished rounds yet. Rounds appear here the moment a worker finishes one on the phone app.<br><br><button class="btn" onclick="seed()">Load demo shifts</button></div></div>`}`;
+}
+
+function pageCameras() {
+  return `<a class="back" href="#/">← Home</a><h2 style="font-size:40px;letter-spacing:-1.3px;font-weight:300">Cameras</h2>
+  <p class="sub">The shop in ${D.aisles.length} aisles. Open one to look through its cameras.</p>
+  <div class="grid" style="grid-template-columns:repeat(2,1fr)">${D.aisles.map((a) => `<a class="card aislecard" href="#/cameras/${a.aisle}">
+    <div style="display:flex;justify-content:space-between;align-items:center"><div><div class="big">Aisle ${a.aisle}</div><div class="muted" style="font-size:14px;margin-top:2px">${a.cams.map((c) => c.bay).join(' · ')}</div></div>
+      ${a.bad ? `<span class="rank" style="background:${COL[a.counts.empty ? 'empty' : a.counts.wrong ? 'wrong' : 'half']};width:44px;height:44px">${a.bad}</span>` : '<span class="chip">all good</span>'}</div>
+    <div class="thumbs">${a.cams.map((c) => `<canvas class="th" data-cam="${c.cam}" width="320" height="180"></canvas>`).join('')}</div></a>`).join('')}</div>`;
+}
+
+function pageAisle(aisle) {
+  const a = D.aisles.find((x) => x.aisle === aisle) || D.aisles[0], i = D.aisles.indexOf(a);
+  const prev = D.aisles[i - 1], next = D.aisles[i + 1];
+  return `<a class="back" href="#/cameras">← All aisles</a>
+  <div style="display:flex;justify-content:space-between;align-items:flex-end"><div><h2 style="font-size:40px;letter-spacing:-1.3px;font-weight:300">Aisle ${a.aisle}</h2><p class="sub" style="margin:0">${a.cams.length} cameras · ${a.bad ? a.bad + ' shelves to fix' : 'all good'}</p></div>
+  <div class="pager"><button class="arrow" ${prev ? `onclick="location.hash='#/cameras/${prev.aisle}'"` : 'disabled'}>‹</button><button class="arrow" ${next ? `onclick="location.hash='#/cameras/${next.aisle}'"` : 'disabled'}>›</button></div></div>
+  <div class="grid cams2" style="margin-top:24px">${a.cams.map((c) => `<a class="card cam" style="display:block;text-decoration:none;color:inherit" href="#/cameras/${a.aisle}/${c.cam}"><canvas class="th" data-cam="${c.cam}" width="800" height="450"></canvas>
+    <div class="t"><span class="who">${c.bay} · ${c.bayName}</span><span class="muted" style="font-size:13px">${c.time ? hhmm(c.time) : 'no picture'}</span></div>
+    <div class="chips">${['empty', 'wrong', 'half', 'ok'].filter((k) => c.counts[k]).map((k) => `<span class="chip"><span class="dot" style="background:${COL[k]}"></span>${c.counts[k]} ${WORD[k]}</span>`).join('') || '<span class="chip">Not checked yet</span>'}</div></a>`).join('')}</div>`;
+}
+
+function pageCamera(aisle, cam) {
+  const a = D.aisles.find((x) => x.aisle === aisle), c = D.cams.find((x) => x.cam === cam);
+  if (!a || !c) return pageCameras();
+  const i = a.cams.indexOf(c), prev = a.cams[i - 1], next = a.cams[i + 1];
+  return `<a class="back" href="#/cameras/${aisle}">← Aisle ${aisle}</a>
+  <div style="display:flex;justify-content:space-between;align-items:flex-end"><div><div class="eyebrow">Aisle ${aisle} · camera ${i + 1} of ${a.cams.length}</div><h2 style="font-size:40px;letter-spacing:-1.3px;font-weight:300;margin-top:6px">${c.bay} · ${c.bayName}</h2></div>
+  <div class="pager"><button class="arrow" ${prev ? `onclick="location.hash='#/cameras/${aisle}/${prev.cam}'"` : 'disabled'}>‹</button><button class="arrow" ${next ? `onclick="location.hash='#/cameras/${aisle}/${next.cam}'"` : 'disabled'}>›</button></div></div>
+  <div class="grid detail" style="margin-top:22px"><div class="card" style="padding:16px"><canvas id="big" class="th" data-cam="${c.cam}" data-labels="1" width="1280" height="720" style="width:100%;border-radius:20px;display:block;background:#222"></canvas>
+    <div class="muted" style="margin:12px 6px 4px;font-size:14px">${c.time ? 'Picture from ' + lisbon(c.time, { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }) : 'No picture yet'}</div></div>
+  <div><div class="sel" id="info"></div><div class="card" style="padding:14px"><div class="who" style="margin:4px 8px 8px">Shelf areas</div><div id="areaList"></div></div></div></div>`;
+}
+
+function renderSel() {
+  const cv = $('big'); if (!cv) return;
+  const c = D.cams.find((x) => x.cam === cv.dataset.cam), it = c.items.find((i) => i.id === selected);
+  $('info').innerHTML = it
+    ? `<div class="row1">${pimg(it.product_id, it.emoji, 56)}<div style="flex:1"><div class="who" style="font-size:18px">${it.name_en}</div><div class="muted" style="font-size:14px">Bay ${it.location_code} · area ${it.id.split('_')[1]}</div></div><span class="badge" style="background:${COL[it.status]}">${WORD[it.status]}</span></div>`
+    : '<div class="muted">Click a square on the picture to see what it is.</div>';
+  $('areaList').innerHTML = c.items.map((i) => `<div class="al ${i.id === selected ? 'on' : ''}" onclick="pick('${i.id}')"><b style="width:22px">${i.id.split('_')[1]}</b>${pimg(i.product_id, i.emoji, 30)}<span style="flex:1">${i.name_en}</span><span class="dot" style="background:${COL[i.status]}"></span><span class="muted" style="font-size:13px;min-width:78px">${WORD[i.status]}</span></div>`).join('');
+  draw(cv, c, true, selected);
+}
+function pick(id) { selected = selected === id ? null : id; renderSel(); }
+function inside(pts, x, y) { let r = false; for (let i = 0, j = pts.length - 1; i < pts.length; j = i++) { const [xi, yi] = pts[i], [xj, yj] = pts[j]; if ((yi > y) !== (yj > y) && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi) r = !r; } return r; }
+function area(pts) { let a = 0; for (let i = 0; i < pts.length; i++) { const [x1, y1] = pts[i], [x2, y2] = pts[(i + 1) % pts.length]; a += x1 * y2 - x2 * y1; } return Math.abs(a / 2); }
+
+function pageInsights() {
+  const tabs = [['products', 'Products'], ['efficiency', 'Efficiency']];
+  const body = tab === 'products' ? `<div class="grid two">
+    <div class="card" style="padding:28px"><div class="who" style="font-size:18px;margin-bottom:4px">Sold out the most</div><div class="muted" style="font-size:14px;margin-bottom:12px">Share of pictures where the shelf was empty.</div><div class="bars">${D.sold.slice(0, 10).map((p) => `<div class="row"><div class="em">${pimg(p.pid, p.emoji, 38)}</div><div><div class="name">${p.name}</div><div class="bar2"><div style="width:${(p.empty / p.obs) * 100}%"></div></div></div><div style="text-align:right"><b>${Math.round((p.empty / p.obs) * 100)}%</b><div class="small">${p.empty} of ${p.obs}</div></div></div>`).join('') || '<div class="muted">Nothing empty in the pictures so far.</div>'}</div></div>
+    <div class="card" style="padding:28px"><div class="who" style="font-size:18px;margin-bottom:4px">Wrong product in the wrong place</div><div class="muted" style="font-size:14px;margin-bottom:12px">Planogram mismatches seen by the cameras.</div><div class="bars">${D.wrongList.slice(0, 10).map((p) => `<div class="row"><div class="em">${pimg(p.pid, p.emoji, 38)}</div><div><div class="name">${p.name}</div><div class="small">Bay ${p.bay}</div></div><div style="text-align:right"><b>${p.wrong}</b><div class="small">${p.wrong === 1 ? 'time' : 'times'}</div></div></div>`).join('') || '<div class="muted">No planogram mismatches seen.</div>'}</div></div></div>`
+  : (() => {
+    const avg = D.slow.length ? D.slow.reduce((n, r) => n + r.v, 0) / D.slow.length : 0, worst = D.slow.length ? D.slow[0].v : 1;
+    const mo = Math.max(1, ...D.aisles.map((a) => a.bad));
+    const stale = D.cams.filter((c) => !c.time || D.newest - c.time >= 3 * 3600).sort((a, b) => a.time - b.time);
+    return `<div class="grid two"><div class="card" style="padding:28px"><div class="who" style="font-size:18px;margin-bottom:4px">Where we are slow</div><div class="muted" style="font-size:14px;margin-bottom:12px">Average time per fixed job, by aisle (walking included).</div><div class="bars">${D.slow.map((r) => `<div class="row"><div class="rank" style="width:30px;height:30px;font-size:13px">${r.a}</div><div><div class="name">Aisle ${r.a}${r.v > avg * 1.2 ? ' <span class="tag" style="background:#fbe6e3;color:#b4493b">slower than usual</span>' : ''}</div><div class="bar2"><div style="width:${(r.v / worst) * 100}%;background:${r.v > avg * 1.2 ? 'var(--empty)' : 'var(--ok)'}"></div></div></div><div style="text-align:right"><b>${mmss(r.v)}</b><div class="small">per job</div></div></div>`).join('') || '<div class="muted">Finish a round on the phone to see timings.</div>'}</div></div>
+    <div class="card" style="padding:28px"><div class="who" style="font-size:18px;margin-bottom:4px">Needs attention now</div><div class="muted" style="font-size:14px;margin-bottom:12px">Open problems by aisle, from each camera's latest picture.</div><div class="bars">${D.aisles.map((a) => `<div class="row"><div class="rank" style="width:30px;height:30px;font-size:13px">${a.aisle}</div><div><div class="name">Aisle ${a.aisle}</div><div class="bar2"><div style="width:${(a.bad / mo) * 100}%;background:var(--half)"></div></div></div><div style="text-align:right"><b>${a.bad}</b></div></div>`).join('')}</div></div></div>
+    <div class="card" style="padding:28px;margin-top:16px"><div class="who" style="font-size:18px;margin-bottom:4px">Cameras not updated</div><div class="muted" style="font-size:14px;margin-bottom:12px">No picture, or more than 3 hours behind the newest.</div><div class="bars">${stale.map((c) => `<div class="row"><div class="rank" style="width:30px;height:30px;font-size:13px">${c.aisle}</div><div><div class="name">${c.bay} · ${c.bayName}</div></div><div class="small" style="text-align:right">${c.time ? dur(D.newest - c.time) + ' behind' : 'no picture'}</div></div>`).join('') || '<div class="muted">All cameras are up to date.</div>'}</div></div>`;
+  })();
+  return `<a class="back" href="#/">← Home</a><h2 style="font-size:40px;letter-spacing:-1.3px;font-weight:300">Insights</h2>
+  <p class="sub">Based on ${D.pictures} camera ${D.pictures === 1 ? 'picture' : 'pictures'} and ${D.rounds.length} finished ${D.rounds.length === 1 ? 'round' : 'rounds'}. The more arrive, the sharper this gets.</p>
+  <div class="tabs">${tabs.map(([k, l]) => `<button class="pill ${k === tab ? 'on' : ''}" onclick="tab='${k}';route()">${l}</button>`).join('')}</div>${body}`;
+}
+
+// ---------- drawing the camera pictures ----------
+function draw(canvas, c, labels, sel) {
+  const ctx = canvas.getContext('2d'), W = canvas.width, H = canvas.height, sx = W / 1280, sy = H / 720;
+  const paint = () => c.items.forEach((i) => {
+    ctx.beginPath(); i.pts.forEach((p, k) => (k ? ctx.lineTo(p[0] * sx, p[1] * sy) : ctx.moveTo(p[0] * sx, p[1] * sy))); ctx.closePath();
+    ctx.globalAlpha = i.id === sel ? 0.5 : c.name ? 0.28 : 0.45; ctx.fillStyle = HEX[i.status]; ctx.fill(); ctx.globalAlpha = 1;
+    const on = i.id === sel;
+    ctx.lineWidth = on ? 10 : labels ? 5 : Math.max(2, 3 * sx * 2); ctx.strokeStyle = on ? '#ffffff' : HEX[i.status]; ctx.stroke();
+    if (labels) { const cx = i.pts.reduce((s, p) => s + p[0], 0) / 4 * sx, cy = i.pts.reduce((s, p) => s + p[1], 0) / 4 * sy;
+      ctx.font = 'bold 30px sans-serif'; ctx.lineWidth = 6; ctx.strokeStyle = '#000'; ctx.fillStyle = '#fff'; const n = i.id.split('_')[1]; ctx.strokeText(n, cx - 9, cy + 9); ctx.fillText(n, cx - 9, cy + 9); }
+  });
+  ctx.fillStyle = '#56655d'; ctx.fillRect(0, 0, W, H);
+  if (!c.name) { paint(); return; }
+  const im = new Image(); im.onload = () => { ctx.drawImage(im, 0, 0, W, H); paint(); }; im.src = `/photos/${c.cam}/${c.name}`;
+}
+function afterRender() {
+  document.querySelectorAll('canvas.th').forEach((cv) => { if (!cv.dataset.labels) draw(cv, D.cams.find((x) => x.cam === cv.dataset.cam), false); });
+  const big = $('big');
+  if (big) {
+    big.classList.add('hit');
+    big.onclick = (e) => {
+      const r = big.getBoundingClientRect(), x = ((e.clientX - r.left) / r.width) * 1280, y = ((e.clientY - r.top) / r.height) * 720;
+      const c = D.cams.find((q) => q.cam === big.dataset.cam);
+      const hit = c.items.filter((i) => inside(i.pts, x, y)).sort((a, b) => area(a.pts) - area(b.pts))[0];
+      selected = hit ? (hit.id === selected ? null : hit.id) : null; renderSel();
+    };
+    renderSel();
+  }
+}
+
+async function seed() { await fetch('/api/seed-demo', { method: 'POST' }); await load(); }
+async function clearDemo() { await fetch('/api/clear-demo', { method: 'POST' }); await load(); }
+load(); setInterval(load, 15000);
+</script>
+</body>
+</html>

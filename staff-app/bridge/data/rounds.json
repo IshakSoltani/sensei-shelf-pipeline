@@ -1,0 +1,1957 @@
+[
+ {
+  "id": "r-1791675140984",
+  "demo": false,
+  "employee": "Filippo",
+  "trip": 1,
+  "loadSeconds": 28,
+  "start": 1791675118,
+  "end": 1791675141,
+  "seconds": 23,
+  "stops": [
+   {
+    "bay": "1C",
+    "aisle": "1",
+    "seconds": 3,
+    "tasks": 3
+   },
+   {
+    "bay": "2A",
+    "aisle": "2",
+    "seconds": 2,
+    "tasks": 2
+   },
+   {
+    "bay": "3A",
+    "aisle": "3",
+    "seconds": 6,
+    "tasks": 4
+   },
+   {
+    "bay": "3C",
+    "aisle": "3",
+    "seconds": 3,
+    "tasks": 4
+   },
+   {
+    "bay": "4B",
+    "aisle": "4",
+    "seconds": 3,
+    "tasks": 1
+   },
+   {
+    "bay": "4C",
+    "aisle": "4",
+    "seconds": 5,
+    "tasks": 5
+   }
+  ],
+  "tasks": [
+   {
+    "key": "6385_3",
+    "name": "Organic red apple 500g",
+    "emoji": "\ud83c\udf4e",
+    "type": "empty",
+    "bay": "1C",
+    "aisle": "1",
+    "productId": "30491"
+   },
+   {
+    "key": "6385_8",
+    "name": "Fuji Carioca apple",
+    "emoji": "\ud83c\udf4e",
+    "type": "empty",
+    "bay": "1C",
+    "aisle": "1",
+    "productId": "20818"
+   },
+   {
+    "key": "6385_4",
+    "name": "Fuji Carioca apple",
+    "emoji": "\ud83c\udf4e",
+    "type": "half",
+    "bay": "1C",
+    "aisle": "1",
+    "productId": "20818"
+   },
+   {
+    "key": "6373_2",
+    "name": "Gala apple 60/70",
+    "emoji": "\ud83c\udf4e",
+    "type": "wrong",
+    "bay": "2A",
+    "aisle": "2",
+    "productId": "32748"
+   },
+   {
+    "key": "6373_5",
+    "name": "Golden apple 65/70",
+    "emoji": "\ud83c\udf4f",
+    "type": "half",
+    "bay": "2A",
+    "aisle": "2",
+    "productId": "32749"
+   },
+   {
+    "key": "6594_7",
+    "name": "Dried garlic 250g",
+    "emoji": "\ud83e\uddc4",
+    "type": "half",
+    "bay": "3A",
+    "aisle": "3",
+    "productId": "31119"
+   },
+   {
+    "key": "6594_8",
+    "name": "Dried garlic",
+    "emoji": "\ud83e\uddc4",
+    "type": "half",
+    "bay": "3A",
+    "aisle": "3",
+    "productId": "11916"
+   },
+   {
+    "key": "6594_11",
+    "name": "Red onions 1kg",
+    "emoji": "\ud83e\uddc5",
+    "type": "half",
+    "bay": "3A",
+    "aisle": "3",
+    "productId": "19127"
+   },
+   {
+    "key": "6594_13",
+    "name": "Sweet onions 1kg",
+    "emoji": "\ud83e\uddc5",
+    "type": "half",
+    "bay": "3A",
+    "aisle": "3",
+    "productId": "21915"
+   },
+   {
+    "key": "6371_2",
+    "name": "Black watermelon",
+    "emoji": "\ud83c\udf49",
+    "type": "half",
+    "bay": "3C",
+    "aisle": "3",
+    "productId": "16143"
+   },
+   {
+    "key": "6371_3",
+    "name": "Green melon",
+    "emoji": "\ud83c\udf48",
+    "type": "half",
+    "bay": "3C",
+    "aisle": "3",
+    "productId": "16336"
+   },
+   {
+    "key": "6371_7",
+    "name": "Cantaloupe melon",
+    "emoji": "\ud83c\udf48",
+    "type": "half",
+    "bay": "3C",
+    "aisle": "3",
+    "productId": "30633"
+   },
+   {
+    "key": "6371_9",
+    "name": "Mini watermelon",
+    "emoji": "\ud83c\udf49",
+    "type": "half",
+    "bay": "3C",
+    "aisle": "3",
+    "productId": "16137"
+   },
+   {
+    "key": "6781_5",
+    "name": "White potatoes 3kg",
+    "emoji": "\ud83e\udd54",
+    "type": "half",
+    "bay": "4B",
+    "aisle": "4",
+    "productId": "22193"
+   },
+   {
+    "key": "6376_8",
+    "name": "Algarve oranges 3kg",
+    "emoji": "\ud83c\udf4a",
+    "type": "wrong",
+    "bay": "4C",
+    "aisle": "4",
+    "productId": "15730"
+   },
+   {
+    "key": "6376_3",
+    "name": "Gold kiwi 500g",
+    "emoji": "\ud83e\udd5d",
+    "type": "half",
+    "bay": "4C",
+    "aisle": "4",
+    "productId": "15781"
+   },
+   {
+    "key": "6376_4",
+    "name": "Zespri kiwi 500g",
+    "emoji": "\ud83e\udd5d",
+    "type": "half",
+    "bay": "4C",
+    "aisle": "4",
+    "productId": "1164"
+   },
+   {
+    "key": "6376_5",
+    "name": "Organic kiwi 400g",
+    "emoji": "\ud83e\udd5d",
+    "type": "half",
+    "bay": "4C",
+    "aisle": "4",
+    "productId": "20508"
+   },
+   {
+    "key": "6376_7",
+    "name": "Algarve oranges 3kg",
+    "emoji": "\ud83c\udf4a",
+    "type": "half",
+    "bay": "4C",
+    "aisle": "4",
+    "productId": "15730"
+   }
+  ]
+ },
+ {
+  "id": "demo-0-0",
+  "demo": true,
+  "employee": "Ana Ribeiro",
+  "start": 1751005240,
+  "end": 1751006450,
+  "seconds": 1210,
+  "loadSeconds": 79,
+  "tasks": [
+   {
+    "key": "6373_5",
+    "name": "Golden apple 65/70",
+    "emoji": "\ud83c\udf4f",
+    "type": "half",
+    "bay": "2A",
+    "aisle": "2",
+    "productId": "32749"
+   },
+   {
+    "key": "6373_9",
+    "name": "Cosmic Crisp apple",
+    "emoji": "\ud83c\udf4e",
+    "type": "half",
+    "bay": "2A",
+    "aisle": "2",
+    "productId": "32262"
+   },
+   {
+    "key": "6491_4",
+    "name": "Peach",
+    "emoji": "\ud83c\udf51",
+    "type": "half",
+    "bay": "2B",
+    "aisle": "2",
+    "productId": "32530"
+   },
+   {
+    "key": "6468_1",
+    "name": "Pineapple",
+    "emoji": "\ud83c\udf4d",
+    "type": "half",
+    "bay": "2C",
+    "aisle": "2",
+    "productId": "23366"
+   },
+   {
+    "key": "6468_7",
+    "name": "Passion fruit",
+    "emoji": "\ud83c\udf4a",
+    "type": "half",
+    "bay": "2C",
+    "aisle": "2",
+    "productId": "22108"
+   },
+   {
+    "key": "6443_2",
+    "name": "Cluster tomatoes",
+    "emoji": "\ud83c\udf45",
+    "type": "half",
+    "bay": "3B",
+    "aisle": "3",
+    "productId": "21120"
+   },
+   {
+    "key": "6443_4",
+    "name": "Organic cherry tomatoes 250g",
+    "emoji": "\ud83c\udf45",
+    "type": "half",
+    "bay": "3B",
+    "aisle": "3",
+    "productId": "22304"
+   },
+   {
+    "key": "6371_5",
+    "name": "Green melon",
+    "emoji": "\ud83c\udf48",
+    "type": "half",
+    "bay": "3C",
+    "aisle": "3",
+    "productId": "16336"
+   },
+   {
+    "key": "6591_10",
+    "name": "Potatoes for boiling 3kg",
+    "emoji": "\ud83e\udd54",
+    "type": "empty",
+    "bay": "4A",
+    "aisle": "4",
+    "productId": "22176"
+   },
+   {
+    "key": "6591_4",
+    "name": "Red potatoes 3kg",
+    "emoji": "\ud83e\udd54",
+    "type": "empty",
+    "bay": "4A",
+    "aisle": "4",
+    "productId": "21965"
+   },
+   {
+    "key": "6781_4",
+    "name": "White potatoes 3kg",
+    "emoji": "\ud83e\udd54",
+    "type": "half",
+    "bay": "4B",
+    "aisle": "4",
+    "productId": "22193"
+   },
+   {
+    "key": "6376_4",
+    "name": "Zespri kiwi 500g",
+    "emoji": "\ud83e\udd5d",
+    "type": "half",
+    "bay": "4C",
+    "aisle": "4",
+    "productId": "1164"
+   }
+  ],
+  "stops": [
+   {
+    "bay": "2A",
+    "aisle": "2",
+    "seconds": 188,
+    "tasks": 2
+   },
+   {
+    "bay": "2B",
+    "aisle": "2",
+    "seconds": 135,
+    "tasks": 1
+   },
+   {
+    "bay": "2C",
+    "aisle": "2",
+    "seconds": 165,
+    "tasks": 2
+   },
+   {
+    "bay": "3B",
+    "aisle": "3",
+    "seconds": 164,
+    "tasks": 2
+   },
+   {
+    "bay": "3C",
+    "aisle": "3",
+    "seconds": 91,
+    "tasks": 1
+   },
+   {
+    "bay": "4A",
+    "aisle": "4",
+    "seconds": 193,
+    "tasks": 2
+   },
+   {
+    "bay": "4B",
+    "aisle": "4",
+    "seconds": 120,
+    "tasks": 1
+   },
+   {
+    "bay": "4C",
+    "aisle": "4",
+    "seconds": 154,
+    "tasks": 1
+   }
+  ]
+ },
+ {
+  "id": "demo-0-1",
+  "demo": true,
+  "employee": "Ana Ribeiro",
+  "start": 1751015472,
+  "end": 1751015991,
+  "seconds": 519,
+  "loadSeconds": 46,
+  "tasks": [
+   {
+    "key": "6468_6",
+    "name": "Guava",
+    "emoji": "\ud83c\udf50",
+    "type": "empty",
+    "bay": "2C",
+    "aisle": "2",
+    "productId": "30368"
+   },
+   {
+    "key": "6468_3",
+    "name": "Pineapple",
+    "emoji": "\ud83c\udf4d",
+    "type": "half",
+    "bay": "2C",
+    "aisle": "2",
+    "productId": "23366"
+   },
+   {
+    "key": "6594_13",
+    "name": "Sweet onions 1kg",
+    "emoji": "\ud83e\uddc5",
+    "type": "half",
+    "bay": "3A",
+    "aisle": "3",
+    "productId": "21915"
+   },
+   {
+    "key": "6371_9",
+    "name": "Mini watermelon",
+    "emoji": "\ud83c\udf49",
+    "type": "wrong",
+    "bay": "3C",
+    "aisle": "3",
+    "productId": "16137"
+   },
+   {
+    "key": "6383_4",
+    "name": "Portuguese cabbage",
+    "emoji": "\ud83e\udd6c",
+    "type": "wrong",
+    "bay": "5A",
+    "aisle": "5",
+    "productId": "15651"
+   }
+  ],
+  "stops": [
+   {
+    "bay": "2C",
+    "aisle": "2",
+    "seconds": 159,
+    "tasks": 2
+   },
+   {
+    "bay": "3A",
+    "aisle": "3",
+    "seconds": 130,
+    "tasks": 1
+   },
+   {
+    "bay": "3C",
+    "aisle": "3",
+    "seconds": 105,
+    "tasks": 1
+   },
+   {
+    "bay": "5A",
+    "aisle": "5",
+    "seconds": 125,
+    "tasks": 1
+   }
+  ]
+ },
+ {
+  "id": "demo-1-0",
+  "demo": true,
+  "employee": "Bruno Costa",
+  "start": 1751009163,
+  "end": 1751010557,
+  "seconds": 1394,
+  "loadSeconds": 89,
+  "tasks": [
+   {
+    "key": "6215_8",
+    "name": "Banana",
+    "emoji": "\ud83c\udf4c",
+    "type": "empty",
+    "bay": "1B",
+    "aisle": "1",
+    "productId": "11908"
+   },
+   {
+    "key": "6215_3",
+    "name": "Banana",
+    "emoji": "\ud83c\udf4c",
+    "type": "half",
+    "bay": "1B",
+    "aisle": "1",
+    "productId": "11908"
+   },
+   {
+    "key": "6373_11",
+    "name": "Packham pear",
+    "emoji": "\ud83c\udf50",
+    "type": "empty",
+    "bay": "2A",
+    "aisle": "2",
+    "productId": "11901"
+   },
+   {
+    "key": "6468_11",
+    "name": "Plantain",
+    "emoji": "\ud83c\udf4c",
+    "type": "half",
+    "bay": "2C",
+    "aisle": "2",
+    "productId": "15591"
+   },
+   {
+    "key": "6468_4",
+    "name": "Red pitaya 300g",
+    "emoji": "\ud83c\udf48",
+    "type": "empty",
+    "bay": "2C",
+    "aisle": "2",
+    "productId": "15855"
+   },
+   {
+    "key": "6468_1",
+    "name": "Pineapple",
+    "emoji": "\ud83c\udf4d",
+    "type": "half",
+    "bay": "2C",
+    "aisle": "2",
+    "productId": "23366"
+   },
+   {
+    "key": "6468_10",
+    "name": "Papaya",
+    "emoji": "\ud83e\udd6d",
+    "type": "empty",
+    "bay": "2C",
+    "aisle": "2",
+    "productId": "11892"
+   },
+   {
+    "key": "6443_11",
+    "name": "Chucha tomatoes",
+    "emoji": "\ud83c\udf45",
+    "type": "half",
+    "bay": "3B",
+    "aisle": "3",
+    "productId": "11898"
+   },
+   {
+    "key": "6591_7",
+    "name": "Ginger",
+    "emoji": "\ud83e\udeda",
+    "type": "empty",
+    "bay": "4A",
+    "aisle": "4",
+    "productId": "22411"
+   },
+   {
+    "key": "6781_10",
+    "name": "Red potatoes",
+    "emoji": "\ud83e\udd54",
+    "type": "half",
+    "bay": "4B",
+    "aisle": "4",
+    "productId": "11912"
+   },
+   {
+    "key": "6376_13",
+    "name": "Algarve oranges 1.5kg",
+    "emoji": "\ud83c\udf4a",
+    "type": "half",
+    "bay": "4C",
+    "aisle": "4",
+    "productId": "26600"
+   },
+   {
+    "key": "6376_4",
+    "name": "Zespri kiwi 500g",
+    "emoji": "\ud83e\udd5d",
+    "type": "half",
+    "bay": "4C",
+    "aisle": "4",
+    "productId": "1164"
+   }
+  ],
+  "stops": [
+   {
+    "bay": "1B",
+    "aisle": "1",
+    "seconds": 239,
+    "tasks": 2
+   },
+   {
+    "bay": "2A",
+    "aisle": "2",
+    "seconds": 168,
+    "tasks": 1
+   },
+   {
+    "bay": "2C",
+    "aisle": "2",
+    "seconds": 296,
+    "tasks": 4
+   },
+   {
+    "bay": "3B",
+    "aisle": "3",
+    "seconds": 133,
+    "tasks": 1
+   },
+   {
+    "bay": "4A",
+    "aisle": "4",
+    "seconds": 117,
+    "tasks": 1
+   },
+   {
+    "bay": "4B",
+    "aisle": "4",
+    "seconds": 168,
+    "tasks": 1
+   },
+   {
+    "bay": "4C",
+    "aisle": "4",
+    "seconds": 273,
+    "tasks": 2
+   }
+  ]
+ },
+ {
+  "id": "demo-1-1",
+  "demo": true,
+  "employee": "Bruno Costa",
+  "start": 1751023111,
+  "end": 1751023709,
+  "seconds": 598,
+  "loadSeconds": 37,
+  "tasks": [
+   {
+    "key": "6462_4",
+    "name": "Seedless white grapes",
+    "emoji": "\ud83c\udf47",
+    "type": "half",
+    "bay": "1A",
+    "aisle": "1",
+    "productId": "21307"
+   },
+   {
+    "key": "6371_5",
+    "name": "Green melon",
+    "emoji": "\ud83c\udf48",
+    "type": "half",
+    "bay": "3C",
+    "aisle": "3",
+    "productId": "16336"
+   },
+   {
+    "key": "6376_16",
+    "name": "Algarve oranges 1.5kg",
+    "emoji": "\ud83c\udf4a",
+    "type": "wrong",
+    "bay": "4C",
+    "aisle": "4",
+    "productId": "26600"
+   },
+   {
+    "key": "6383_2",
+    "name": "Hass avocado",
+    "emoji": "\ud83e\udd51",
+    "type": "empty",
+    "bay": "5A",
+    "aisle": "5",
+    "productId": "16429"
+   },
+   {
+    "key": "6383_4",
+    "name": "Portuguese cabbage",
+    "emoji": "\ud83e\udd6c",
+    "type": "half",
+    "bay": "5A",
+    "aisle": "5",
+    "productId": "15651"
+   }
+  ],
+  "stops": [
+   {
+    "bay": "1A",
+    "aisle": "1",
+    "seconds": 129,
+    "tasks": 1
+   },
+   {
+    "bay": "3C",
+    "aisle": "3",
+    "seconds": 134,
+    "tasks": 1
+   },
+   {
+    "bay": "4C",
+    "aisle": "4",
+    "seconds": 169,
+    "tasks": 1
+   },
+   {
+    "bay": "5A",
+    "aisle": "5",
+    "seconds": 166,
+    "tasks": 2
+   }
+  ]
+ },
+ {
+  "id": "demo-1-2",
+  "demo": true,
+  "employee": "Bruno Costa",
+  "start": 1751031933,
+  "end": 1751032727,
+  "seconds": 794,
+  "loadSeconds": 63,
+  "tasks": [
+   {
+    "key": "6462_6",
+    "name": "Seedless white grapes 500g",
+    "emoji": "\ud83c\udf47",
+    "type": "half",
+    "bay": "1A",
+    "aisle": "1",
+    "productId": "19032"
+   },
+   {
+    "key": "6591_4",
+    "name": "Red potatoes 3kg",
+    "emoji": "\ud83e\udd54",
+    "type": "half",
+    "bay": "4A",
+    "aisle": "4",
+    "productId": "21965"
+   },
+   {
+    "key": "6376_15",
+    "name": "Algarve orange",
+    "emoji": "\ud83c\udf4a",
+    "type": "half",
+    "bay": "4C",
+    "aisle": "4",
+    "productId": "11906"
+   },
+   {
+    "key": "6376_14",
+    "name": "Clementine",
+    "emoji": "\ud83c\udf4a",
+    "type": "empty",
+    "bay": "4C",
+    "aisle": "4",
+    "productId": "12756"
+   },
+   {
+    "key": "6376_10",
+    "name": "Zespri kiwi",
+    "emoji": "\ud83e\udd5d",
+    "type": "half",
+    "bay": "4C",
+    "aisle": "4",
+    "productId": "14646"
+   },
+   {
+    "key": "6386_5",
+    "name": "Courgette",
+    "emoji": "\ud83e\udd52",
+    "type": "half",
+    "bay": "5B",
+    "aisle": "5",
+    "productId": "11893"
+   }
+  ],
+  "stops": [
+   {
+    "bay": "1A",
+    "aisle": "1",
+    "seconds": 135,
+    "tasks": 1
+   },
+   {
+    "bay": "4A",
+    "aisle": "4",
+    "seconds": 154,
+    "tasks": 1
+   },
+   {
+    "bay": "4C",
+    "aisle": "4",
+    "seconds": 371,
+    "tasks": 3
+   },
+   {
+    "bay": "5B",
+    "aisle": "5",
+    "seconds": 134,
+    "tasks": 1
+   }
+  ]
+ },
+ {
+  "id": "demo-1-3",
+  "demo": true,
+  "employee": "Bruno Costa",
+  "start": 1751003965,
+  "end": 1751004789,
+  "seconds": 824,
+  "loadSeconds": 58,
+  "tasks": [
+   {
+    "key": "6373_3",
+    "name": "Pink Lady apple",
+    "emoji": "\ud83c\udf4e",
+    "type": "half",
+    "bay": "2A",
+    "aisle": "2",
+    "productId": "19133"
+   },
+   {
+    "key": "6371_5",
+    "name": "Green melon",
+    "emoji": "\ud83c\udf48",
+    "type": "half",
+    "bay": "3C",
+    "aisle": "3",
+    "productId": "16336"
+   },
+   {
+    "key": "6371_7",
+    "name": "Cantaloupe melon",
+    "emoji": "\ud83c\udf48",
+    "type": "empty",
+    "bay": "3C",
+    "aisle": "3",
+    "productId": "30633"
+   },
+   {
+    "key": "6376_12",
+    "name": "Clementine",
+    "emoji": "\ud83c\udf4a",
+    "type": "half",
+    "bay": "4C",
+    "aisle": "4",
+    "productId": "12756"
+   },
+   {
+    "key": "6383_3",
+    "name": "Green pepper",
+    "emoji": "\ud83e\uded1",
+    "type": "half",
+    "bay": "5A",
+    "aisle": "5",
+    "productId": "11896"
+   },
+   {
+    "key": "6386_4",
+    "name": "Cauliflower",
+    "emoji": "\ud83e\udd66",
+    "type": "empty",
+    "bay": "5B",
+    "aisle": "5",
+    "productId": "21114"
+   },
+   {
+    "key": "6386_6",
+    "name": "White cabbage",
+    "emoji": "\ud83e\udd6c",
+    "type": "half",
+    "bay": "5B",
+    "aisle": "5",
+    "productId": "21152"
+   }
+  ],
+  "stops": [
+   {
+    "bay": "2A",
+    "aisle": "2",
+    "seconds": 129,
+    "tasks": 1
+   },
+   {
+    "bay": "3C",
+    "aisle": "3",
+    "seconds": 213,
+    "tasks": 2
+   },
+   {
+    "bay": "4C",
+    "aisle": "4",
+    "seconds": 147,
+    "tasks": 1
+   },
+   {
+    "bay": "5A",
+    "aisle": "5",
+    "seconds": 127,
+    "tasks": 1
+   },
+   {
+    "bay": "5B",
+    "aisle": "5",
+    "seconds": 208,
+    "tasks": 2
+   }
+  ]
+ },
+ {
+  "id": "demo-2-0",
+  "demo": true,
+  "employee": "Carla Mendes",
+  "start": 1751015784,
+  "end": 1751016741,
+  "seconds": 957,
+  "loadSeconds": 62,
+  "tasks": [
+   {
+    "key": "6215_3",
+    "name": "Banana",
+    "emoji": "\ud83c\udf4c",
+    "type": "half",
+    "bay": "1B",
+    "aisle": "1",
+    "productId": "11908"
+   },
+   {
+    "key": "6468_16",
+    "name": "Palmer mango",
+    "emoji": "\ud83e\udd6d",
+    "type": "half",
+    "bay": "2C",
+    "aisle": "2",
+    "productId": "21789"
+   },
+   {
+    "key": "6371_9",
+    "name": "Mini watermelon",
+    "emoji": "\ud83c\udf49",
+    "type": "half",
+    "bay": "3C",
+    "aisle": "3",
+    "productId": "16137"
+   },
+   {
+    "key": "6781_7",
+    "name": "White potatoes 3kg",
+    "emoji": "\ud83e\udd54",
+    "type": "empty",
+    "bay": "4B",
+    "aisle": "4",
+    "productId": "22193"
+   },
+   {
+    "key": "6376_5",
+    "name": "Organic kiwi 400g",
+    "emoji": "\ud83e\udd5d",
+    "type": "half",
+    "bay": "4C",
+    "aisle": "4",
+    "productId": "20508"
+   },
+   {
+    "key": "6383_3",
+    "name": "Green pepper",
+    "emoji": "\ud83e\uded1",
+    "type": "half",
+    "bay": "5A",
+    "aisle": "5",
+    "productId": "11896"
+   }
+  ],
+  "stops": [
+   {
+    "bay": "1B",
+    "aisle": "1",
+    "seconds": 162,
+    "tasks": 1
+   },
+   {
+    "bay": "2C",
+    "aisle": "2",
+    "seconds": 174,
+    "tasks": 1
+   },
+   {
+    "bay": "3C",
+    "aisle": "3",
+    "seconds": 151,
+    "tasks": 1
+   },
+   {
+    "bay": "4B",
+    "aisle": "4",
+    "seconds": 195,
+    "tasks": 1
+   },
+   {
+    "bay": "4C",
+    "aisle": "4",
+    "seconds": 152,
+    "tasks": 1
+   },
+   {
+    "bay": "5A",
+    "aisle": "5",
+    "seconds": 123,
+    "tasks": 1
+   }
+  ]
+ },
+ {
+  "id": "demo-2-1",
+  "demo": true,
+  "employee": "Carla Mendes",
+  "start": 1751025144,
+  "end": 1751026097,
+  "seconds": 953,
+  "loadSeconds": 121,
+  "tasks": [
+   {
+    "key": "6468_15",
+    "name": "Palmer mango",
+    "emoji": "\ud83e\udd6d",
+    "type": "empty",
+    "bay": "2C",
+    "aisle": "2",
+    "productId": "21789"
+   },
+   {
+    "key": "6468_11",
+    "name": "Plantain",
+    "emoji": "\ud83c\udf4c",
+    "type": "empty",
+    "bay": "2C",
+    "aisle": "2",
+    "productId": "15591"
+   },
+   {
+    "key": "6594_4",
+    "name": "Spring onion",
+    "emoji": "\ud83e\uddc5",
+    "type": "half",
+    "bay": "3A",
+    "aisle": "3",
+    "productId": "11914"
+   },
+   {
+    "key": "6591_2",
+    "name": "Roasting potatoes 2kg",
+    "emoji": "\ud83e\udd54",
+    "type": "half",
+    "bay": "4A",
+    "aisle": "4",
+    "productId": "22965"
+   },
+   {
+    "key": "6781_7",
+    "name": "White potatoes 3kg",
+    "emoji": "\ud83e\udd54",
+    "type": "half",
+    "bay": "4B",
+    "aisle": "4",
+    "productId": "22193"
+   },
+   {
+    "key": "6386_6",
+    "name": "White cabbage",
+    "emoji": "\ud83e\udd6c",
+    "type": "empty",
+    "bay": "5B",
+    "aisle": "5",
+    "productId": "21152"
+   }
+  ],
+  "stops": [
+   {
+    "bay": "2C",
+    "aisle": "2",
+    "seconds": 265,
+    "tasks": 2
+   },
+   {
+    "bay": "3A",
+    "aisle": "3",
+    "seconds": 139,
+    "tasks": 1
+   },
+   {
+    "bay": "4A",
+    "aisle": "4",
+    "seconds": 187,
+    "tasks": 1
+   },
+   {
+    "bay": "4B",
+    "aisle": "4",
+    "seconds": 217,
+    "tasks": 1
+   },
+   {
+    "bay": "5B",
+    "aisle": "5",
+    "seconds": 145,
+    "tasks": 1
+   }
+  ]
+ },
+ {
+  "id": "demo-3-0",
+  "demo": true,
+  "employee": "Diego Santos",
+  "start": 1751022915,
+  "end": 1751023837,
+  "seconds": 922,
+  "loadSeconds": 100,
+  "tasks": [
+   {
+    "key": "6462_1",
+    "name": "Strawberries 500g",
+    "emoji": "\ud83c\udf53",
+    "type": "half",
+    "bay": "1A",
+    "aisle": "1",
+    "productId": "1156"
+   },
+   {
+    "key": "6215_5",
+    "name": "Banana",
+    "emoji": "\ud83c\udf4c",
+    "type": "half",
+    "bay": "1B",
+    "aisle": "1",
+    "productId": "11908"
+   },
+   {
+    "key": "6373_8",
+    "name": "Cosmic Crisp apple",
+    "emoji": "\ud83c\udf4e",
+    "type": "half",
+    "bay": "2A",
+    "aisle": "2",
+    "productId": "32262"
+   },
+   {
+    "key": "6468_13",
+    "name": "Palmer mango",
+    "emoji": "\ud83e\udd6d",
+    "type": "half",
+    "bay": "2C",
+    "aisle": "2",
+    "productId": "21789"
+   },
+   {
+    "key": "6781_8",
+    "name": "White potatoes 3kg",
+    "emoji": "\ud83e\udd54",
+    "type": "half",
+    "bay": "4B",
+    "aisle": "4",
+    "productId": "22193"
+   },
+   {
+    "key": "6781_6",
+    "name": "White potatoes 3kg",
+    "emoji": "\ud83e\udd54",
+    "type": "wrong",
+    "bay": "4B",
+    "aisle": "4",
+    "productId": "22193"
+   },
+   {
+    "key": "6383_4",
+    "name": "Portuguese cabbage",
+    "emoji": "\ud83e\udd6c",
+    "type": "half",
+    "bay": "5A",
+    "aisle": "5",
+    "productId": "15651"
+   }
+  ],
+  "stops": [
+   {
+    "bay": "1A",
+    "aisle": "1",
+    "seconds": 125,
+    "tasks": 1
+   },
+   {
+    "bay": "1B",
+    "aisle": "1",
+    "seconds": 135,
+    "tasks": 1
+   },
+   {
+    "bay": "2A",
+    "aisle": "2",
+    "seconds": 136,
+    "tasks": 1
+   },
+   {
+    "bay": "2C",
+    "aisle": "2",
+    "seconds": 146,
+    "tasks": 1
+   },
+   {
+    "bay": "4B",
+    "aisle": "4",
+    "seconds": 256,
+    "tasks": 2
+   },
+   {
+    "bay": "5A",
+    "aisle": "5",
+    "seconds": 124,
+    "tasks": 1
+   }
+  ]
+ },
+ {
+  "id": "demo-3-1",
+  "demo": true,
+  "employee": "Diego Santos",
+  "start": 1751034266,
+  "end": 1751035192,
+  "seconds": 926,
+  "loadSeconds": 96,
+  "tasks": [
+   {
+    "key": "6215_4",
+    "name": "Banana",
+    "emoji": "\ud83c\udf4c",
+    "type": "empty",
+    "bay": "1B",
+    "aisle": "1",
+    "productId": "11908"
+   },
+   {
+    "key": "6468_3",
+    "name": "Pineapple",
+    "emoji": "\ud83c\udf4d",
+    "type": "empty",
+    "bay": "2C",
+    "aisle": "2",
+    "productId": "23366"
+   },
+   {
+    "key": "6591_7",
+    "name": "Ginger",
+    "emoji": "\ud83e\udeda",
+    "type": "empty",
+    "bay": "4A",
+    "aisle": "4",
+    "productId": "22411"
+   },
+   {
+    "key": "6781_2",
+    "name": "Onions 1.5kg",
+    "emoji": "\ud83e\uddc5",
+    "type": "half",
+    "bay": "4B",
+    "aisle": "4",
+    "productId": "22083"
+   },
+   {
+    "key": "6781_9",
+    "name": "White potatoes 3kg",
+    "emoji": "\ud83e\udd54",
+    "type": "half",
+    "bay": "4B",
+    "aisle": "4",
+    "productId": "22193"
+   },
+   {
+    "key": "6376_14",
+    "name": "Clementine",
+    "emoji": "\ud83c\udf4a",
+    "type": "half",
+    "bay": "4C",
+    "aisle": "4",
+    "productId": "12756"
+   },
+   {
+    "key": "6383_9",
+    "name": "Cucumber",
+    "emoji": "\ud83e\udd52",
+    "type": "half",
+    "bay": "5A",
+    "aisle": "5",
+    "productId": "11895"
+   }
+  ],
+  "stops": [
+   {
+    "bay": "1B",
+    "aisle": "1",
+    "seconds": 138,
+    "tasks": 1
+   },
+   {
+    "bay": "2C",
+    "aisle": "2",
+    "seconds": 124,
+    "tasks": 1
+   },
+   {
+    "bay": "4A",
+    "aisle": "4",
+    "seconds": 140,
+    "tasks": 1
+   },
+   {
+    "bay": "4B",
+    "aisle": "4",
+    "seconds": 250,
+    "tasks": 2
+   },
+   {
+    "bay": "4C",
+    "aisle": "4",
+    "seconds": 175,
+    "tasks": 1
+   },
+   {
+    "bay": "5A",
+    "aisle": "5",
+    "seconds": 99,
+    "tasks": 1
+   }
+  ]
+ },
+ {
+  "id": "demo-3-2",
+  "demo": true,
+  "employee": "Diego Santos",
+  "start": 1751003428,
+  "end": 1751004324,
+  "seconds": 896,
+  "loadSeconds": 88,
+  "tasks": [
+   {
+    "key": "6462_1",
+    "name": "Strawberries 500g",
+    "emoji": "\ud83c\udf53",
+    "type": "empty",
+    "bay": "1A",
+    "aisle": "1",
+    "productId": "1156"
+   },
+   {
+    "key": "6215_9",
+    "name": "Algarve orange",
+    "emoji": "\ud83c\udf4a",
+    "type": "half",
+    "bay": "1B",
+    "aisle": "1",
+    "productId": "11906"
+   },
+   {
+    "key": "6385_2",
+    "name": "Fuji apple",
+    "emoji": "\ud83c\udf4e",
+    "type": "half",
+    "bay": "1C",
+    "aisle": "1",
+    "productId": "16633"
+   },
+   {
+    "key": "6491_7",
+    "name": "Nectarine",
+    "emoji": "\ud83c\udf51",
+    "type": "half",
+    "bay": "2B",
+    "aisle": "2",
+    "productId": "32532"
+   },
+   {
+    "key": "6591_3",
+    "name": "Zero-residue potatoes 4kg",
+    "emoji": "\ud83e\udd54",
+    "type": "wrong",
+    "bay": "4A",
+    "aisle": "4",
+    "productId": "19454"
+   },
+   {
+    "key": "6376_13",
+    "name": "Algarve oranges 1.5kg",
+    "emoji": "\ud83c\udf4a",
+    "type": "empty",
+    "bay": "4C",
+    "aisle": "4",
+    "productId": "26600"
+   },
+   {
+    "key": "6383_3",
+    "name": "Green pepper",
+    "emoji": "\ud83e\uded1",
+    "type": "empty",
+    "bay": "5A",
+    "aisle": "5",
+    "productId": "11896"
+   }
+  ],
+  "stops": [
+   {
+    "bay": "1A",
+    "aisle": "1",
+    "seconds": 139,
+    "tasks": 1
+   },
+   {
+    "bay": "1B",
+    "aisle": "1",
+    "seconds": 94,
+    "tasks": 1
+   },
+   {
+    "bay": "1C",
+    "aisle": "1",
+    "seconds": 98,
+    "tasks": 1
+   },
+   {
+    "bay": "2B",
+    "aisle": "2",
+    "seconds": 138,
+    "tasks": 1
+   },
+   {
+    "bay": "4A",
+    "aisle": "4",
+    "seconds": 132,
+    "tasks": 1
+   },
+   {
+    "bay": "4C",
+    "aisle": "4",
+    "seconds": 170,
+    "tasks": 1
+   },
+   {
+    "bay": "5A",
+    "aisle": "5",
+    "seconds": 125,
+    "tasks": 1
+   }
+  ]
+ },
+ {
+  "id": "demo-4-0",
+  "demo": true,
+  "employee": "Eva Pires",
+  "start": 1751028618,
+  "end": 1751030173,
+  "seconds": 1555,
+  "loadSeconds": 212,
+  "tasks": [
+   {
+    "key": "6462_7",
+    "name": "Red Globe grapes",
+    "emoji": "\ud83c\udf47",
+    "type": "empty",
+    "bay": "1A",
+    "aisle": "1",
+    "productId": "15597"
+   },
+   {
+    "key": "6215_7",
+    "name": "Algarve orange",
+    "emoji": "\ud83c\udf4a",
+    "type": "half",
+    "bay": "1B",
+    "aisle": "1",
+    "productId": "11906"
+   },
+   {
+    "key": "6373_7",
+    "name": "Cosmic Crisp apple",
+    "emoji": "\ud83c\udf4e",
+    "type": "empty",
+    "bay": "2A",
+    "aisle": "2",
+    "productId": "32262"
+   },
+   {
+    "key": "6373_11",
+    "name": "Packham pear",
+    "emoji": "\ud83c\udf50",
+    "type": "half",
+    "bay": "2A",
+    "aisle": "2",
+    "productId": "11901"
+   },
+   {
+    "key": "6373_6",
+    "name": "Golden apple (Portugal)",
+    "emoji": "\ud83c\udf4f",
+    "type": "half",
+    "bay": "2A",
+    "aisle": "2",
+    "productId": "26786"
+   },
+   {
+    "key": "6443_10",
+    "name": "Sweet mini tomatoes 200g",
+    "emoji": "\ud83c\udf45",
+    "type": "half",
+    "bay": "3B",
+    "aisle": "3",
+    "productId": "23042"
+   },
+   {
+    "key": "6371_2",
+    "name": "Black watermelon",
+    "emoji": "\ud83c\udf49",
+    "type": "half",
+    "bay": "3C",
+    "aisle": "3",
+    "productId": "16143"
+   },
+   {
+    "key": "6371_3",
+    "name": "Green melon",
+    "emoji": "\ud83c\udf48",
+    "type": "half",
+    "bay": "3C",
+    "aisle": "3",
+    "productId": "16336"
+   },
+   {
+    "key": "6371_4",
+    "name": "Black watermelon",
+    "emoji": "\ud83c\udf49",
+    "type": "half",
+    "bay": "3C",
+    "aisle": "3",
+    "productId": "16143"
+   }
+  ],
+  "stops": [
+   {
+    "bay": "1A",
+    "aisle": "1",
+    "seconds": 194,
+    "tasks": 1
+   },
+   {
+    "bay": "1B",
+    "aisle": "1",
+    "seconds": 215,
+    "tasks": 1
+   },
+   {
+    "bay": "2A",
+    "aisle": "2",
+    "seconds": 444,
+    "tasks": 3
+   },
+   {
+    "bay": "3B",
+    "aisle": "3",
+    "seconds": 221,
+    "tasks": 1
+   },
+   {
+    "bay": "3C",
+    "aisle": "3",
+    "seconds": 481,
+    "tasks": 3
+   }
+  ]
+ },
+ {
+  "id": "demo-4-1",
+  "demo": true,
+  "employee": "Eva Pires",
+  "start": 1751039641,
+  "end": 1751040448,
+  "seconds": 807,
+  "loadSeconds": 107,
+  "tasks": [
+   {
+    "key": "6215_3",
+    "name": "Banana",
+    "emoji": "\ud83c\udf4c",
+    "type": "wrong",
+    "bay": "1B",
+    "aisle": "1",
+    "productId": "11908"
+   },
+   {
+    "key": "6373_12",
+    "name": "Conference pear",
+    "emoji": "\ud83c\udf50",
+    "type": "empty",
+    "bay": "2A",
+    "aisle": "2",
+    "productId": "11909"
+   },
+   {
+    "key": "6376_12",
+    "name": "Clementine",
+    "emoji": "\ud83c\udf4a",
+    "type": "half",
+    "bay": "4C",
+    "aisle": "4",
+    "productId": "12756"
+   },
+   {
+    "key": "6383_6",
+    "name": "Aubergine",
+    "emoji": "\ud83c\udf46",
+    "type": "empty",
+    "bay": "5A",
+    "aisle": "5",
+    "productId": "21208"
+   },
+   {
+    "key": "6383_9",
+    "name": "Cucumber",
+    "emoji": "\ud83e\udd52",
+    "type": "half",
+    "bay": "5A",
+    "aisle": "5",
+    "productId": "11895"
+   }
+  ],
+  "stops": [
+   {
+    "bay": "1B",
+    "aisle": "1",
+    "seconds": 149,
+    "tasks": 1
+   },
+   {
+    "bay": "2A",
+    "aisle": "2",
+    "seconds": 169,
+    "tasks": 1
+   },
+   {
+    "bay": "4C",
+    "aisle": "4",
+    "seconds": 252,
+    "tasks": 1
+   },
+   {
+    "bay": "5A",
+    "aisle": "5",
+    "seconds": 237,
+    "tasks": 2
+   }
+  ]
+ },
+ {
+  "id": "demo-4-2",
+  "demo": true,
+  "employee": "Eva Pires",
+  "start": 1751007007,
+  "end": 1751008743,
+  "seconds": 1736,
+  "loadSeconds": 218,
+  "tasks": [
+   {
+    "key": "6385_8",
+    "name": "Fuji Carioca apple",
+    "emoji": "\ud83c\udf4e",
+    "type": "empty",
+    "bay": "1C",
+    "aisle": "1",
+    "productId": "20818"
+   },
+   {
+    "key": "6468_9",
+    "name": "Papaya (whole)",
+    "emoji": "\ud83c\udf48",
+    "type": "half",
+    "bay": "2C",
+    "aisle": "2",
+    "productId": "21122"
+   },
+   {
+    "key": "6443_13",
+    "name": "Round tomatoes",
+    "emoji": "\ud83c\udf45",
+    "type": "half",
+    "bay": "3B",
+    "aisle": "3",
+    "productId": "21134"
+   },
+   {
+    "key": "6371_2",
+    "name": "Black watermelon",
+    "emoji": "\ud83c\udf49",
+    "type": "half",
+    "bay": "3C",
+    "aisle": "3",
+    "productId": "16143"
+   },
+   {
+    "key": "6591_6",
+    "name": "Sweet potato",
+    "emoji": "\ud83c\udf60",
+    "type": "empty",
+    "bay": "4A",
+    "aisle": "4",
+    "productId": "12661"
+   },
+   {
+    "key": "6591_8",
+    "name": "Sweet potato",
+    "emoji": "\ud83c\udf60",
+    "type": "wrong",
+    "bay": "4A",
+    "aisle": "4",
+    "productId": "12661"
+   },
+   {
+    "key": "6781_7",
+    "name": "White potatoes 3kg",
+    "emoji": "\ud83e\udd54",
+    "type": "half",
+    "bay": "4B",
+    "aisle": "4",
+    "productId": "22193"
+   },
+   {
+    "key": "6376_2",
+    "name": "Galia melon",
+    "emoji": "\ud83c\udf48",
+    "type": "empty",
+    "bay": "4C",
+    "aisle": "4",
+    "productId": "11891"
+   },
+   {
+    "key": "6386_1",
+    "name": "Broccoli",
+    "emoji": "\ud83e\udd66",
+    "type": "half",
+    "bay": "5B",
+    "aisle": "5",
+    "productId": "21178"
+   }
+  ],
+  "stops": [
+   {
+    "bay": "1C",
+    "aisle": "1",
+    "seconds": 193,
+    "tasks": 1
+   },
+   {
+    "bay": "2C",
+    "aisle": "2",
+    "seconds": 169,
+    "tasks": 1
+   },
+   {
+    "bay": "3B",
+    "aisle": "3",
+    "seconds": 215,
+    "tasks": 1
+   },
+   {
+    "bay": "3C",
+    "aisle": "3",
+    "seconds": 177,
+    "tasks": 1
+   },
+   {
+    "bay": "4A",
+    "aisle": "4",
+    "seconds": 357,
+    "tasks": 2
+   },
+   {
+    "bay": "4B",
+    "aisle": "4",
+    "seconds": 222,
+    "tasks": 1
+   },
+   {
+    "bay": "4C",
+    "aisle": "4",
+    "seconds": 210,
+    "tasks": 1
+   },
+   {
+    "bay": "5B",
+    "aisle": "5",
+    "seconds": 193,
+    "tasks": 1
+   }
+  ]
+ },
+ {
+  "id": "demo-4-3",
+  "demo": true,
+  "employee": "Eva Pires",
+  "start": 1751021928,
+  "end": 1751023957,
+  "seconds": 2029,
+  "loadSeconds": 188,
+  "tasks": [
+   {
+    "key": "6462_6",
+    "name": "Seedless white grapes 500g",
+    "emoji": "\ud83c\udf47",
+    "type": "half",
+    "bay": "1A",
+    "aisle": "1",
+    "productId": "19032"
+   },
+   {
+    "key": "6385_8",
+    "name": "Fuji Carioca apple",
+    "emoji": "\ud83c\udf4e",
+    "type": "half",
+    "bay": "1C",
+    "aisle": "1",
+    "productId": "20818"
+   },
+   {
+    "key": "6373_10",
+    "name": "Packham pear",
+    "emoji": "\ud83c\udf50",
+    "type": "half",
+    "bay": "2A",
+    "aisle": "2",
+    "productId": "11901"
+   },
+   {
+    "key": "6491_9",
+    "name": "Flat peach",
+    "emoji": "\ud83c\udf51",
+    "type": "half",
+    "bay": "2B",
+    "aisle": "2",
+    "productId": "32533"
+   },
+   {
+    "key": "6491_6",
+    "name": "Peach",
+    "emoji": "\ud83c\udf51",
+    "type": "half",
+    "bay": "2B",
+    "aisle": "2",
+    "productId": "32530"
+   },
+   {
+    "key": "6468_15",
+    "name": "Palmer mango",
+    "emoji": "\ud83e\udd6d",
+    "type": "wrong",
+    "bay": "2C",
+    "aisle": "2",
+    "productId": "21789"
+   },
+   {
+    "key": "6594_4",
+    "name": "Spring onion",
+    "emoji": "\ud83e\uddc5",
+    "type": "half",
+    "bay": "3A",
+    "aisle": "3",
+    "productId": "11914"
+   },
+   {
+    "key": "6781_4",
+    "name": "White potatoes 3kg",
+    "emoji": "\ud83e\udd54",
+    "type": "half",
+    "bay": "4B",
+    "aisle": "4",
+    "productId": "22193"
+   },
+   {
+    "key": "6376_10",
+    "name": "Zespri kiwi",
+    "emoji": "\ud83e\udd5d",
+    "type": "half",
+    "bay": "4C",
+    "aisle": "4",
+    "productId": "14646"
+   },
+   {
+    "key": "6376_3",
+    "name": "Gold kiwi 500g",
+    "emoji": "\ud83e\udd5d",
+    "type": "half",
+    "bay": "4C",
+    "aisle": "4",
+    "productId": "15781"
+   }
+  ],
+  "stops": [
+   {
+    "bay": "1A",
+    "aisle": "1",
+    "seconds": 235,
+    "tasks": 1
+   },
+   {
+    "bay": "1C",
+    "aisle": "1",
+    "seconds": 206,
+    "tasks": 1
+   },
+   {
+    "bay": "2A",
+    "aisle": "2",
+    "seconds": 197,
+    "tasks": 1
+   },
+   {
+    "bay": "2B",
+    "aisle": "2",
+    "seconds": 309,
+    "tasks": 2
+   },
+   {
+    "bay": "2C",
+    "aisle": "2",
+    "seconds": 163,
+    "tasks": 1
+   },
+   {
+    "bay": "3A",
+    "aisle": "3",
+    "seconds": 212,
+    "tasks": 1
+   },
+   {
+    "bay": "4B",
+    "aisle": "4",
+    "seconds": 269,
+    "tasks": 1
+   },
+   {
+    "bay": "4C",
+    "aisle": "4",
+    "seconds": 438,
+    "tasks": 2
+   }
+  ]
+ }
+]

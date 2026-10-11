@@ -1,0 +1,100 @@
+[
+ {
+  "camera": "6462",
+  "location_code": "1A",
+  "aisle": "1",
+  "bay_name": "Berries, grapes & mango",
+  "fixture": "wall"
+ },
+ {
+  "camera": "6215",
+  "location_code": "1B",
+  "aisle": "1",
+  "bay_name": "Bananas & oranges",
+  "fixture": "wall"
+ },
+ {
+  "camera": "6385",
+  "location_code": "1C",
+  "aisle": "1",
+  "bay_name": "Apples",
+  "fixture": "wall"
+ },
+ {
+  "camera": "6373",
+  "location_code": "2A",
+  "aisle": "2",
+  "bay_name": "Apples & pears",
+  "fixture": "wall"
+ },
+ {
+  "camera": "6491",
+  "location_code": "2B",
+  "aisle": "2",
+  "bay_name": "Peaches & nectarines",
+  "fixture": "wall"
+ },
+ {
+  "camera": "6468",
+  "location_code": "2C",
+  "aisle": "2",
+  "bay_name": "Tropical fruit",
+  "fixture": "wall"
+ },
+ {
+  "camera": "6594",
+  "location_code": "3A",
+  "aisle": "3",
+  "bay_name": "Onions, garlic & pumpkin",
+  "fixture": "wall"
+ },
+ {
+  "camera": "6443",
+  "location_code": "3B",
+  "aisle": "3",
+  "bay_name": "Tomatoes",
+  "fixture": "wall"
+ },
+ {
+  "camera": "6371",
+  "location_code": "3C",
+  "aisle": "3",
+  "bay_name": "Melons",
+  "fixture": "wall"
+ },
+ {
+  "camera": "6591",
+  "location_code": "4A",
+  "aisle": "4",
+  "bay_name": "Potatoes & ginger",
+  "fixture": "wall"
+ },
+ {
+  "camera": "6781",
+  "location_code": "4B",
+  "aisle": "4",
+  "bay_name": "Potatoes & onions",
+  "fixture": "wall"
+ },
+ {
+  "camera": "6376",
+  "location_code": "4C",
+  "aisle": "4",
+  "bay_name": "Citrus & kiwi",
+  "fixture": "wall"
+ },
+ {
+  "camera": "6383",
+  "location_code": "5A",
+  "aisle": "5",
+  "bay_name": "Peppers & vegetables",
+  "fixture": "wall"
+ },
+ {
+  "camera": "6386",
+  "location_code": "5B",
+  "aisle": "5",
+  "bay_name": "Cabbage & broccoli",
+  "fixture": "wall"
+ }
+]

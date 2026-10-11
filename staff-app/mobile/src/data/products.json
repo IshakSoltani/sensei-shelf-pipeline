@@ -1,0 +1,798 @@
+[
+ {
+  "product_id": "1156",
+  "name_en": "Strawberries 500g",
+  "name_pt": "MORANGO EMB. 500 GR",
+  "emoji": "🍓",
+  "category": "Berries, grapes & mango",
+  "sold_as": "pack",
+  "pack_capacity": 8
+ },
+ {
+  "product_id": "11913",
+  "name_en": "Mango",
+  "name_pt": "MANGA CNT KG",
+  "emoji": "🥭",
+  "category": "Berries, grapes & mango",
+  "sold_as": "loose"
+ },
+ {
+  "product_id": "21307",
+  "name_en": "Seedless white grapes",
+  "name_pt": "UVA BRANCA S/ GRAINHA CNT KG",
+  "emoji": "🍇",
+  "category": "Berries, grapes & mango",
+  "sold_as": "loose"
+ },
+ {
+  "product_id": "19032",
+  "name_en": "Seedless white grapes 500g",
+  "name_pt": "UVA BRANCA S/GRAINHA CNT 500 G",
+  "emoji": "🍇",
+  "category": "Berries, grapes & mango",
+  "sold_as": "pack",
+  "pack_capacity": 8
+ },
+ {
+  "product_id": "15597",
+  "name_en": "Red Globe grapes",
+  "name_pt": "UVA RED GLOBE CNT KG",
+  "emoji": "🍇",
+  "category": "Berries, grapes & mango",
+  "sold_as": "loose"
+ },
+ {
+  "product_id": "3579",
+  "name_en": "Cherries 500g",
+  "name_pt": "CEREJA 24+ 500 GR",
+  "emoji": "🍒",
+  "category": "Berries, grapes & mango",
+  "sold_as": "pack",
+  "pack_capacity": 8
+ },
+ {
+  "product_id": "20923",
+  "name_en": "Madeira banana",
+  "name_pt": "BANANA DA MADEIRA CNT KG",
+  "emoji": "🍌",
+  "category": "Bananas & oranges",
+  "sold_as": "loose"
+ },
+ {
+  "product_id": "11908",
+  "name_en": "Banana",
+  "name_pt": "BANANA CAT I CNT KG",
+  "emoji": "🍌",
+  "category": "Bananas & oranges",
+  "sold_as": "loose"
+ },
+ {
+  "product_id": "11906",
+  "name_en": "Algarve orange",
+  "name_pt": "CITRINOS DO ALGARVE IGP LARANJA 70/95 KG",
+  "emoji": "🍊",
+  "category": "Citrus & kiwi",
+  "sold_as": "loose"
+ },
+ {
+  "product_id": "16633",
+  "name_en": "Fuji apple",
+  "name_pt": "MACA FUJI CNT CAL. 73/85 KG IMP",
+  "emoji": "🍎",
+  "category": "Apples",
+  "sold_as": "loose"
+ },
+ {
+  "product_id": "30491",
+  "name_en": "Organic red apple 500g",
+  "name_pt": "MAÇA VERMELHA BIO 500 G",
+  "emoji": "🍎",
+  "category": "Apples",
+  "sold_as": "pack",
+  "pack_capacity": 8
+ },
+ {
+  "product_id": "20818",
+  "name_en": "Fuji Carioca apple",
+  "name_pt": "MAÇA FUJI CARIOCA 65/75 1 KG IMP",
+  "emoji": "🍎",
+  "category": "Apples",
+  "sold_as": "loose"
+ },
+ {
+  "product_id": "11919",
+  "name_en": "Granny Smith apple",
+  "name_pt": "MACA GRANNY SMITH CNT CAL.73/85 KG",
+  "emoji": "🍏",
+  "category": "Apples",
+  "sold_as": "loose"
+ },
+ {
+  "product_id": "32170",
+  "name_en": "Reineta apple",
+  "name_pt": "MACA REINETA CNT CAL 70/80 KG",
+  "emoji": "🍎",
+  "category": "Apples",
+  "sold_as": "loose"
+ },
+ {
+  "product_id": "13702",
+  "name_en": "Gala apple",
+  "name_pt": "MAÇÃ GALA CNT CAL 70/80 KG IMP",
+  "emoji": "🍎",
+  "category": "Apples & pears",
+  "sold_as": "loose"
+ },
+ {
+  "product_id": "32748",
+  "name_en": "Gala apple 60/70",
+  "name_pt": "MAÇÂ GALA CNT 60/70 1 KG IMP",
+  "emoji": "🍎",
+  "category": "Apples & pears",
+  "sold_as": "loose"
+ },
+ {
+  "product_id": "19133",
+  "name_en": "Pink Lady apple",
+  "name_pt": "MACA PINK LADY CNT CAL.73/80 KG",
+  "emoji": "🍎",
+  "category": "Apples & pears",
+  "sold_as": "loose"
+ },
+ {
+  "product_id": "26786",
+  "name_en": "Golden apple (Portugal)",
+  "name_pt": "MAÇA GOLDEN NACIONAL 75/85 KG",
+  "emoji": "🍏",
+  "category": "Apples & pears",
+  "sold_as": "loose"
+ },
+ {
+  "product_id": "32749",
+  "name_en": "Golden apple 65/70",
+  "name_pt": "MAÇA GOLDEN NACIONAL CAL. 65/70 1 KG",
+  "emoji": "🍏",
+  "category": "Apples & pears",
+  "sold_as": "loose"
+ },
+ {
+  "product_id": "32262",
+  "name_en": "Cosmic Crisp apple",
+  "name_pt": "MAÇÃ COSMIC CRISP 75/85 KG",
+  "emoji": "🍎",
+  "category": "Apples & pears",
+  "sold_as": "loose"
+ },
+ {
+  "product_id": "11901",
+  "name_en": "Packham pear",
+  "name_pt": "PERA PACKAMS CNT CAL.65/75 KG",
+  "emoji": "🍐",
+  "category": "Apples & pears",
+  "sold_as": "loose"
+ },
+ {
+  "product_id": "11909",
+  "name_en": "Conference pear",
+  "name_pt": "PERA CONFERENCE CAL 60/75 CNT KG",
+  "emoji": "🍐",
+  "category": "Apples & pears",
+  "sold_as": "loose"
+ },
+ {
+  "product_id": "31228",
+  "name_en": "Apricot",
+  "name_pt": "ALPERCE CNT CAL. 45/55 KG",
+  "emoji": "🍑",
+  "category": "Peaches & nectarines",
+  "sold_as": "loose"
+ },
+ {
+  "product_id": "32533",
+  "name_en": "Flat peach",
+  "name_pt": "PESSEGO PARAGUAYO R0 A/AA/AAA KG",
+  "emoji": "🍑",
+  "category": "Peaches & nectarines",
+  "sold_as": "loose"
+ },
+ {
+  "product_id": "32530",
+  "name_en": "Peach",
+  "name_pt": "PESSEGO R0 A/AA KG",
+  "emoji": "🍑",
+  "category": "Peaches & nectarines",
+  "sold_as": "loose"
+ },
+ {
+  "product_id": "32532",
+  "name_en": "Nectarine",
+  "name_pt": "NECTARINA R0 A/AA KG",
+  "emoji": "🍑",
+  "category": "Peaches & nectarines",
+  "sold_as": "loose"
+ },
+ {
+  "product_id": "23366",
+  "name_en": "Pineapple",
+  "name_pt": "ABACAXI SUPER SWEET KG",
+  "emoji": "🍍",
+  "category": "Tropical fruit",
+  "sold_as": "loose"
+ },
+ {
+  "product_id": "15855",
+  "name_en": "Red pitaya 300g",
+  "name_pt": "PITAYA VERMELHA 300G",
+  "emoji": "🍈",
+  "category": "Tropical fruit",
+  "sold_as": "pack",
+  "pack_capacity": 8
+ },
+ {
+  "product_id": "15835",
+  "name_en": "Yellow pitaya 200g",
+  "name_pt": "PITAYA AMARELA 200G",
+  "emoji": "🍈",
+  "category": "Tropical fruit",
+  "sold_as": "pack",
+  "pack_capacity": 8
+ },
+ {
+  "product_id": "30368",
+  "name_en": "Guava",
+  "name_pt": "GOIABA CNT KG",
+  "emoji": "🍐",
+  "category": "Tropical fruit",
+  "sold_as": "loose"
+ },
+ {
+  "product_id": "22108",
+  "name_en": "Passion fruit",
+  "name_pt": "MARACUJA ROXO CNT KG",
+  "emoji": "🍊",
+  "category": "Tropical fruit",
+  "sold_as": "loose"
+ },
+ {
+  "product_id": "25211",
+  "name_en": "Granadilla",
+  "name_pt": "GRANADILHA 80 G",
+  "emoji": "🍊",
+  "category": "Tropical fruit",
+  "sold_as": "pack",
+  "pack_capacity": 8
+ },
+ {
+  "product_id": "21122",
+  "name_en": "Papaya (whole)",
+  "name_pt": "MAMAO INTEIRO CNT KG",
+  "emoji": "🍈",
+  "category": "Tropical fruit",
+  "sold_as": "loose"
+ },
+ {
+  "product_id": "11892",
+  "name_en": "Papaya",
+  "name_pt": "PAPAIA DE AVIÃO INTEIRA CNT KG",
+  "emoji": "🥭",
+  "category": "Tropical fruit",
+  "sold_as": "loose"
+ },
+ {
+  "product_id": "15591",
+  "name_en": "Plantain",
+  "name_pt": "BANANA PAO CNT KG",
+  "emoji": "🍌",
+  "category": "Tropical fruit",
+  "sold_as": "loose"
+ },
+ {
+  "product_id": "21789",
+  "name_en": "Palmer mango",
+  "name_pt": "MANGA AVIÃO PALMER KG",
+  "emoji": "🥭",
+  "category": "Tropical fruit",
+  "sold_as": "loose"
+ },
+ {
+  "product_id": "15816",
+  "name_en": "Hokkaido pumpkin",
+  "name_pt": "ABÓBORA HOKAIDO R0 KG",
+  "emoji": "🎃",
+  "category": "Onions, garlic & pumpkin",
+  "sold_as": "loose"
+ },
+ {
+  "product_id": "15753",
+  "name_en": "Red potatoes 5kg",
+  "name_pt": "BATATA VERMELHA EMB:. 5 KG",
+  "emoji": "🥔",
+  "category": "Onions, garlic & pumpkin",
+  "sold_as": "pack",
+  "pack_capacity": 3,
+  "heavy": true
+ },
+ {
+  "product_id": "21965",
+  "name_en": "Red potatoes 3kg",
+  "name_pt": "BATATA VERMELHA CNT EMB. 3KG",
+  "emoji": "🥔",
+  "category": "Potatoes & onions",
+  "sold_as": "pack",
+  "pack_capacity": 4,
+  "heavy": true
+ },
+ {
+  "product_id": "11914",
+  "name_en": "Spring onion",
+  "name_pt": "CEBOLA NOVA CNT KG",
+  "emoji": "🧅",
+  "category": "Potatoes & onions",
+  "sold_as": "loose"
+ },
+ {
+  "product_id": "22083",
+  "name_en": "Onions 1.5kg",
+  "name_pt": "CEBOLA CNT EMB. 1.5 KG",
+  "emoji": "🧅",
+  "category": "Potatoes & onions",
+  "sold_as": "pack",
+  "pack_capacity": 3,
+  "heavy": true
+ },
+ {
+  "product_id": "31119",
+  "name_en": "Dried garlic 250g",
+  "name_pt": "ALHO SECO CNT 250GR",
+  "emoji": "🧄",
+  "category": "Onions, garlic & pumpkin",
+  "sold_as": "pack",
+  "pack_capacity": 8
+ },
+ {
+  "product_id": "11916",
+  "name_en": "Dried garlic",
+  "name_pt": "ALHO SECO KG",
+  "emoji": "🧄",
+  "category": "Onions, garlic & pumpkin",
+  "sold_as": "loose"
+ },
+ {
+  "product_id": "11917",
+  "name_en": "Red onion",
+  "name_pt": "CEBOLA ROXA CNT KG",
+  "emoji": "🧅",
+  "category": "Onions, garlic & pumpkin",
+  "sold_as": "loose"
+ },
+ {
+  "product_id": "19127",
+  "name_en": "Red onions 1kg",
+  "name_pt": "CEBOLA ROXA CNT 1KG",
+  "emoji": "🧅",
+  "category": "Onions, garlic & pumpkin",
+  "sold_as": "pack",
+  "pack_capacity": 8
+ },
+ {
+  "product_id": "18090",
+  "name_en": "Pearl onions 500g",
+  "name_pt": "CEBOLINHA FRANCESA CNT 500G",
+  "emoji": "🧅",
+  "category": "Onions, garlic & pumpkin",
+  "sold_as": "pack",
+  "pack_capacity": 8
+ },
+ {
+  "product_id": "21915",
+  "name_en": "Sweet onions 1kg",
+  "name_pt": "CEBOLA DOCE CNT EMB 1 KG",
+  "emoji": "🧅",
+  "category": "Onions, garlic & pumpkin",
+  "sold_as": "pack",
+  "pack_capacity": 8
+ },
+ {
+  "product_id": "21134",
+  "name_en": "Round tomatoes",
+  "name_pt": "TOMATE REDONDO CNT KG",
+  "emoji": "🍅",
+  "category": "Tomatoes",
+  "sold_as": "loose"
+ },
+ {
+  "product_id": "21120",
+  "name_en": "Cluster tomatoes",
+  "name_pt": "TOMATE CACHO CNT KG",
+  "emoji": "🍅",
+  "category": "Tomatoes",
+  "sold_as": "loose"
+ },
+ {
+  "product_id": "1267",
+  "name_en": "Tasty tomatoes 400g",
+  "name_pt": "TOMATE TASTY SC EMB 400G",
+  "emoji": "🍅",
+  "category": "Tomatoes",
+  "sold_as": "pack",
+  "pack_capacity": 8
+ },
+ {
+  "product_id": "22304",
+  "name_en": "Organic cherry tomatoes 250g",
+  "name_pt": "TOMATE CHERRY BIO EMB. 250 GR",
+  "emoji": "🍅",
+  "category": "Tomatoes",
+  "sold_as": "pack",
+  "pack_capacity": 8
+ },
+ {
+  "product_id": "19959",
+  "name_en": "Zero-residue tomatoes 1kg",
+  "name_pt": "TOMATE ZER0%D 1KG",
+  "emoji": "🍅",
+  "category": "Tomatoes",
+  "sold_as": "pack",
+  "pack_capacity": 8
+ },
+ {
+  "product_id": "18514",
+  "name_en": "Beef tomatoes",
+  "name_pt": "TOMATE CORAÇÃO DE BOI CNT KG",
+  "emoji": "🍅",
+  "category": "Tomatoes",
+  "sold_as": "loose"
+ },
+ {
+  "product_id": "18254",
+  "name_en": "Cherry tomatoes 250g",
+  "name_pt": "TOMATE CHERRY VERMELHO CNT 250GR",
+  "emoji": "🍅",
+  "category": "Tomatoes",
+  "sold_as": "pack",
+  "pack_capacity": 8
+ },
+ {
+  "product_id": "21223",
+  "name_en": "Mini red tomatoes 250g",
+  "name_pt": "TOMATE MINI CHUCHA VERMELHO CNT 250GR",
+  "emoji": "🍅",
+  "category": "Tomatoes",
+  "sold_as": "pack",
+  "pack_capacity": 8
+ },
+ {
+  "product_id": "23042",
+  "name_en": "Sweet mini tomatoes 200g",
+  "name_pt": "TOMATE MINI CHUCHA SWEET SC 200G",
+  "emoji": "🍅",
+  "category": "Tomatoes",
+  "sold_as": "pack",
+  "pack_capacity": 8
+ },
+ {
+  "product_id": "11898",
+  "name_en": "Chucha tomatoes",
+  "name_pt": "TOMATE CHUCHA CNT KG",
+  "emoji": "🍅",
+  "category": "Tomatoes",
+  "sold_as": "loose"
+ },
+ {
+  "product_id": "18533",
+  "name_en": "Mini cluster tomatoes 500g",
+  "name_pt": "MINI TOMATE CACHO CNT 500G",
+  "emoji": "🍅",
+  "category": "Tomatoes",
+  "sold_as": "pack",
+  "pack_capacity": 8
+ },
+ {
+  "product_id": "15600",
+  "name_en": "Striped watermelon",
+  "name_pt": "MELANCIA RISCADA P/ SEMENTES INT CNT KG",
+  "emoji": "🍉",
+  "category": "Melons",
+  "sold_as": "loose",
+  "heavy": true
+ },
+ {
+  "product_id": "16143",
+  "name_en": "Black watermelon",
+  "name_pt": "MELANCIA PRETA POUCAS SEMENTES INT KG",
+  "emoji": "🍉",
+  "category": "Melons",
+  "sold_as": "loose",
+  "heavy": true
+ },
+ {
+  "product_id": "16336",
+  "name_en": "Green melon",
+  "name_pt": "MELAO VERDE INTEIRO CNT KG",
+  "emoji": "🍈",
+  "category": "Melons",
+  "sold_as": "loose",
+  "heavy": true
+ },
+ {
+  "product_id": "30633",
+  "name_en": "Cantaloupe melon",
+  "name_pt": "MELOA CANTALUPE/CHARENTAIS INTEIR CNT KG",
+  "emoji": "🍈",
+  "category": "Melons",
+  "sold_as": "loose",
+  "heavy": true
+ },
+ {
+  "product_id": "16137",
+  "name_en": "Mini watermelon",
+  "name_pt": "MELANCIA MINI INTEIRA CNT KG",
+  "emoji": "🍉",
+  "category": "Melons",
+  "sold_as": "loose",
+  "heavy": true
+ },
+ {
+  "product_id": "11912",
+  "name_en": "Red potatoes",
+  "name_pt": "BATATA VERMELHA CNT KG",
+  "emoji": "🥔",
+  "category": "Potatoes & onions",
+  "sold_as": "loose"
+ },
+ {
+  "product_id": "22965",
+  "name_en": "Roasting potatoes 2kg",
+  "name_pt": "BATATA ASSAR CNT EMB. 2 KG",
+  "emoji": "🥔",
+  "category": "Potatoes & ginger",
+  "sold_as": "pack",
+  "pack_capacity": 6
+ },
+ {
+  "product_id": "19454",
+  "name_en": "Zero-residue potatoes 4kg",
+  "name_pt": "BATATA ZER0%D 4KG",
+  "emoji": "🥔",
+  "category": "Potatoes & ginger",
+  "sold_as": "pack",
+  "pack_capacity": 4,
+  "heavy": true
+ },
+ {
+  "product_id": "12661",
+  "name_en": "Sweet potato",
+  "name_pt": "BATATA DOCE CNT KG",
+  "emoji": "🍠",
+  "category": "Potatoes & ginger",
+  "sold_as": "loose"
+ },
+ {
+  "product_id": "22411",
+  "name_en": "Ginger",
+  "name_pt": "GENGIBRE CNT KG",
+  "emoji": "🫚",
+  "category": "Potatoes & ginger",
+  "sold_as": "loose"
+ },
+ {
+  "product_id": "22176",
+  "name_en": "Potatoes for boiling 3kg",
+  "name_pt": "BATATA ESPECIAL COZER SC EMB. 3KG",
+  "emoji": "🥔",
+  "category": "Potatoes & ginger",
+  "sold_as": "pack",
+  "pack_capacity": 4,
+  "heavy": true
+ },
+ {
+  "product_id": "22193",
+  "name_en": "White potatoes 3kg",
+  "name_pt": "BATATA BRANCA CNT EMB. 3KG",
+  "emoji": "🥔",
+  "category": "Potatoes & onions",
+  "sold_as": "pack",
+  "pack_capacity": 4,
+  "heavy": true
+ },
+ {
+  "product_id": "11889",
+  "name_en": "Lemon",
+  "name_pt": "LIMÃO CNT 60/75 KG",
+  "emoji": "🍋",
+  "category": "Citrus & kiwi",
+  "sold_as": "loose"
+ },
+ {
+  "product_id": "11891",
+  "name_en": "Galia melon",
+  "name_pt": "MELOA GALIA INTEIRA CNT KG",
+  "emoji": "🍈",
+  "category": "Citrus & kiwi",
+  "sold_as": "loose",
+  "heavy": true
+ },
+ {
+  "product_id": "15781",
+  "name_en": "Gold kiwi 500g",
+  "name_pt": "KIWI GOLD ZESPRI 500 G",
+  "emoji": "🥝",
+  "category": "Citrus & kiwi",
+  "sold_as": "pack",
+  "pack_capacity": 8
+ },
+ {
+  "product_id": "1164",
+  "name_en": "Zespri kiwi 500g",
+  "name_pt": "KIWI ZESPRI 500 GR",
+  "emoji": "🥝",
+  "category": "Citrus & kiwi",
+  "sold_as": "pack",
+  "pack_capacity": 8
+ },
+ {
+  "product_id": "20508",
+  "name_en": "Organic kiwi 400g",
+  "name_pt": "KIWI CNT BIO 400 G",
+  "emoji": "🥝",
+  "category": "Citrus & kiwi",
+  "sold_as": "pack",
+  "pack_capacity": 8
+ },
+ {
+  "product_id": "11890",
+  "name_en": "Lime",
+  "name_pt": "LIMA CNT KG",
+  "emoji": "🍋",
+  "category": "Citrus & kiwi",
+  "sold_as": "loose"
+ },
+ {
+  "product_id": "15730",
+  "name_en": "Algarve oranges 3kg",
+  "name_pt": "CITRINOS ALGARVE IGP LARANJA 6/7/8 3KG",
+  "emoji": "🍊",
+  "category": "Citrus & kiwi",
+  "sold_as": "pack",
+  "pack_capacity": 4,
+  "heavy": true
+ },
+ {
+  "product_id": "14646",
+  "name_en": "Zespri kiwi",
+  "name_pt": "KIWI ZESPRI KG",
+  "emoji": "🥝",
+  "category": "Citrus & kiwi",
+  "sold_as": "loose"
+ },
+ {
+  "product_id": "12756",
+  "name_en": "Clementine",
+  "name_pt": "CLEMENTINA CAL 60/75 CNT KG",
+  "emoji": "🍊",
+  "category": "Citrus & kiwi",
+  "sold_as": "loose"
+ },
+ {
+  "product_id": "26600",
+  "name_en": "Algarve oranges 1.5kg",
+  "name_pt": "CITR ALGARVE IGP LARANJA 3/4/5 1.5 KG",
+  "emoji": "🍊",
+  "category": "Citrus & kiwi",
+  "sold_as": "pack",
+  "pack_capacity": 3,
+  "heavy": true
+ },
+ {
+  "product_id": "21254",
+  "name_en": "Curly lettuce (bag)",
+  "name_pt": "ALFACE FRISADA SACO CNT KG",
+  "emoji": "🥬",
+  "category": "Peppers & vegetables",
+  "sold_as": "loose"
+ },
+ {
+  "product_id": "16429",
+  "name_en": "Hass avocado",
+  "name_pt": "ABACATE HASS PRONTO COMER CNT KG",
+  "emoji": "🥑",
+  "category": "Peppers & vegetables",
+  "sold_as": "loose"
+ },
+ {
+  "product_id": "11896",
+  "name_en": "Green pepper",
+  "name_pt": "PIMENTO VERDE CNT KG",
+  "emoji": "🫑",
+  "category": "Peppers & vegetables",
+  "sold_as": "loose"
+ },
+ {
+  "product_id": "15651",
+  "name_en": "Portuguese cabbage",
+  "name_pt": "COUVE PORTUGUESA/PENCA CNT KG",
+  "emoji": "🥬",
+  "category": "Peppers & vegetables",
+  "sold_as": "loose"
+ },
+ {
+  "product_id": "11897",
+  "name_en": "Red pepper",
+  "name_pt": "PIMENTO VERMELHO CNT KG",
+  "emoji": "🫑",
+  "category": "Peppers & vegetables",
+  "sold_as": "loose"
+ },
+ {
+  "product_id": "21208",
+  "name_en": "Aubergine",
+  "name_pt": "BERINGELA CNT KG",
+  "emoji": "🍆",
+  "category": "Peppers & vegetables",
+  "sold_as": "loose"
+ },
+ {
+  "product_id": "18329",
+  "name_en": "Chayote",
+  "name_pt": "CHUCHU CNT KG",
+  "emoji": "🥒",
+  "category": "Peppers & vegetables",
+  "sold_as": "loose"
+ },
+ {
+  "product_id": "21413",
+  "name_en": "Green beans",
+  "name_pt": "FEIJÃO VERDE CNT KG",
+  "emoji": "🫛",
+  "category": "Peppers & vegetables",
+  "sold_as": "loose"
+ },
+ {
+  "product_id": "11895",
+  "name_en": "Cucumber",
+  "name_pt": "PEPINO CNT KG",
+  "emoji": "🥒",
+  "category": "Peppers & vegetables",
+  "sold_as": "loose"
+ },
+ {
+  "product_id": "21178",
+  "name_en": "Broccoli",
+  "name_pt": "COUVE BROCOLO CNT KG",
+  "emoji": "🥦",
+  "category": "Cabbage & broccoli",
+  "sold_as": "loose"
+ },
+ {
+  "product_id": "21152",
+  "name_en": "White cabbage",
+  "name_pt": "COUVE BRANCA CNT KG",
+  "emoji": "🥬",
+  "category": "Cabbage & broccoli",
+  "sold_as": "loose"
+ },
+ {
+  "product_id": "15653",
+  "name_en": "Red cabbage",
+  "name_pt": "COUVE ROXA CNT KG",
+  "emoji": "🥬",
+  "category": "Cabbage & broccoli",
+  "sold_as": "loose"
+ },
+ {
+  "product_id": "21114",
+  "name_en": "Cauliflower",
+  "name_pt": "COUVE FLOR CNT KG",
+  "emoji": "🥦",
+  "category": "Cabbage & broccoli",
+  "sold_as": "loose"
+ },
+ {
+  "product_id": "11893",
+  "name_en": "Courgette",
+  "name_pt": "CURGETE VERDE CNT KG",
+  "emoji": "🥒",
+  "category": "Cabbage & broccoli",
+  "sold_as": "loose"
+ }
+]

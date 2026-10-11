@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shelf Round · Drop pictures</title>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root { --bg:#f7f8fa; --ink:#3a4756; --ink2:#7d8998; --line:#dfe4ea; --dark:#34463f; --card:#fff; --empty:#e9776c; --wrong:#f0a05a; --half:#efd352; --ok:#5fae82; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font-family:'Figtree',system-ui,sans-serif; font-weight:400; }
+  main { max-width:880px; margin:0 auto; padding:48px 24px 80px; }
+  .eyebrow { color:var(--ink2); font-size:15px; }
+  h1 { font-weight:300; font-size:44px; letter-spacing:-1.4px; line-height:1.1; margin:10px 0 8px; }
+  .lead { color:var(--ink2); font-size:18px; max-width:560px; line-height:1.5; }
+  .drop { margin-top:32px; border:2px dashed #c4ccd5; border-radius:28px; background:var(--card); padding:56px 24px; text-align:center; transition:.15s; cursor:pointer; }
+  .drop.over { border-color:var(--dark); background:#eef4f0; }
+  .drop b { font-weight:500; font-size:22px; display:block; margin-bottom:6px; }
+  .drop span { color:var(--ink2); }
+  .row { display:flex; gap:12px; align-items:center; margin-top:16px; color:var(--ink2); font-size:15px; flex-wrap:wrap; }
+  select, button { font:inherit; }
+  select { border:1.5px solid var(--line); border-radius:12px; padding:8px 12px; background:#fff; color:var(--ink); }
+  .btn { background:var(--dark); color:#fff; border:0; border-radius:14px; padding:10px 18px; cursor:pointer; font-weight:500; }
+  .ghost { background:none; color:var(--ink2); text-decoration:underline; border:0; cursor:pointer; padding:0; }
+  .link { margin-top:28px; background:#e6f1ea; color:var(--dark); border-radius:20px; padding:16px 20px; font-size:15px; line-height:1.5; }
+  h2 { font-weight:500; font-size:13px; letter-spacing:1.2px; text-transform:uppercase; color:var(--ink2); margin:40px 0 14px; }
+  .item { display:flex; gap:16px; align-items:center; background:var(--card); border-radius:22px; padding:12px; margin-bottom:12px; }
+  .item img { width:150px; height:84px; object-fit:cover; border-radius:14px; background:#56655d; }
+  .meta { flex:1; min-width:0; }
+  .meta b { font-weight:500; font-size:17px; }
+  .meta div { color:var(--ink2); font-size:14px; margin-top:2px; }
+  .chips { display:flex; gap:8px; flex-wrap:wrap; margin-top:8px; }
+  .chip { display:inline-flex; align-items:center; gap:6px; font-size:13px; background:#eef1f4; border-radius:99px; padding:4px 11px; }
+  .chip i { width:10px; height:10px; border-radius:50%; display:inline-block; }
+  .wait { color:#a9741f; background:#fbf3df; }
+  a { color:var(--dark); font-weight:500; }
+  .empty { color:var(--ink2); padding:24px 0; }
+  #msg { margin-top:12px; font-size:15px; color:var(--ink2); min-height:22px; }
+</style>
+</head>
+<body>
+<main>
+  <div class="eyebrow">Shelf Round · Bridge</div>
+  <h1>Drop camera pictures.<br>The app picks them up.</h1>
+  <p class="lead">Drop single photos or whole camera folders (like <b>6215</b>). Each photo is checked against the planogram boxes, and the phone app shows the result.</p>
+
+  <div class="drop" id="drop">
+    <b>Drop pictures or folders here</b>
+    <span>or click to choose files</span>
+    <input type="file" id="pick" accept="image/*" multiple hidden>
+  </div>
+  <div class="row">
+    <span>Photos dropped without a camera folder belong to camera</span>
+    <select id="cam"></select>
+    <span style="flex:1"></span>
+    <button class="ghost" id="clear">Remove everything</button>
+  </div>
+  <div id="msg"></div>
+  <div class="link" id="link"></div>
+
+  <h2>Pictures</h2>
+  <div id="list"><div class="empty">Nothing yet.</div></div>
+</main>
+
+<script>
+const $ = (id) => document.getElementById(id);
+let cameras = [];
+const COL = { empty: 'var(--empty)', wrong: 'var(--wrong)', half: 'var(--half)', full: 'var(--ok)' };
+const WORD = { empty: 'Empty', wrong: 'Wrong product', half: 'Half', full: 'Full' };
+
+async function status() {
+  const s = await (await fetch('/api/status')).json();
+  if (!cameras.length) {
+    cameras = s.cameras;
+    $('cam').innerHTML = '<option value="">choose…</option>' + cameras.map((c) => `<option>${c}</option>`).join('');
+  }
+  $('link').innerHTML = s.shelfModel
+    ? 'The shelf-check model is <b>on</b>. New pictures are checked within seconds: code rules first, the model only where it is needed.'
+    : s.autoAnalyze
+    ? 'The shelf-check model is not running, so pictures are checked with a single Claude call. Start the model for the full pipeline.'
+    : 'Automatic analysis is <b>off</b>: start the shelf-check model (<code>python app/server.py --port 8790</code>), or post results to <code>/api/results</code>.';
+  $('link').innerHTML += `<br>Phone app reads from <b>http://${s.ips[0] || 'localhost'}:${s.port}</b>`;
+  $('list').innerHTML = s.photos.length ? s.photos.map(card).join('') : '<div class="empty">Nothing yet.</div>';
+}
+
+function when(name) {
+  const t = parseInt(name, 10);
+  return t > 1e9 ? new Date(t * 1000).toLocaleString([], { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }) : name;
+}
+function card(p) {
+  const chips = p.analyzed
+    ? ['empty', 'wrong', 'half', 'full'].filter((k) => p.summary[k]).map((k) => `<span class="chip"><i style="background:${COL[k]}"></i>${p.summary[k]} ${WORD[k]}</span>`).join('')
+    : '<span class="chip wait">Waiting for analysis</span>';
+  return `<div class="item"><img src="/photos/${p.camera}/${p.name}" alt="">
+    <div class="meta"><b>Camera ${p.camera}</b><div>${when(p.name)} · ${p.name}</div><div class="chips">${chips}</div></div>
+    <a href="/inspect.html?camera=${p.camera}&name=${p.name}" target="_blank">Look</a></div>`;
+}
+
+// ---- reading dropped files and folders ----
+const isImg = (n) => /\.(jpe?g|png)$/i.test(n);
+function entryFiles(entry, path = '') {
+  return new Promise((ok) => {
+    if (entry.isFile) entry.file((f) => ok(isImg(f.name) ? [{ file: f, path: path + f.name }] : []), () => ok([]));
+    else if (entry.isDirectory) {
+      const reader = entry.createReader(), all = [];
+      const read = () => reader.readEntries(async (list) => {
+        if (!list.length) return ok((await Promise.all(all.map((e) => entryFiles(e, path + entry.name + '/')))).flat());
+        all.push(...list); read();
+      }, () => ok([]));
+      read();
+    } else ok([]);
+  });
+}
+async function upload(items) {
+  const fallback = $('cam').value;
+  let done = 0, skipped = 0;
+  for (const { file, path } of items) {
+    const cam = (path.split('/').find((seg) => cameras.includes(seg))) || fallback;
+    if (!cam) { skipped++; continue; }
+    $('msg').textContent = `Uploading ${++done} of ${items.length}…`;
+    await fetch(`/api/upload?camera=${cam}&name=${encodeURIComponent(file.name)}`, { method: 'POST', body: file });
+  }
+  $('msg').textContent = `${done} uploaded.` + (skipped ? ` ${skipped} skipped: choose a camera first (no camera folder in their path).` : '');
+  status();
+}
+$('drop').addEventListener('dragover', (e) => { e.preventDefault(); $('drop').classList.add('over'); });
+$('drop').addEventListener('dragleave', () => $('drop').classList.remove('over'));
+$('drop').addEventListener('drop', async (e) => {
+  e.preventDefault(); $('drop').classList.remove('over');
+  const entries = [...e.dataTransfer.items].map((i) => i.webkitGetAsEntry && i.webkitGetAsEntry()).filter(Boolean);
+  const files = (await Promise.all(entries.map((en) => entryFiles(en)))).flat();
+  upload(files);
+});
+$('drop').addEventListener('click', () => $('pick').click());
+$('pick').addEventListener('change', () => upload([...$('pick').files].map((f) => ({ file: f, path: f.name }))));
+$('clear').addEventListener('click', async () => { if (confirm('Remove all pictures and results?')) { await fetch('/api/clear', { method: 'POST' }); status(); } });
+
+status(); setInterval(status, 2500);
+</script>
+</body>
+</html>

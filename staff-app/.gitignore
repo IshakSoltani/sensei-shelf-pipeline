@@ -1,0 +1,15 @@
+node_modules/
+.expo/
+dist/
+.DS_Store
+.playwright-mcp/
+expo-qr.png
+# secrets and local-only data
+.env
+.env.*
+bridge/data/photos/
+bridge/data/trial-backup/
+bridge/data/tts/
+bridge/data/*.before-test
+mobile/app 2.json
+bridge/data/details.json

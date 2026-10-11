@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shelf Round · Look</title>
+<style>
+  body { margin:0; background:#f7f8fa; color:#3a4756; font-family:system-ui,sans-serif; }
+  main { max-width:1320px; margin:0 auto; padding:20px; }
+  canvas { width:100%; height:auto; border-radius:16px; display:block; background:#222; }
+  table { border-collapse:collapse; margin-top:16px; font-size:14px; }
+  td { padding:4px 14px 4px 0; vertical-align:top; }
+</style></head>
+<body><main>
+<h3 id="t"></h3>
+<canvas id="c" width="1280" height="720"></canvas>
+<table id="rows"></table>
+</main>
+<script>
+const q = new URLSearchParams(location.search), camera = q.get('camera'), name = q.get('name');
+const COL = { empty: '#e9776c', wrong: '#f0a05a', half: '#efd352', full: '#5fae82' };
+(async () => {
+  const [{ planogram, areas }, results] = await Promise.all([fetch('/api/planogram').then((r) => r.json()), fetch('/api/results').then((r) => r.json())]);
+  const res = (results[camera] || {})[name] || {};
+  document.getElementById('t').textContent = `Camera ${camera} · ${name}` + (Object.keys(res).length ? ' · analyzed' : ' · not analyzed yet');
+  const im = new Image(); im.src = `/photos/${camera}/${name}`;
+  im.onload = () => {
+    const c = document.getElementById('c').getContext('2d'); c.drawImage(im, 0, 0, 1280, 720);
+    c.font = 'bold 34px sans-serif';
+    let rows = '';
+    for (const [id, pts] of Object.entries(planogram[camera])) {
+      const r = res[id], st = !r ? null : r.planogram_compliant === false ? 'wrong' : r.stock_level;
+      c.lineWidth = 5; c.strokeStyle = st ? COL[st] : '#ff2d55'; c.beginPath();
+      pts.forEach((p, i) => (i ? c.lineTo(p[0], p[1]) : c.moveTo(p[0], p[1]))); c.closePath(); c.stroke();
+      const cx = pts.reduce((s, p) => s + p[0], 0) / 4, cy = pts.reduce((s, p) => s + p[1], 0) / 4, n = id.split('_')[1];
+      c.lineWidth = 6; c.strokeStyle = '#000'; c.fillStyle = '#fff'; c.strokeText(n, cx - 10, cy + 10); c.fillText(n, cx - 10, cy + 10);
+      rows += `<tr><td><b>${n}</b></td><td>${areas[id].emoji} ${areas[id].name_en}</td><td>${st || ''}</td></tr>`;
+    }
+    document.getElementById('rows').innerHTML = rows;
+  };
+})();
+</script></body></html>

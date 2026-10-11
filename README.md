@@ -1,13 +1,24 @@
-# Sensei shelf check
+# JunctionX Lisbon 2026 Hackathon · Sensei Shelf Check
 
-**JunctionX Lisbon 2026 · Sensei challenge, "Fresh eyes on fresh produce".**
-For every planogram area in a ceiling-camera photo, the pipeline answers two questions in Sensei's annotation format: is the planned product there (`planogram_compliant`), and is the area `empty`, `half` or `full`. A staff app shows the answer on the photo.
+**Sensei challenge, "Fresh eyes on fresh produce".** Ceiling cameras watch the fruit and vegetable section. For every planogram area our model says whether the planned product is there (`planogram_compliant`) and whether the area is `empty`, `half` or `full`, in Sensei's annotation format. **Shelf Round**, our staff app, turns those verdicts into a restock round on the phone and a live store overview for the manager.
 
 The idea: **spend nothing on the easy areas.** Code rules and an open-weight model we fine-tuned with LoRA run for free on a laptop. Claude Opus is only called for areas the free tiers can't settle, and plain code makes the final call, so the same answer always gives the same verdict.
 
+## The whole system
+
+<p align="center"><img src="docs/img/system.svg" alt="System: ceiling cameras send pictures to the bridge; the bridge asks the shelf-check model and keeps its verdicts; the phone app and the manager dashboard read them" width="100%"></p>
+
+A camera picture lands on the **bridge** (`staff-app/bridge`). The bridge sends it to the **shelf-check model** (`app/server.py`) and stores the verdict for every area. The **phone app** (`staff-app/mobile`) asks the bridge every few seconds and plans the round: every empty shelf on the first trip, wrong products next, half shelves to fill the rest of the cart. Finished rounds go back to the bridge, and the **manager dashboard** ranks the store, the staff and the products from them.
+
+<p align="center"><img src="docs/img/manager.jpg" alt="Shelf Round manager dashboard: shelves to fix, staff on the floor, every shelf's state by aisle, what needs attention, top staff, products that sold out and products in the wrong place" width="100%"></p>
+
+<sub>The manager dashboard (demo shifts). The phone app and the dashboard are described in [`staff-app/README.md`](staff-app/README.md).</sub>
+
+## The shelf-check model
+
 <p align="center"><img src="docs/img/pipeline.svg" alt="Pipeline: shelf photo, planogram areas, then three tiers (code rules, fine-tuned Qwen, Claude Opus) feeding code decision rules and the submission file" width="100%"></p>
 
-## How it works
+### How it works
 
 Each photo is matched to its camera from a thumbnail (the cameras never move). Each planogram area is then cut out and straightened. Every area goes through the tiers, cheapest first, and stops at the first one that is sure.
 
@@ -27,7 +38,7 @@ The models describe, the **decision rules in code** decide:
 
 <sub>Real output, camera 6373 (apples and pears) at 18:21. Left: the verdict per area. Right: who decided. 4 of 12 areas were settled by code for $0; Opus was asked about the other 8.</sub>
 
-## Why it works
+### Why it works
 
 **Most areas are easy, so they shouldn't cost anything.** A crate heaped with apples looks full to a few lines of OpenCV. A model is only needed where the picture is genuinely unclear.
 
@@ -39,7 +50,7 @@ The models describe, the **decision rules in code** decide:
 
 **Measured, not guessed.** 901 hand-checked areas (`labels/dev.csv`) and the official points formula (+1 right, −2 wrong product, −2 under, −3 over, −5 missing). Every decision, with its numbers, is in [`docs/decisions.md`](docs/decisions.md).
 
-## The fine-tuned open-weight model
+### The fine-tuned open-weight model
 
 - **Base:** `mlx-community/Qwen3.5-4B-MLX-4bit`, open weights.
 - **LoRA:** rank 16 over all 32 layers, 500 steps, 448 px crops, trained on a 16 GB MacBook with a memory-capped trainer (`tools/lora_train.py`).
@@ -52,7 +63,7 @@ gh release download qwen-lora-run1b -p adapters.safetensors -D models/qwen3.5-4b
 
 Set `"mode": "cascade"` in `config.json` and `predict.py` runs it first, handing to Opus only what it is unsure about.
 
-## Cost
+### Cost
 
 | Approach | 26 validation photos |
 |---|---|
@@ -60,7 +71,7 @@ Set `"mode": "cascade"` in `config.json` and `predict.py` runs it first, handing
 
 The code rules and the open-weight model run locally for nothing; Opus is billed only for the areas they pass on.
 
-## Results
+### Results
 
 | | Points | Share of max |
 |---|---|---|
@@ -70,25 +81,29 @@ The code rules and the open-weight model run locally for nothing; Opus is billed
 
 Under our older coverage-only stock rule, the same pipeline scores 1,378 of 1,802 on our labels. Those labels predate the two-customer test and call one or two packs "empty". The 20 areas where they disagree with it are listed in the decision log. We kept the two-customer test because it is the organisers' own definition of empty: nobody would buy what is left.
 
-## The app
+### The model's test page
 
 <p align="center"><img src="docs/img/app.jpg" alt="The gate-first test page: the score in the official points format, then each photo with its areas outlined and, per area, who decided it and why" width="100%"></p>
 
-Drop the validation folder (with `annotations.json` if you have it). Every photo is judged, scored in the brief's points format, and shown with each area outlined. Each area shows its verdict, who decided it and why. **Fresh run** asks Opus again instead of reusing saved answers. A one-photo staff view lists what to restock, what holds the wrong product and what is running low.
+Drop the validation folder (with `annotations.json` if you have it). Every photo is judged, scored in the brief's points format, and shown with each area outlined. Each area shows its verdict, who decided it and why. **Fresh run** asks Opus again instead of reusing saved answers.
 
 ## Run it
 
 ```
 uv venv && uv pip install -r requirements.txt          # add -r requirements-local.txt for the local model
 echo "ANTHROPIC_API_KEY=sk-ant-..." > .env
+./start.sh                                             # the model (:8790) and the staff app's bridge (:8787)
+cd staff-app/mobile && npm install && npx expo start --lan   # the phone app: scan the QR code with Expo Go
 ```
 
-The organisers' dataset is not in this repo. Unzip it into `data/raw/extracted/new_dataset_hackathon_junctionx_10_oct_2026_v2/`; only the reference builder and the app's samples need it.
+Drop camera pictures on http://127.0.0.1:8787: the model checks them and the phone app picks the results up. The manager dashboard is at http://127.0.0.1:8787/manager.html.
+
+The organisers' dataset is not in this repo. Unzip it into `data/raw/extracted/new_dataset_hackathon_junctionx_10_oct_2026_v2/`; only the reference builder and the model's sample photos need it.
 
 | Command | What it does |
 |---|---|
 | `.venv/bin/python gatepipe.py predict <folder> --api --out submission.json` | the submission run: code rules, then Opus for the rest (`<folder>` holds one sub-folder per camera) |
-| `.venv/bin/python app/server.py` | the app: open http://127.0.0.1:8787/gates (test run + score) or http://127.0.0.1:8787 (staff view) |
+| `.venv/bin/python app/server.py --port 8790` | the model service on its own: http://127.0.0.1:8790/gates is the test run + score page |
 | `.venv/bin/python predict.py <folder> --out submission.json` | Opus on every area, or the full cascade with `"mode": "cascade"` |
 | `.venv/bin/python gatepipe.py check` | replays the training day from saved answers and scores it on `labels/dev.csv` (no API calls) |
 | `.venv/bin/python gatepipe.py build` | rebuilds the code rules' references (emptiest picture and colour fingerprint per area) |
@@ -102,7 +117,9 @@ The organisers' dataset is not in this repo. Unzip it into `data/raw/extracted/n
 | `shelfcheck.py` | planogram, crops, the Opus judge with its answer cache, the prompts, the decision rules (fill thresholds, two-customer test, same kind), official scoring |
 | `predict.py` | Opus on every area, or the cascade (`"mode": "cascade"`: local Qwen first, Opus where unsure) |
 | `config.json` | the frozen settings: model, prompt, stock rule, two-customer test, cascade thresholds |
-| `app/` | the gate-first test page (`gates.html`), the staff view (`index.html`) and their server |
+| `app/` | the model service (`server.py`): the test run + score page (`gates.html`), a one-photo view (`index.html`), and the `/analyze_gates` route the bridge calls |
+| `staff-app/` | Shelf Round: the phone app (`mobile/`, Expo), the bridge and the manager dashboard (`bridge/`) |
+| `start.sh` | starts the model and the bridge together |
 | `models/qwen3.5-4b-shelf-lora/` | the LoRA adapter's config (weights in the release) |
 | `tools/` | LoRA training and its dataset, local-model evaluation, cascade tuning, code-rule tuning and replay, prompt tuning |
 | `data/` | planogram, English product names, camera fingerprints, the code rules' references, the training day's saved verdicts |
