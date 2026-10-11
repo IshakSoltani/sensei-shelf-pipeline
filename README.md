@@ -2,7 +2,7 @@
 
 **Sensei challenge, "Fresh eyes on fresh produce".** Ceiling cameras watch the fruit and vegetable section. For every planogram area our model says whether the planned product is there (`planogram_compliant`) and whether the area is `empty`, `half` or `full`, in Sensei's annotation format. **Shelf Round**, our staff app, turns those verdicts into a restock round on the phone and a live store overview for the manager.
 
-The idea: **spend nothing on the easy areas.** Code rules and an open-weight model we fine-tuned with LoRA run for free on a laptop. Claude Opus is only called for areas the free tiers can't settle, and plain code makes the final call, so the same answer always gives the same verdict.
+The idea: **spend nothing on the easy areas, and get better with every photo.** Code rules and an open-weight model we fine-tuned with LoRA run for free on a laptop. Claude Opus is only called for areas the free tiers can't settle, and plain code makes the final call, so the same answer always gives the same verdict. Every photo the store collects feeds a **learning loop**: the teacher's answers become training data for the open model, so it can take over more of the work at each training round.
 
 ## The whole system
 
@@ -15,6 +15,19 @@ The dashboard also **plans the people**: from a full day of camera verdicts it c
 <p align="center"><img src="docs/img/manager.jpg" alt="Shelf Round manager dashboard: shelves to fix, staff on the floor, every shelf's state by aisle, what needs attention, top staff, products that sold out and products in the wrong place" width="100%"></p>
 
 <sub>The manager dashboard (demo shifts), with the hour-by-hour staffing plan. The phone app and the dashboard are described in [`staff-app/README.md`](staff-app/README.md).</sub>
+
+## The learning loop
+
+<p align="center"><img src="docs/img/loop.svg" alt="Learning loop: collect photos through the staff app, the teacher model labels every area, the labels become a training set, a LoRA fine-tune updates the open-weight student, the student answers more areas locally, and the next photos start the loop again" width="100%"></p>
+
+The pipeline improves itself from the store's own photos. Managers drop photos on the **training playground** (the dashboard's Settings tab, with levels, a camera collection and a contributor ranking), and every camera picture the bridge judges is kept too. The teacher model labels every area it sees, and those answers are saved. At each milestone (25, 50, 100, 250 photos) a training round turns the collected photos and the teacher's answers into a new LoRA training set and fine-tunes the open-weight Qwen student on a laptop. The better the student gets, the more areas it keeps for itself, and the fewer go to the teacher.
+
+```
+.venv/bin/python tools/build_lora_dataset.py --with-collected   # training-day photos + everything collected by the staff app
+.venv/bin/python tools/lora_train.py <mlx_vlm.lora arguments>     # Qwen3.5-4B-MLX-4bit, the dataset folder, rank 16, 500 steps
+```
+
+The evaluation photos behind `labels/dev.csv` never enter training, so every round is measured on the same clean areas.
 
 ## The shelf-check model
 
@@ -56,7 +69,7 @@ The models describe, the **decision rules in code** decide:
 
 - **Base:** `mlx-community/Qwen3.5-4B-MLX-4bit`, open weights.
 - **LoRA:** rank 16 over all 32 layers, 500 steps, 448 px crops, trained on a 16 GB MacBook with a memory-capped trainer (`tools/lora_train.py`).
-- **Training data** (`tools/build_lora_dataset.py`): Opus as the teacher, overridden by our hand labels wherever a person labelled the area.
+- **Training data** (`tools/build_lora_dataset.py`): Opus as the teacher, overridden by our hand labels wherever a person labelled the area; `--with-collected` adds every photo collected through the staff app (the learning loop).
 - **Weights:** the adapter (130 MB) is attached to the [`qwen-lora-run1b`](https://github.com/IshakSoltani/sensei-shelf-pipeline/releases/tag/qwen-lora-run1b) release.
 
 ```
@@ -85,11 +98,11 @@ Under our older coverage-only stock rule, the same pipeline scores 1,378 of 1,80
 
 ### The model's test page and tuning panel
 
-<p align="center"><img src="docs/img/app.jpg" alt="The gate-first test page: the score in the official points format, then each photo with its areas outlined and, per area, who decided it and why" width="100%"></p>
+<p align="center"><img src="docs/img/app.jpg" alt="The validation run inside the manager dashboard: the score in the official points format, next to the tuning panel" width="100%"></p>
 
 Drop the validation folder (with `annotations.json` if you have it). Every photo is judged, scored in the brief's points format, and shown with each area outlined. Each area shows its verdict, who decided it and why. **Fresh run** asks Opus again instead of reusing saved answers.
 
-Next to the score, **Tune the decision** exposes every setting that turns the model's answers into verdicts: the code rule (on or off, and its two thresholds), the fill levels for empty and half, the two-customer test, and how strict the wrong-product flag is. Every change re-decides all photos at once from the answers already collected (no new model calls) and shows how many areas changed and, with annotations, the new score. The download uses the tuned settings. "Ask Opus about every area" (on by default) collects an answer for the areas the code rule settles too, so the code rule itself can be tuned afterwards.
+Next to the score, **Tune the decision** exposes every setting that turns the model's answers into verdicts: the code rule (on or off, and its two thresholds), the fill levels for empty and half, the two-customer test, and how strict the wrong-product flag is. Every change re-decides all photos at once from the answers already collected (no new model calls) and shows how many areas changed and, with annotations, the new score. The download uses the tuned settings. "Check every area with the model" (on by default) collects an answer for the areas the code rule settles too, so the code rule itself can be tuned afterwards. The same page runs inside the manager dashboard (Settings, Validation run).
 
 ## Run it
 
@@ -125,7 +138,7 @@ The organisers' dataset is not in this repo. Unzip it into `data/raw/extracted/n
 | `staff-app/` | Shelf Round: the phone app (`mobile/`, Expo), the bridge and the manager dashboard (`bridge/`) |
 | `start.sh` | starts the model and the bridge together |
 | `models/qwen3.5-4b-shelf-lora/` | the LoRA adapter's config (weights in the release) |
-| `tools/` | LoRA training and its dataset, local-model evaluation, cascade tuning, code-rule tuning and replay, prompt tuning, the staffing forecast |
+| `tools/` | the learning loop (dataset builder with the collected photos, memory-capped LoRA trainer), local-model evaluation, cascade tuning, code-rule tuning and replay, prompt tuning, the staffing forecast |
 | `data/` | planogram, English product names, camera fingerprints, the code rules' references, the training day's saved verdicts |
 | `labels/dev.csv` | 901 hand-checked areas from the shared training day |
 | `docs/` | the decision log and the README images |

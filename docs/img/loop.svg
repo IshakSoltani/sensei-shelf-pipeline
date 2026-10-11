@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1240 360" width="1240" height="360" role="img" aria-label="Learning loop: photos are collected through the staff app, the teacher model labels every area, the labels become a training set, a LoRA fine-tune updates the open-weight student, and the student answers more areas on the laptop; then the loop starts again with the next photos.">
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M1 1 L8 5 L1 9" fill="none" stroke="#a3b19c" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+  <style>
+    text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; fill: #edf1e6; }
+    .k { font-size: 13px; fill: #a3b19c; }
+    .h { font-size: 18px; font-weight: 650; }
+    .b { font-size: 14px; fill: #c4cfbd; }
+    .m { font-size: 13px; fill: #a3b19c; }
+    .box { fill: #182116; stroke: #2b3828; stroke-width: 1.5; }
+    .flow { fill: none; stroke: #a3b19c; stroke-width: 2; stroke-linecap: round; }
+  </style>
+  <rect width="1240" height="360" fill="#10170f"/>
+
+  <rect class="box" x="30" y="40" width="210" height="190" rx="12"/>
+  <text class="k" x="50" y="70">1</text>
+  <text class="h" x="50" y="94">Collect</text>
+  <text class="b" x="50" y="122">managers drop photos on</text>
+  <text class="b" x="50" y="142">the training playground;</text>
+  <text class="b" x="50" y="162">every camera picture</text>
+  <text class="b" x="50" y="182">is kept too</text>
+  <text class="m" x="50" y="212">staff app · bridge</text>
+
+  <rect class="box" x="270" y="40" width="210" height="190" rx="12"/>
+  <text class="k" x="290" y="70">2</text>
+  <text class="h" x="290" y="94">Label</text>
+  <text class="b" x="290" y="122">the teacher model judges</text>
+  <text class="b" x="290" y="142">every area it is shown:</text>
+  <text class="b" x="290" y="162">product, fill, what is</text>
+  <text class="b" x="290" y="182">left; answers are saved</text>
+  <text class="m" x="290" y="212">Claude Opus 5.5</text>
+
+  <rect class="box" x="510" y="40" width="210" height="190" rx="12"/>
+  <text class="k" x="530" y="70">3</text>
+  <text class="h" x="530" y="94">Build</text>
+  <text class="b" x="530" y="122">area crops + the teacher's</text>
+  <text class="b" x="530" y="142">answers become training</text>
+  <text class="b" x="530" y="162">examples; our hand labels</text>
+  <text class="b" x="530" y="182">win where they exist</text>
+  <text class="m" x="530" y="212">build_lora_dataset.py</text>
+
+  <rect class="box" x="750" y="40" width="210" height="190" rx="12"/>
+  <text class="k" x="770" y="70">4</text>
+  <text class="h" x="770" y="94" style="fill:#b9d4ab">Fine-tune</text>
+  <text class="b" x="770" y="122">LoRA on the open-weight</text>
+  <text class="b" x="770" y="142">Qwen3.5-4B, on a</text>
+  <text class="b" x="770" y="162">16 GB laptop, at each</text>
+  <text class="b" x="770" y="182">milestone of photos</text>
+  <text class="m" x="770" y="212">lora_train.py</text>
+
+  <rect class="box" x="990" y="40" width="220" height="190" rx="12"/>
+  <text class="k" x="1010" y="70">5</text>
+  <text class="h" x="1010" y="94">Answer locally</text>
+  <text class="b" x="1010" y="122">the student keeps the</text>
+  <text class="b" x="1010" y="142">areas it is sure of; only</text>
+  <text class="b" x="1010" y="162">the rest go to the</text>
+  <text class="b" x="1010" y="182">teacher</text>
+  <text class="m" x="1010" y="212">cascade mode</text>
+
+  <path class="flow" d="M240 135 H264" marker-end="url(#a)"/>
+  <path class="flow" d="M480 135 H504" marker-end="url(#a)"/>
+  <path class="flow" d="M720 135 H744" marker-end="url(#a)"/>
+  <path class="flow" d="M960 135 H984" marker-end="url(#a)"/>
+  <path class="flow" d="M1100 230 V280 C 1100 305, 1085 312, 1060 312 H 160 C 135 312, 135 305, 135 280 V236" marker-end="url(#a)"/>
+  <text class="m" x="620" y="303" text-anchor="middle">the next photos: every milestone (25, 50, 100, 250 photos) is a new training round</text>
+</svg>
