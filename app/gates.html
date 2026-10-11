@@ -132,8 +132,8 @@ html.embed .seg{background:var(--panel2)}html.embed .seg button[aria-pressed=tru
     <input type="file" id="pickdir" webkitdirectory multiple>
     <input type="file" id="pick" multiple accept="image/*,.json,application/json">
     <div class="opts">
-      <label><input type="checkbox" id="fresh" checked><span><b>Fresh run:</b> the model checks every photo again, ignoring answers saved earlier. A real test; about $0.01 per area. Untick to reuse saved answers where they exist (fast and free on training-day photos).</span></label>
-      <label><input type="checkbox" id="collect" checked><span><b>Check every area with the model,</b> also the ones the code rule answers, so every setting in the tuning panel can be changed afterwards without asking again. The verdicts are the same; about 15 % more cost.</span></label>
+      <label><input type="checkbox" id="fresh" checked><span><b>Fresh run:</b> the model checks every photo again, ignoring answers saved earlier. Untick to reuse saved answers where they exist.</span></label>
+      <label><input type="checkbox" id="collect" checked><span><b>Check every area with the model,</b> also the ones the code rule answers, so every setting in the tuning panel can be changed afterwards without asking again. The verdicts are the same.</span></label>
       <div class="row"><span>Model prompt</span><select id="version" aria-label="Prompt version"></select></div>
     </div>
   </div>
@@ -143,7 +143,7 @@ html.embed .seg{background:var(--panel2)}html.embed .seg button[aria-pressed=tru
     <section class="side" id="side-gates"></section>
     <section class="side tune" id="tune">
       <h2>Tune the decision</h2>
-      <p class="src">Re-decides every photo from the answers already collected. No new model calls, no cost.</p>
+      <p class="src">Re-decides every photo from the answers already collected.</p>
       <div class="grp"><h3>Code rule: clearly full <label><input type="checkbox" data-k="gate"> on</label></h3>
         <div class="ctl" data-dep="gate"><span>Floor changed from its emptiest picture, at least</span><output data-o="cov_min"></output><input type="range" data-k="cov_min" min="0.3" max="0.9" step="0.05"></div>
         <div class="ctl" data-dep="gate"><span>Colours this close to the usual product, at most</span><output data-o="fp_max"></output><input type="range" data-k="fp_max" min="0.05" max="0.5" step="0.05"></div></div>
@@ -171,7 +171,7 @@ html.embed .seg{background:var(--panel2)}html.embed .seg button[aria-pressed=tru
 <script>
 const $ = id => document.getElementById(id);
 const VAL = {empty: 0, half: 0.5, full: 1};
-const queue = []; let running = 0, done = 0, total = 0, spent = 0, ann = null, annName = "";
+const queue = []; let running = 0, done = 0, total = 0, ann = null, annName = "";
 const subGates = {}, subBase = {}, cards = {}, photos = {};   // current settings / submitted settings / per photo
 let DEF = null, P = null, tuneTimer = null;
 const FMT = {cov_min: v => Math.round(v * 100) + "%", fp_max: v => (+v).toFixed(2), fill_empty: v => v + "%", fill_half: v => v + "%", flag_pmatch_max: v => v + "%"};
@@ -281,7 +281,7 @@ async function add(files) {
 function status() {
   if (!total && !ann) return say("");
   const what = ann ? `scoring against ${esc(annName)}` : "no annotations.json yet: scoring against our own hand labels where we have them";
-  say(`${done} of ${total} photos checked${running ? `, ${running} running` : ""} · $${spent.toFixed(2)} spent · ${what}`);
+  say(`${done} of ${total} photos checked${running ? `, ${running} running` : ""} · ${what}`);
 }
 
 function pump() {
@@ -299,7 +299,6 @@ async function check({f, cam, card}) {
     const r = await fetch(`/analyze_gates?${q}`, {method: "POST", body: f, headers: {"Content-Type": "application/octet-stream"}});
     const o = await r.json();
     if (!r.ok) { card.querySelector(".sub").outerHTML = `<span class="sub err">${esc(o.error || r.statusText)}</span>`; return; }
-    spent += o.summary.api_cost_usd || 0;
     const key = `${o.camera}/${o.file}`;
     photos[key] = {o, card, raw: Object.fromEntries(o.areas.map(a => [a.area_id, a.raw]))};
     Object.assign((subBase[o.camera] ??= {}), o.submission[o.camera]);     // the run used the submitted settings
@@ -349,7 +348,7 @@ function show(card, o) {
       <span class="more">${how}${chg}${lab}</span></li>`;
   }).join("");
   card.innerHTML = `
-    <h2>${esc(o.file)} <span class="pts" data-pts></span> <span class="sub">camera ${esc(o.camera)}${o.camera_name ? " · " + esc(o.camera_name) : ""}${o.time_utc ? " · " + esc(o.time_utc) + " UTC" : ""} · ${o.areas.length} areas${nChanged ? `, ${nChanged} changed by your settings` : ""} · ${o.summary.seconds}s · $${(o.summary.api_cost_usd || 0).toFixed(3)}</span></h2>
+    <h2>${esc(o.file)} <span class="pts" data-pts></span> <span class="sub">camera ${esc(o.camera)}${o.camera_name ? " · " + esc(o.camera_name) : ""}${o.time_utc ? " · " + esc(o.time_utc) + " UTC" : ""} · ${o.areas.length} areas${nChanged ? `, ${nChanged} changed by your settings` : ""} · ${o.summary.seconds}s</span></h2>
     <div class="grid">
       <div class="shot"><img src="${o.image}" alt="${esc(o.file)} with every area outlined"><svg viewBox="0 0 1280 720" aria-hidden="true">${polys}${tags}</svg></div>
       <ol>${rows}</ol>
