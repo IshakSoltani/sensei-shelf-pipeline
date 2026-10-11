@@ -31,5 +31,6 @@
   "time_budget_seconds": 720,
   "first_pass_by_seconds": 300,
   "stop_new_calls_seconds": 600,
-  "notes": "11 Oct 00:45: Opus v5 x1, image only; stock level from Opus's own fill estimate (empty < 35 %, half < 65 %, else full), chosen by grouped CV: 1349/1802 on 901 labels (argmax 1269), 567/812 clean. Flag on a confident 'no'. $0.12 per photo. See docs/decisions.md."
+  "notes": "11 Oct 00:45: Opus v5 x1, image only; stock level from Opus's own fill estimate (empty < 35 %, half < 65 %, else full), chosen by grouped CV: 1349/1802 on 901 labels (argmax 1269), 567/812 clean. Flag on a confident 'no'. $0.12 per photo. See docs/decisions.md. 11 Oct: stock_test two_customers (Ishak): can we serve two customers in a row without refilling? no -> empty, yes -> at least half; counted in packs/bags/large items, coverage otherwise. See docs/decisions.md.",
+  "stock_test": "two_customers"
 }

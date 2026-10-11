@@ -1,7 +1,7 @@
 """Shelf Check app: upload a shelf photo, see every planogram area judged.
 
     .venv/bin/python app/server.py [--port 8787]      then open http://127.0.0.1:8787
-    batch run + score: http://127.0.0.1:8787/batch (drop the validation photos, and annotations.json when it exists)
+    gate-first test run + score: http://127.0.0.1:8787/gates (drop the validation folder, with annotations.json when it exists)
 
 The camera is recognised from the photo itself (the cameras never move, so a 64x36 grey thumbnail is enough),
 the areas are judged exactly as predict.py does (config.json rules, references from data/refs), and the page
@@ -16,6 +16,7 @@ import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import shelfcheck as sc
+import gatepipe
 
 HERE = Path(__file__).resolve().parent
 STORE = sc.DATA / "refs"
@@ -109,6 +110,18 @@ async def analyze(img, cam, name, fresh=False):
             "samples": CFG["samples"]}
 
 
+def gate_analysis(img, cam, name, allow_api=False, fresh=False):
+    """The gate-first pipeline on one photo (scored against our hand labels when this photo has them)."""
+    out = asyncio.run(gatepipe.run_photo(img, cam, name, allow_api=allow_api, fresh=fresh))
+    labels = {k: v for k, v in sc.load_labels().items() if k[0] == cam and k[1] == name}
+    for a in out["areas"]:
+        lab = labels.get((cam, name, a["area_id"]))
+        if lab:
+            a["label"] = {"stock": {0: "empty", 0.5: "half", 1: "full"}[lab["stock_value"]], "compliant": lab["compliant"]}
+    out["time_utc"] = sc.hhmm(sc.parse_ts(name)) if sc.parse_ts(name) else None
+    return out
+
+
 class Handler(BaseHTTPRequestHandler):
     def log_message(self, fmt, *args):
         print(f"[{time.strftime('%H:%M:%S')}] {fmt % args}", flush=True)
@@ -120,8 +133,8 @@ class Handler(BaseHTTPRequestHandler):
 
     def do_GET(self):
         url = urllib.parse.urlparse(self.path)
-        if url.path in ("/", "/batch"):
-            b = (HERE / ("batch.html" if url.path == "/batch" else "index.html")).read_bytes()
+        if url.path in ("/", "/batch", "/gates"):
+            b = (HERE / {"/": "index.html", "/batch": "gates.html", "/gates": "gates.html"}[url.path]).read_bytes()
             self.send_response(200); self.send_header("Content-Type", "text/html; charset=utf-8"); self.send_header("Content-Length", str(len(b)))
             self.end_headers(); self.wfile.write(b)
         elif url.path == "/samples":
@@ -151,13 +164,19 @@ class Handler(BaseHTTPRequestHandler):
                     judged = {(cam, f) for cam, files in d["submission"].items() for f in files}
                     labels = {k: v for k, v in sc.load_labels().items() if (k[0], k[1]) in judged}
                     source = "our hand labels"
+                if d.get("only_judged"):   # while a batch is still running: score the photos judged so far
+                    judged = {(cam, f) for cam, files in d["submission"].items() for f in files}
+                    labels = {k: v for k, v in labels.items() if (k[0], k[1]) in judged}
                 total, c = sc.score(d["submission"], labels)
-                photos = len({(k[0], k[1]) for k in labels})
-                self.send_json({"points": total, "max": 2 * len(labels), "areas": len(labels), "photos": photos, "source": source, "counts": c})
+                keys = sorted({(k[0], k[1]) for k in labels})
+                per_photo = {f"{cam}/{f}": {"points": sc.score(d["submission"], {k: v for k, v in labels.items() if k[:2] == (cam, f)})[0],
+                                            "max": 2 * sum(1 for k in labels if k[:2] == (cam, f))} for cam, f in keys}
+                self.send_json({"points": total, "max": 2 * len(labels), "areas": len(labels), "photos": len(keys), "source": source,
+                                "counts": c, "per_photo": per_photo})
             except Exception as e:
                 self.send_json({"error": f"Could not score: {e!r}"[:300]}, 400)
             return
-        if url.path != "/analyze":
+        if url.path not in ("/analyze", "/analyze_gates"):
             self.send_json({"error": "not found"}, 404); return
         q = urllib.parse.parse_qs(url.query)
         body = self.rfile.read(int(self.headers.get("Content-Length", 0)))
@@ -173,6 +192,14 @@ class Handler(BaseHTTPRequestHandler):
         if cam not in sc.CAM_AREAS:
             self.send_json({"error": "I could not tell which camera this is. Pick the camera and try again.", "detected": detected, "margin": margin}, 422); return
         name = (q.get("name") or ["upload.jpg"])[0]
+        if url.path == "/analyze_gates":
+            try:
+                out = gate_analysis(img, cam, name, allow_api=(q.get("api") or ["0"])[0] == "1", fresh=(q.get("fresh") or ["0"])[0] == "1")
+            except Exception as e:
+                self.send_json({"error": f"Checking failed: {e!r}"[:300]}, 500); return
+            out["detected"] = detected; out["detect_margin"] = margin
+            out["image"] = "data:image/jpeg;base64," + base64.standard_b64encode(sc.jpg(img, 82)).decode()
+            self.send_json(out); return
         try:
             out = asyncio.run(analyze(img, cam, name, fresh=(q.get("fresh") or ["0"])[0] == "1"))
         except Exception as e:

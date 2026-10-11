@@ -3,6 +3,32 @@
 Dated, newest first. Every entry says what was decided, on what evidence, and what would change it.
 Experiments (numbers) live in `out/experiments.jsonl` and on the dashboard; this file is the reasoning.
 
+## 11 Oct: the two-customer test (stock_test: two_customers), replacing "one pack left is half"
+
+Ishak, refining the packaged rule above: "Can we still serve two customers in a row without refilling? If yes it is half; if no it is empty and we send someone to replenish." One pack or bag left is empty; a portion for only one customer is empty.
+
+- Applies to areas counted in units: packaged products (pack weight in the name: 500 G, 1 KG, EMB.; not a calibre such as 75/85 KG or R0 KG) and large loose items (melon, watermelon, pineapple, papaya, cabbage, cauliflower, pumpkin): 70 of 152 areas. They skip the clearly-full gate (coverage cannot count bags; it called two bags "full" on 6385_4 at 07:21 to 10:34).
+- With the saved v5 answers the count is read from Opus's own observation (`shelfcheck.units_seen`: "Single 1 kg Carioca bag" = 1, "Two cardboard packs" = 2, "one or two" = 1, "eight cabbage heads" = 8; pack weights such as "1 kg bags" are not counts). One unit (or fewer) of the right product = empty; two or more = at least half; no count in the text = the coverage reading stands. A first version misread "cauliflower heads" and a neighbour's pineapple as one item (3 labelled-full areas turned empty); fixed and covered by 17 test sentences.
+- Prompt v9 (ready, not in use) asks the question itself: customers_served none / one / two_or_more, with a normal purchase defined (one pack or bag, one large item, one bunch, about 1 kg of other loose produce). It is the only way to apply the test to loose produce counted by the kilo; it needs new Opus calls to measure (~$10 for the 901 labels).
+- Measured offline on the 901 labels (0 API calls): Opus alone 1385 -> 1326 (clean 576 -> 550); gate first 1378 -> 1314. 25 labelled areas change: empty -> half 19 (labels: half 5, empty 14: two packs, punnets or melons the team called empty), half -> empty 6 (labels half: one 3 kg potato bag, one melon, one onion bag). Every change follows the rule; the cost is the team's labels following the older convention.
+- Decision: on (Ishak's definition, the organisers' "would a customer still buy it", and the staff use of "empty" = send someone). Revert: `"stock_test": "coverage"`.
+
+## 11 Oct: the coded gates in front of today's Opus config (fill:35:65 + same kind): no gain, offline replay, 0 API calls
+
+Ishak: run our coded rules before Opus and see whether they help, without calling Opus. `tools/gate_replay_now.py` replays the 181 photos of the training day: gates first (covered, nothing changed, clearly empty, clearly full + fingerprint), today's Opus decision only where no gate answers, Opus answers read from `cache/judge` by content hash. Thresholds re-chosen against today's Opus on the 495 team labels, checked on the 406 clean ones.
+
+| setting | all 901 | clean 406 | Opus calls | $/photo |
+|---|---|---|---|---|
+| **Opus x1 on every area (config)** | **1385** | **576** | 100 % | 0.120 |
+| scored run, careful gates (full only) | 1362 | 551 | 93 % | 0.112 |
+| scored run, aggressive gates (full only) | 1379 | 562 | 78 % | 0.094 |
+| store mode, careful gates | 1365 | 557 | 87 % | 0.104 |
+| store mode, aggressive gates | 1211 | 489 | 24 % | 0.028 |
+
+- No "clearly empty" setting qualifies. The "clearly full" gate holds on the tuning labels (+2 to +8) and loses on the clean ones (−14 to −25): it does not generalise. "Nothing changed" helps only at a very tight bar (6 % of areas, +3 points) and needs an earlier photo of the same day, which the scored run does not have.
+- **Product identification:** the colour fingerprint separates wrong from right products well where it exists (AUC 0.97 on 567 areas), but every one of Opus's 7 false alarms and 10 of its 11 misses sit on areas with no fingerprint (near-empty, no clean reference). Added as a flag it only adds false alarms (−54 to −312); as a veto it changes nothing.
+- Decision: the scored run stays Opus x1 on every area. The gates stay the store-mode cost story ($0.12 → $0.03 per photo for −174 points). Cost report: `docs/cost-report.pdf`.
+
 ## 11 Oct, 01:20: the customer view as extra context (v8): neutral; config stays v5 + fill rule
 
 Ishak: keep everything Opus gets and add the mentors' customer/staff question as extra context. Why v7 (mentor questions only) lost 180 points: it changed ~50 calls, mostly wrongly, in two patterns: leftovers on a bare liner became "half" (a shopper would take the last bunches; labels say empty, 16 cases) and crates of a few large items became "half" (staff would refill; labels say full, 9 cases); it had also dropped the "small gaps are still full" guidance. v8 = v5 unchanged + a cross-check paragraph with those two cases spelled out; v8b = v8 + "in doubt, lower".

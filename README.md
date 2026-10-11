@@ -1,51 +1,114 @@
-# Sensei shelf check: pipeline, viewer and fine-tuned model
+# Sensei shelf check
 
-JunctionX Lisbon 2026, Sensei challenge ("Fresh eyes on fresh produce"). For every planogram area in a ceiling-camera photo the pipeline answers `planogram_compliant` and `stock_level` (empty / half / full) in Sensei's annotation format.
+**JunctionX Lisbon 2026 · Sensei challenge, "Fresh eyes on fresh produce".**
+For every planogram area in a ceiling-camera photo, the pipeline answers two questions in Sensei's annotation format: is the planned product there (`planogram_compliant`), and is the area `empty`, `half` or `full`. A staff app shows the answer on the photo.
 
-## What runs
+The idea: **spend nothing on the easy areas.** Code rules and an open-weight model we fine-tuned with LoRA run for free on a laptop. Claude Opus is only called for areas the free tiers can't settle, and plain code makes the final call, so the same answer always gives the same verdict.
 
-Claude Opus 5.5 judges each area once (`config.json`: prompt v5, effort low, image only: the whole photo with the area outlined, a close-up, and the area straightened). Two coded rules then turn its answer into the call:
+<p align="center"><img src="docs/img/pipeline.svg" alt="Pipeline: shelf photo, planogram areas, then three tiers (code rules, fine-tuned Qwen, Claude Opus) feeding code decision rules and the submission file" width="100%"></p>
 
-- **Stock level from Opus's own fill estimate** (`"stock_rule": "fill:35:65"`): under 35 % covered is empty, under 65 % half, otherwise full.
-- **Same kind of produce counts as compliant** (`shelfcheck.same_kind`): a different variety of the planned fruit (Golden apples where Gala is planned) is not a wrong product. Kiwi is excluded because the labels treat gold and green kiwi as different.
+## How it works
 
-On 901 hand-labelled areas of the training day this scores 1,385 of 1,802 points (77 %); plain Opus scores 1,269. About $0.12 per photo. Every decision and experiment is in `docs/decisions.md`.
+Each photo is matched to its camera from a thumbnail (the cameras never move). Each planogram area is then cut out and straightened. Every area goes through the tiers, cheapest first, and stops at the first one that is sure.
 
-## Setup
+| Tier | What it is | Cost | Where |
+|---|---|---|---|
+| **0 · Code rules** | The area is compared with its own emptiest picture of the day: if 50 % or more of its floor has changed and the colours match the planned product's fingerprint, it is full. No model involved. | $0, milliseconds | `gates.py`, `gatepipe.py` |
+| **1 · Qwen3.5-4B + our LoRA** | An open-weight vision model, fine-tuned by us on Opus's answers and our 901 hand-checked areas. Runs locally on Apple silicon (MLX). Keeps the areas it is sure about. | $0, local | `predict.py` (`"mode": "cascade"`), `tools/lora_train.py` |
+| **2 · Claude Opus 5.5** | Only the areas the cheaper tiers pass on. It sees the whole frame with the area outlined, a close-up and the area straightened, and returns the fill, the product it sees and a short description. | $0.011 per area | `shelfcheck.py` |
 
-```
-uv venv && uv pip install -r requirements.txt        # add -r requirements-local.txt for the local model
-echo "ANTHROPIC_API_KEY=sk-ant-..." > .env
-```
+The models describe, the **decision rules in code** decide:
 
-The organisers' dataset is not in this repo. Put it at `data/raw/extracted/new_dataset_hackathon_junctionx_10_oct_2026_v2/` (only the tools and the viewer's sample list need it; judging new photos does not).
+- **The two-customer test.** Could two customers, one after the other, still buy here without anyone refilling? No: **empty**, send someone. Yes: **at least half**. Packaged products and large items (melons, pineapples, cabbages) are counted in units. Loose produce is read by fill: under 35 % is empty, under 65 % is half.
+- **Wrong product** only on a confident "no". A different variety of the same fruit (Golden apples where Gala is planned) still counts as compliant, as the organisers asked.
+- **Every area is always answered,** because a missing area costs 5 points: an area no tier can judge (a blocked view, a failed call) takes the training day's last verdict for that area.
 
-## Run
+<p align="center"><img src="docs/img/shelf-verdicts.jpg" alt="Camera 6373 at 18:21: each area outlined in the colour of its verdict, and again in the colour of the tier that decided it" width="100%"></p>
 
-- **Viewer**: `.venv/bin/python app/server.py`, then open http://127.0.0.1:8787/batch, drop up to 26 photos and see each photo with its areas outlined and what the model thinks is in each. Tick "Fresh run" to ask Opus again instead of replaying saved answers. http://127.0.0.1:8787 is the single-photo staff view.
-- **Submission file**: `.venv/bin/python predict.py <folder of photos> --out submission.json` (a complete fallback file is written first, so no area is ever missing).
+<sub>Real output, camera 6373 (apples and pears) at 18:21. Left: the verdict per area. Right: who decided. 4 of 12 areas were settled by code for $0; Opus was asked about the other 8.</sub>
 
-## Files
+## Why it works
 
-| Path | What |
-|---|---|
-| `shelfcheck.py` | planogram, crops, prompts (v1 to v8), the Opus judge with its answer cache, decision rules, scoring |
-| `predict.py` | the submission run (`"mode": "opus"`; `"cascade"` = local model first, Opus where unsure) |
-| `app/` | the viewer (`batch.html`) and the staff view (`index.html`) |
-| `gates.py`, `tools/gate_tune.py`, `tools/stack_tune.py` | coded pre-checks (covered, unchanged, clearly empty/full, colour fingerprint) and their measurement: a cost story for store use, not more accurate than Opus |
-| `tools/local_eval.py`, `cascade_tune.py`, `cascade_test.py` | the local model and the cascade measurements |
-| `tools/build_lora_dataset.py`, `tools/lora_train.py` | the LoRA training set (Opus as teacher, people's labels where they exist) and the memory-capped trainer |
-| `tools/tune.py` | scores any prompt/model on `labels/dev.csv` |
-| `labels/` | 901 hand-checked areas (`dev.csv`) and their sources |
-| `data/` | planogram, English product table, camera fingerprints, day pass, reference crops |
-| `models/qwen3.5-4b-shelf-lora/` | the fine-tuned adapter's config; the weights are a release download (below) |
+**Most areas are easy, so they shouldn't cost anything.** A crate heaped with apples looks full to a few lines of OpenCV. A model is only needed where the picture is genuinely unclear.
 
-## The fine-tuned model
+**Stock is counted the way staff count it, not the way a camera sees it.** Coverage alone gets packaged produce wrong both ways: two 1 kg bags in a large crate cover 30 % of the floor but can still serve two customers, while one 3 kg bag can cover more than half of its crate and still serve only one. The two-customer test turns "how much floor is covered" into "do we need to send someone". That's the question the staff app exists to answer.
 
-Qwen3.5-4B (`mlx-community/Qwen3.5-4B-MLX-4bit`) with a LoRA adapter (rank 16, 500 steps, 448 px crops) trained on Opus's answers and the team's labels. The weights (130 MB, over GitHub's file limit) are attached to the `qwen-lora-run1b` release:
+<p align="center"><img src="docs/img/two-customers.jpg" alt="Four crates: two packs left and two bags left are half; one bag left is empty even when it covers 55 % of the floor" width="100%"></p>
+
+**The model only describes; code decides.** Opus returns a fill estimate and what it sees, and the thresholds that turn this into a level were chosen by grouped cross-validation on our labels. Changing a rule never needs a new model call: every rule in this repo was measured offline against saved answers.
+
+**Measured, not guessed.** 901 hand-checked areas (`labels/dev.csv`) and the official points formula (+1 right, −2 wrong product, −2 under, −3 over, −5 missing). Every decision, with its numbers, is in [`docs/decisions.md`](docs/decisions.md).
+
+## The fine-tuned open-weight model
+
+- **Base:** `mlx-community/Qwen3.5-4B-MLX-4bit`, open weights.
+- **LoRA:** rank 16 over all 32 layers, 500 steps, 448 px crops, trained on a 16 GB MacBook with a memory-capped trainer (`tools/lora_train.py`).
+- **Training data** (`tools/build_lora_dataset.py`): Opus as the teacher, overridden by our hand labels wherever a person labelled the area.
+- **Weights:** the adapter (130 MB) is attached to the [`qwen-lora-run1b`](https://github.com/IshakSoltani/sensei-shelf-pipeline/releases/tag/qwen-lora-run1b) release.
 
 ```
 gh release download qwen-lora-run1b -p adapters.safetensors -D models/qwen3.5-4b-shelf-lora
 ```
 
-Measured, it is not good enough to replace Opus: 102 of 218 points on 10 evening photos against Opus's 145, and its printed confidence is 0.90 on almost every area, so a cascade cannot tell when to hand over (see `docs/decisions.md`).
+Set `"mode": "cascade"` in `config.json` and `predict.py` runs it first, handing to Opus only what it is unsure about.
+
+## Cost
+
+| Configuration | Opus calls | Per photo | 26 validation photos |
+|---|---|---|---|
+| Code rules → Qwen LoRA → Opus (`"mode": "cascade"`) | about 7 % of areas | about $0.01 to $0.03 | under $1 |
+| **Code rules → Opus (submitted, `gatepipe.py`)** | 85 % of areas | **$0.10** | **about $2.70** |
+| Opus on every area | 100 % | $0.12 | about $3.20 |
+
+All figures come from the tokens recorded on every saved answer, at Claude API list prices. The full breakdown is in [`docs/cost-report.pdf`](docs/cost-report.pdf).
+
+**Why the submitted run skips the local model.** Points are 80 % of the grade and cost 20 %. On 10 evening photos the fine-tuned Qwen scored 102 of 218 points against Opus's 145. It also printed the same 0.90 confidence on almost every area, so a cascade can't yet tell which areas to hand over. So the scored run goes straight from the code rules to Opus. The free tiers are ready: as the local model's confidence improves, the cascade's share of Opus calls drops towards zero with no change to the decision rules.
+
+## Results
+
+| | Points | Share of max |
+|---|---|---|
+| Our 901 hand-checked areas, final pipeline | 1,314 of 1,802 | 73 % |
+| 26-photo stand-in for the validation set (last frames of the day) | 350 of 568 | 62 % |
+| The organisers' example solution in the brief | 320 of 578 | 55 % |
+
+Under our older coverage-only stock rule, the same pipeline scores 1,378 of 1,802 on our labels. Those labels predate the two-customer test and call one or two packs "empty". The 20 areas where they disagree with it are listed in the decision log. We kept the two-customer test because it is the organisers' own definition of empty: nobody would buy what is left.
+
+## The app
+
+<p align="center"><img src="docs/img/app.jpg" alt="The gate-first test page: the score in the official points format, then each photo with its areas outlined and, per area, who decided it and why" width="100%"></p>
+
+Drop the validation folder (with `annotations.json` if you have it). Every photo is judged, scored in the brief's points format, and shown with each area outlined. Each area shows its verdict, who decided it and why. **Fresh run** asks Opus again instead of reusing saved answers. A one-photo staff view lists what to restock, what holds the wrong product and what is running low.
+
+## Run it
+
+```
+uv venv && uv pip install -r requirements.txt          # add -r requirements-local.txt for the local model
+echo "ANTHROPIC_API_KEY=sk-ant-..." > .env
+```
+
+The organisers' dataset is not in this repo. Unzip it into `data/raw/extracted/new_dataset_hackathon_junctionx_10_oct_2026_v2/`; only the reference builder and the app's samples need it.
+
+| Command | What it does |
+|---|---|
+| `.venv/bin/python gatepipe.py predict <folder> --api --out submission.json` | the submission run: code rules, then Opus for the rest (`<folder>` holds one sub-folder per camera) |
+| `.venv/bin/python app/server.py` | the app: open http://127.0.0.1:8787/gates (test run + score) or http://127.0.0.1:8787 (staff view) |
+| `.venv/bin/python predict.py <folder> --out submission.json` | Opus on every area, or the full cascade with `"mode": "cascade"` |
+| `.venv/bin/python gatepipe.py check` | replays the training day from saved answers and scores it on `labels/dev.csv` (no API calls) |
+| `.venv/bin/python gatepipe.py build` | rebuilds the code rules' references (emptiest picture and colour fingerprint per area) |
+
+## Repository
+
+| Path | What |
+|---|---|
+| `gatepipe.py` | the submitted pipeline: code rules first, Opus for the rest, decision rules, scoring check |
+| `gates.py` | the code rules: coverage against the emptiest picture, colour fingerprint, covered-shelf check |
+| `shelfcheck.py` | planogram, crops, the Opus judge with its answer cache, the prompts, the decision rules (fill thresholds, two-customer test, same kind), official scoring |
+| `predict.py` | Opus on every area, or the cascade (`"mode": "cascade"`: local Qwen first, Opus where unsure) |
+| `config.json` | the frozen settings: model, prompt, stock rule, two-customer test, cascade thresholds |
+| `app/` | the gate-first test page (`gates.html`), the staff view (`index.html`) and their server |
+| `models/qwen3.5-4b-shelf-lora/` | the LoRA adapter's config (weights in the release) |
+| `tools/` | LoRA training and its dataset, local-model evaluation, cascade tuning, code-rule tuning and replay, prompt tuning |
+| `data/` | planogram, English product names, camera fingerprints, the code rules' references, the training day's saved verdicts |
+| `labels/dev.csv` | 901 hand-checked areas from the shared training day |
+| `docs/` | the decision log, the cost report, the README images |

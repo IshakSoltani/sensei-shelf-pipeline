@@ -1,0 +1,769 @@
+{
+ "all_photos": false,
+ "covered": [
+  "6383|1751001156.jpg",
+  "6386|1751001156.jpg"
+ ],
+ "areas": {
+  "6215_1": {
+   "empty_photo": "1751021396.jpg",
+   "empty_fill": 90,
+   "fingerprint_photos": 0
+  },
+  "6215_2": {
+   "empty_photo": "1751029718.jpg",
+   "empty_fill": 5,
+   "fingerprint_photos": 2
+  },
+  "6215_3": {
+   "empty_photo": "1751029718.jpg",
+   "empty_fill": 60,
+   "fingerprint_photos": 5
+  },
+  "6215_4": {
+   "empty_photo": "1751029718.jpg",
+   "empty_fill": 5,
+   "fingerprint_photos": 6
+  },
+  "6215_5": {
+   "empty_photo": "1751037607.jpg",
+   "empty_fill": 80,
+   "fingerprint_photos": 4
+  },
+  "6215_6": {
+   "empty_photo": "1751037607.jpg",
+   "empty_fill": 25,
+   "fingerprint_photos": 5
+  },
+  "6215_7": {
+   "empty_photo": "1751037607.jpg",
+   "empty_fill": 0,
+   "fingerprint_photos": 0
+  },
+  "6215_8": {
+   "empty_photo": "1751029718.jpg",
+   "empty_fill": 25,
+   "fingerprint_photos": 6
+  },
+  "6215_9": {
+   "empty_photo": "1751029718.jpg",
+   "empty_fill": 70,
+   "fingerprint_photos": 0
+  },
+  "6215_10": {
+   "empty_photo": "1751021396.jpg",
+   "empty_fill": 0,
+   "fingerprint_photos": 0
+  },
+  "6371_1": {
+   "empty_photo": "1751028797.jpg",
+   "empty_fill": 0,
+   "fingerprint_photos": 3
+  },
+  "6371_2": {
+   "empty_photo": "1751028797.jpg",
+   "empty_fill": 0,
+   "fingerprint_photos": 2
+  },
+  "6371_3": {
+   "empty_photo": "1751032728.jpg",
+   "empty_fill": 35,
+   "fingerprint_photos": 0
+  },
+  "6371_4": {
+   "empty_photo": "1751040755.jpg",
+   "empty_fill": 70,
+   "fingerprint_photos": 5
+  },
+  "6371_5": {
+   "empty_photo": "1751036943.jpg",
+   "empty_fill": 40,
+   "fingerprint_photos": 0
+  },
+  "6371_6": {
+   "empty_photo": "1751036943.jpg",
+   "empty_fill": 75,
+   "fingerprint_photos": 3
+  },
+  "6371_7": {
+   "empty_photo": "1751005865.jpg",
+   "empty_fill": 0,
+   "fingerprint_photos": 4
+  },
+  "6371_8": {
+   "empty_photo": "1751036943.jpg",
+   "empty_fill": 0,
+   "fingerprint_photos": 5
+  },
+  "6371_9": {
+   "empty_photo": "1751040755.jpg",
+   "empty_fill": 50,
+   "fingerprint_photos": 4
+  },
+  "6373_1": {
+   "empty_photo": "1751040770.jpg",
+   "empty_fill": 85,
+   "fingerprint_photos": 0
+  },
+  "6373_2": {
+   "empty_photo": "1751001172.jpg",
+   "empty_fill": 45,
+   "fingerprint_photos": 0
+  },
+  "6373_3": {
+   "empty_photo": "1751001172.jpg",
+   "empty_fill": 0,
+   "fingerprint_photos": 2
+  },
+  "6373_4": {
+   "empty_photo": "1751001172.jpg",
+   "empty_fill": 55,
+   "fingerprint_photos": 0
+  },
+  "6373_5": {
+   "empty_photo": "1751040770.jpg",
+   "empty_fill": 5,
+   "fingerprint_photos": 4
+  },
+  "6373_6": {
+   "empty_photo": "1751001172.jpg",
+   "empty_fill": 0,
+   "fingerprint_photos": 0
+  },
+  "6373_7": {
+   "empty_photo": "1751001172.jpg",
+   "empty_fill": 70,
+   "fingerprint_photos": 0
+  },
+  "6373_8": {
+   "empty_photo": "1751001172.jpg",
+   "empty_fill": 0,
+   "fingerprint_photos": 0
+  },
+  "6373_9": {
+   "empty_photo": "1751040770.jpg",
+   "empty_fill": 85,
+   "fingerprint_photos": 0
+  },
+  "6373_10": {
+   "empty_photo": "1751001172.jpg",
+   "empty_fill": 45,
+   "fingerprint_photos": 5
+  },
+  "6373_11": {
+   "empty_photo": "1751001172.jpg",
+   "empty_fill": 85,
+   "fingerprint_photos": 5
+  },
+  "6373_12": {
+   "empty_photo": "1751037118.jpg",
+   "empty_fill": 85,
+   "fingerprint_photos": 4
+  },
+  "6376_1": {
+   "empty_photo": "1751017831.jpg",
+   "empty_fill": 85,
+   "fingerprint_photos": 5
+  },
+  "6376_2": {
+   "empty_photo": "1751033639.jpg",
+   "empty_fill": 20,
+   "fingerprint_photos": 0
+  },
+  "6376_3": {
+   "empty_photo": "1751029801.jpg",
+   "empty_fill": 30,
+   "fingerprint_photos": 0
+  },
+  "6376_4": {
+   "empty_photo": "1751029801.jpg",
+   "empty_fill": 0,
+   "fingerprint_photos": 0
+  },
+  "6376_5": {
+   "empty_photo": "1751029801.jpg",
+   "empty_fill": 0,
+   "fingerprint_photos": 0
+  },
+  "6376_6": {
+   "empty_photo": "1751029801.jpg",
+   "empty_fill": 85,
+   "fingerprint_photos": 3
+  },
+  "6376_7": {
+   "empty_photo": "1751037379.jpg",
+   "empty_fill": 85,
+   "fingerprint_photos": 0
+  },
+  "6376_8": {
+   "empty_photo": "1751033639.jpg",
+   "empty_fill": 0,
+   "fingerprint_photos": 1
+  },
+  "6376_9": {
+   "empty_photo": "1751037379.jpg",
+   "empty_fill": 0,
+   "fingerprint_photos": 0
+  },
+  "6376_10": {
+   "empty_photo": "1751037379.jpg",
+   "empty_fill": 85,
+   "fingerprint_photos": 6
+  },
+  "6376_11": {
+   "empty_photo": "1751041136.jpg",
+   "empty_fill": 0,
+   "fingerprint_photos": 4
+  },
+  "6376_12": {
+   "empty_photo": "1751033639.jpg",
+   "empty_fill": 0,
+   "fingerprint_photos": 0
+  },
+  "6376_13": {
+   "empty_photo": "1751029801.jpg",
+   "empty_fill": 85,
+   "fingerprint_photos": 2
+  },
+  "6376_14": {
+   "empty_photo": "1751033639.jpg",
+   "empty_fill": 90,
+   "fingerprint_photos": 0
+  },
+  "6376_15": {
+   "empty_photo": "1751041136.jpg",
+   "empty_fill": 80,
+   "fingerprint_photos": 3
+  },
+  "6376_16": {
+   "empty_photo": "1751041136.jpg",
+   "empty_fill": 50,
+   "fingerprint_photos": 5
+  },
+  "6383_1": {
+   "empty_photo": "1751025309.jpg",
+   "empty_fill": 55,
+   "fingerprint_photos": 3
+  },
+  "6383_2": {
+   "empty_photo": "1751037199.jpg",
+   "empty_fill": 80,
+   "fingerprint_photos": 3
+  },
+  "6383_3": {
+   "empty_photo": "1751021577.jpg",
+   "empty_fill": 85,
+   "fingerprint_photos": 3
+  },
+  "6383_4": {
+   "empty_photo": "1751029430.jpg",
+   "empty_fill": 0,
+   "fingerprint_photos": 1
+  },
+  "6383_5": {
+   "empty_photo": "1751009368.jpg",
+   "empty_fill": 75,
+   "fingerprint_photos": 5
+  },
+  "6383_6": {
+   "empty_photo": "1751021577.jpg",
+   "empty_fill": 20,
+   "fingerprint_photos": 2
+  },
+  "6383_7": {
+   "empty_photo": "1751013620.jpg",
+   "empty_fill": 75,
+   "fingerprint_photos": 4
+  },
+  "6383_8": {
+   "empty_photo": "1751025309.jpg",
+   "empty_fill": 80,
+   "fingerprint_photos": 5
+  },
+  "6383_9": {
+   "empty_photo": "1751037199.jpg",
+   "empty_fill": 80,
+   "fingerprint_photos": 5
+  },
+  "6385_1": {
+   "empty_photo": "1751001178.jpg",
+   "empty_fill": 80,
+   "fingerprint_photos": 3
+  },
+  "6385_2": {
+   "empty_photo": "1751008904.jpg",
+   "empty_fill": 90,
+   "fingerprint_photos": 8
+  },
+  "6385_3": {
+   "empty_photo": "1751001178.jpg",
+   "empty_fill": 5,
+   "fingerprint_photos": 0
+  },
+  "6385_4": {
+   "empty_photo": "1751001178.jpg",
+   "empty_fill": 45,
+   "fingerprint_photos": 2
+  },
+  "6385_5": {
+   "empty_photo": "1751001178.jpg",
+   "empty_fill": 80,
+   "fingerprint_photos": 2
+  },
+  "6385_6": {
+   "empty_photo": "1751020485.jpg",
+   "empty_fill": 90,
+   "fingerprint_photos": 2
+  },
+  "6385_7": {
+   "empty_photo": "1751012735.jpg",
+   "empty_fill": 85,
+   "fingerprint_photos": 7
+  },
+  "6385_8": {
+   "empty_photo": "1751044017.jpg",
+   "empty_fill": 3,
+   "fingerprint_photos": 0
+  },
+  "6385_9": {
+   "empty_photo": "1751001178.jpg",
+   "empty_fill": 85,
+   "fingerprint_photos": 1
+  },
+  "6386_1": {
+   "empty_photo": "1751024835.jpg",
+   "empty_fill": 75,
+   "fingerprint_photos": 6
+  },
+  "6386_2": {
+   "empty_photo": "1751040333.jpg",
+   "empty_fill": 75,
+   "fingerprint_photos": 3
+  },
+  "6386_3": {
+   "empty_photo": "1751028928.jpg",
+   "empty_fill": 75,
+   "fingerprint_photos": 2
+  },
+  "6386_4": {
+   "empty_photo": "1751005249.jpg",
+   "empty_fill": 30,
+   "fingerprint_photos": 0
+  },
+  "6386_5": {
+   "empty_photo": "1751032558.jpg",
+   "empty_fill": 80,
+   "fingerprint_photos": 4
+  },
+  "6386_6": {
+   "empty_photo": "1751005249.jpg",
+   "empty_fill": 20,
+   "fingerprint_photos": 6
+  },
+  "6443_1": {
+   "empty_photo": "1751001244.jpg",
+   "empty_fill": 85,
+   "fingerprint_photos": 6
+  },
+  "6443_2": {
+   "empty_photo": "1751001244.jpg",
+   "empty_fill": 50,
+   "fingerprint_photos": 6
+  },
+  "6443_3": {
+   "empty_photo": "1751005341.jpg",
+   "empty_fill": 60,
+   "fingerprint_photos": 0
+  },
+  "6443_4": {
+   "empty_photo": "1751032575.jpg",
+   "empty_fill": 85,
+   "fingerprint_photos": 0
+  },
+  "6443_5": {
+   "empty_photo": "1751028789.jpg",
+   "empty_fill": 80,
+   "fingerprint_photos": 0
+  },
+  "6443_6": {
+   "empty_photo": "1751028789.jpg",
+   "empty_fill": 72,
+   "fingerprint_photos": 4
+  },
+  "6443_7": {
+   "empty_photo": "1751001244.jpg",
+   "empty_fill": 75,
+   "fingerprint_photos": 0
+  },
+  "6443_8": {
+   "empty_photo": "1751028789.jpg",
+   "empty_fill": 75,
+   "fingerprint_photos": 6
+  },
+  "6443_9": {
+   "empty_photo": "1751013117.jpg",
+   "empty_fill": 80,
+   "fingerprint_photos": 0
+  },
+  "6443_10": {
+   "empty_photo": "1751001244.jpg",
+   "empty_fill": 12,
+   "fingerprint_photos": 0
+  },
+  "6443_11": {
+   "empty_photo": "1751032575.jpg",
+   "empty_fill": 20,
+   "fingerprint_photos": 4
+  },
+  "6443_12": {
+   "empty_photo": "1751013117.jpg",
+   "empty_fill": 85,
+   "fingerprint_photos": 1
+  },
+  "6443_13": {
+   "empty_photo": "1751036374.jpg",
+   "empty_fill": 0,
+   "fingerprint_photos": 5
+  },
+  "6462_1": {
+   "empty_photo": "1751001155.jpg",
+   "empty_fill": 3,
+   "fingerprint_photos": 3
+  },
+  "6462_2": {
+   "empty_photo": "1751001155.jpg",
+   "empty_fill": 75,
+   "fingerprint_photos": 9
+  },
+  "6462_3": {
+   "empty_photo": "1751032838.jpg",
+   "empty_fill": 80,
+   "fingerprint_photos": 9
+  },
+  "6462_4": {
+   "empty_photo": "1751001155.jpg",
+   "empty_fill": 0,
+   "fingerprint_photos": 8
+  },
+  "6462_5": {
+   "empty_photo": "1751001155.jpg",
+   "empty_fill": 3,
+   "fingerprint_photos": 8
+  },
+  "6462_6": {
+   "empty_photo": "1751001155.jpg",
+   "empty_fill": 0,
+   "fingerprint_photos": 1
+  },
+  "6462_7": {
+   "empty_photo": "1751001155.jpg",
+   "empty_fill": 0,
+   "fingerprint_photos": 5
+  },
+  "6462_8": {
+   "empty_photo": "1751001155.jpg",
+   "empty_fill": 0,
+   "fingerprint_photos": 8
+  },
+  "6462_9": {
+   "empty_photo": "1751001155.jpg",
+   "empty_fill": 0,
+   "fingerprint_photos": 9
+  },
+  "6468_1": {
+   "empty_photo": "1751041038.jpg",
+   "empty_fill": 80,
+   "fingerprint_photos": 4
+  },
+  "6468_2": {
+   "empty_photo": "1751021997.jpg",
+   "empty_fill": 75,
+   "fingerprint_photos": 5
+  },
+  "6468_3": {
+   "empty_photo": "1751026188.jpg",
+   "empty_fill": 75,
+   "fingerprint_photos": 4
+  },
+  "6468_4": {
+   "empty_photo": "1751013530.jpg",
+   "empty_fill": 80,
+   "fingerprint_photos": 2
+  },
+  "6468_5": {
+   "empty_photo": "1751021997.jpg",
+   "empty_fill": 75,
+   "fingerprint_photos": 4
+  },
+  "6468_6": {
+   "empty_photo": "1751013530.jpg",
+   "empty_fill": 85,
+   "fingerprint_photos": 4
+  },
+  "6468_7": {
+   "empty_photo": "1751021997.jpg",
+   "empty_fill": 80,
+   "fingerprint_photos": 2
+  },
+  "6468_8": {
+   "empty_photo": "1751041038.jpg",
+   "empty_fill": 85,
+   "fingerprint_photos": 1
+  },
+  "6468_9": {
+   "empty_photo": "1751041038.jpg",
+   "empty_fill": 50,
+   "fingerprint_photos": 2
+  },
+  "6468_10": {
+   "empty_photo": "1751041038.jpg",
+   "empty_fill": 25,
+   "fingerprint_photos": 0
+  },
+  "6468_11": {
+   "empty_photo": "1751033646.jpg",
+   "empty_fill": 85,
+   "fingerprint_photos": 5
+  },
+  "6468_12": {
+   "empty_photo": "1751021997.jpg",
+   "empty_fill": 85,
+   "fingerprint_photos": 1
+  },
+  "6468_13": {
+   "empty_photo": "1751041038.jpg",
+   "empty_fill": 80,
+   "fingerprint_photos": 5
+  },
+  "6468_14": {
+   "empty_photo": "1751041038.jpg",
+   "empty_fill": 70,
+   "fingerprint_photos": 5
+  },
+  "6468_15": {
+   "empty_photo": "1751041038.jpg",
+   "empty_fill": 75,
+   "fingerprint_photos": 4
+  },
+  "6468_16": {
+   "empty_photo": "1751041038.jpg",
+   "empty_fill": 75,
+   "fingerprint_photos": 3
+  },
+  "6491_1": {
+   "empty_photo": "1751001245.jpg",
+   "empty_fill": 0,
+   "fingerprint_photos": 10
+  },
+  "6491_2": {
+   "empty_photo": "1751005570.jpg",
+   "empty_fill": 3,
+   "fingerprint_photos": 9
+  },
+  "6491_3": {
+   "empty_photo": "1751001245.jpg",
+   "empty_fill": 5,
+   "fingerprint_photos": 0
+  },
+  "6491_4": {
+   "empty_photo": "1751005570.jpg",
+   "empty_fill": 3,
+   "fingerprint_photos": 0
+  },
+  "6491_5": {
+   "empty_photo": "1751001245.jpg",
+   "empty_fill": 0,
+   "fingerprint_photos": 7
+  },
+  "6491_6": {
+   "empty_photo": "1751001245.jpg",
+   "empty_fill": 0,
+   "fingerprint_photos": 0
+  },
+  "6491_7": {
+   "empty_photo": "1751001245.jpg",
+   "empty_fill": 5,
+   "fingerprint_photos": 5
+  },
+  "6491_8": {
+   "empty_photo": "1751001245.jpg",
+   "empty_fill": 0,
+   "fingerprint_photos": 1
+  },
+  "6491_9": {
+   "empty_photo": "1751018041.jpg",
+   "empty_fill": 0,
+   "fingerprint_photos": 0
+  },
+  "6491_10": {
+   "empty_photo": "1751001245.jpg",
+   "empty_fill": 3,
+   "fingerprint_photos": 0
+  },
+  "6591_1": {
+   "empty_photo": "1751009443.jpg",
+   "empty_fill": 80,
+   "fingerprint_photos": 9
+  },
+  "6591_2": {
+   "empty_photo": "1751009443.jpg",
+   "empty_fill": 80,
+   "fingerprint_photos": 4
+  },
+  "6591_3": {
+   "empty_photo": "1751017235.jpg",
+   "empty_fill": 85,
+   "fingerprint_photos": 0
+  },
+  "6591_4": {
+   "empty_photo": "1751009443.jpg",
+   "empty_fill": 75,
+   "fingerprint_photos": 8
+  },
+  "6591_5": {
+   "empty_photo": "1751005287.jpg",
+   "empty_fill": 30,
+   "fingerprint_photos": 7
+  },
+  "6591_6": {
+   "empty_photo": "1751005287.jpg",
+   "empty_fill": 0,
+   "fingerprint_photos": 1
+  },
+  "6591_7": {
+   "empty_photo": "1751005287.jpg",
+   "empty_fill": 45,
+   "fingerprint_photos": 7
+  },
+  "6591_8": {
+   "empty_photo": "1751005287.jpg",
+   "empty_fill": 75,
+   "fingerprint_photos": 7
+  },
+  "6591_9": {
+   "empty_photo": "1751009443.jpg",
+   "empty_fill": 90,
+   "fingerprint_photos": 8
+  },
+  "6591_10": {
+   "empty_photo": "1751017235.jpg",
+   "empty_fill": 80,
+   "fingerprint_photos": 7
+  },
+  "6594_1": {
+   "empty_photo": "1751008928.jpg",
+   "empty_fill": 0,
+   "fingerprint_photos": 8
+  },
+  "6594_2": {
+   "empty_photo": "1751013117.jpg",
+   "empty_fill": 55,
+   "fingerprint_photos": 6
+  },
+  "6594_3": {
+   "empty_photo": "1751013117.jpg",
+   "empty_fill": 80,
+   "fingerprint_photos": 6
+  },
+  "6594_4": {
+   "empty_photo": "1751029354.jpg",
+   "empty_fill": 0,
+   "fingerprint_photos": 7
+  },
+  "6594_5": {
+   "empty_photo": "1751033482.jpg",
+   "empty_fill": 85,
+   "fingerprint_photos": 0
+  },
+  "6594_6": {
+   "empty_photo": "1751033482.jpg",
+   "empty_fill": 85,
+   "fingerprint_photos": 1
+  },
+  "6594_7": {
+   "empty_photo": "1751008928.jpg",
+   "empty_fill": 5,
+   "fingerprint_photos": 0
+  },
+  "6594_8": {
+   "empty_photo": "1751033482.jpg",
+   "empty_fill": 55,
+   "fingerprint_photos": 8
+  },
+  "6594_9": {
+   "empty_photo": "1751008928.jpg",
+   "empty_fill": 0,
+   "fingerprint_photos": 0
+  },
+  "6594_10": {
+   "empty_photo": "1751021279.jpg",
+   "empty_fill": 85,
+   "fingerprint_photos": 6
+  },
+  "6594_11": {
+   "empty_photo": "1751041681.jpg",
+   "empty_fill": 55,
+   "fingerprint_photos": 6
+  },
+  "6594_12": {
+   "empty_photo": "1751041681.jpg",
+   "empty_fill": 80,
+   "fingerprint_photos": 0
+  },
+  "6594_13": {
+   "empty_photo": "1751008928.jpg",
+   "empty_fill": 90,
+   "fingerprint_photos": 0
+  },
+  "6781_1": {
+   "empty_photo": "1751041407.jpg",
+   "empty_fill": 85,
+   "fingerprint_photos": 6
+  },
+  "6781_2": {
+   "empty_photo": "1751005810.jpg",
+   "empty_fill": 65,
+   "fingerprint_photos": 1
+  },
+  "6781_3": {
+   "empty_photo": "1751005810.jpg",
+   "empty_fill": 85,
+   "fingerprint_photos": 9
+  },
+  "6781_4": {
+   "empty_photo": "1751041407.jpg",
+   "empty_fill": 80,
+   "fingerprint_photos": 9
+  },
+  "6781_5": {
+   "empty_photo": "1751005810.jpg",
+   "empty_fill": 75,
+   "fingerprint_photos": 8
+  },
+  "6781_6": {
+   "empty_photo": "1751041407.jpg",
+   "empty_fill": 80,
+   "fingerprint_photos": 6
+  },
+  "6781_7": {
+   "empty_photo": "1751001200.jpg",
+   "empty_fill": 85,
+   "fingerprint_photos": 8
+  },
+  "6781_8": {
+   "empty_photo": "1751001200.jpg",
+   "empty_fill": 80,
+   "fingerprint_photos": 8
+  },
+  "6781_9": {
+   "empty_photo": "1751041407.jpg",
+   "empty_fill": 40,
+   "fingerprint_photos": 6
+  },
+  "6781_10": {
+   "empty_photo": "1751041407.jpg",
+   "empty_fill": 85,
+   "fingerprint_photos": 7
+  }
+ }
+}

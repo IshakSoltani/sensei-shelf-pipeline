@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Gate-first test run</title>
+<style>
+/* same world as the viewer: dark leaf ground, the three stock colours, cyan for a wrong product;
+   plus straw for "the rule answered" and sage for "Opus answered" in the who-decided view */
+:root{--bg:#10170f;--panel:#182116;--panel2:#1f2a1c;--ink:#edf1e6;--muted:#a3b19c;--line:#2b3828;
+--empty:#e0584a;--half:#e4a93e;--full:#6cbb76;--id:#5cc0cf;--rule:#e9dca6;--model:#8fa88b;color-scheme:dark}
+*{box-sizing:border-box}[hidden]{display:none!important}html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.5 system-ui,-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;font-variant-numeric:tabular-nums}
+main{max-width:1180px;margin:0 auto;padding:24px 16px 64px;min-width:0}
+h1{font-size:clamp(30px,5vw,42px);line-height:1.05;margin:0 0 6px;letter-spacing:-0.02em}
+a{color:var(--ink)}
+.lead{color:var(--muted);margin:0 0 20px;max-width:66ch}
+.drop{background:var(--panel);border-radius:14px;padding:28px 20px;text-align:center}
+.drop.over{background:var(--panel2)}
+.drop>p{margin:0 0 14px;font-size:18px}
+.btn{display:inline-block;background:var(--ink);color:var(--bg);padding:12px 20px;border-radius:8px;cursor:pointer;border:0;font:inherit;font-weight:650}
+.btn:hover{background:#d7dfd2}
+.btn.quiet{background:var(--panel2);color:var(--ink);margin-left:8px}.btn.quiet:hover{background:var(--line)}
+.btn:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--id);outline-offset:2px}
+input[type=file]{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden}
+.opts{margin:18px auto 0;display:grid;gap:8px;max-width:640px;text-align:left;font-size:15px;color:var(--muted)}
+.opts label{display:grid;grid-template-columns:22px 1fr;gap:4px 8px;cursor:pointer}
+.opts input{margin:3px 0 0;accent-color:var(--full)}
+.opts b{color:var(--ink);font-weight:600}
+.status{color:var(--muted);margin:16px 0 0;min-height:1.5em}
+.status .err{color:var(--empty)}
+
+.board{margin-top:22px;display:grid;grid-template-columns:1fr;gap:16px}
+@media(min-width:820px){.board{grid-template-columns:minmax(0,560px)}}
+.side{background:var(--panel);border-radius:14px;padding:18px 18px 14px}
+.side h2{font-size:18px;margin:0;font-weight:650}
+.side .src{color:var(--muted);font-size:14px;margin:2px 0 10px}
+.side .big{font-size:46px;font-weight:700;line-height:1.05;letter-spacing:-0.01em;margin:0 0 12px}
+.side .big span{font-size:20px;color:var(--muted);font-weight:500;letter-spacing:0}
+.side table{width:100%;border-collapse:collapse;font-size:15px}
+.side td{padding:4px 0}
+.side td.n{text-align:right;width:4.5em}
+.side td.p{text-align:right;width:4.5em;color:var(--muted)}
+.side .na{color:var(--muted);font-size:15px;margin:6px 0 0}
+.side .foot{color:var(--muted);font-size:14px;margin:10px 0 0}
+.actions{display:flex;flex-wrap:wrap;gap:12px 22px;align-items:center;margin:16px 0 0}
+.seg{display:inline-flex;background:var(--panel);border-radius:9px;padding:3px}
+.seg button{background:none;border:0;color:var(--muted);font:inherit;font-size:15px;padding:7px 13px;border-radius:7px;cursor:pointer}
+.seg button[aria-pressed=true]{background:var(--panel2);color:var(--ink);font-weight:600}
+.seg button:hover{color:var(--ink)}
+.dl{background:none;border:0;color:var(--ink);font:inherit;font-size:15px;cursor:pointer;padding:7px 0;text-decoration:underline;text-underline-offset:3px}
+.dl:hover{color:#fff}
+.legend{display:flex;flex-wrap:wrap;gap:8px 20px;margin:12px 0 0;font-size:15px;color:var(--muted)}
+.legend span::before{content:"";display:inline-block;width:14px;height:14px;border-radius:3px;margin-right:7px;vertical-align:-2px;background:var(--sw)}
+.legend span.dash::before{background:none;border:2px dashed var(--sw);width:10px;height:10px}
+.legend[hidden]{display:none}
+
+.card{background:var(--panel);border-radius:14px;padding:16px;margin-top:20px}
+.card h2{font-size:19px;margin:0 0 10px;display:flex;flex-wrap:wrap;gap:4px 14px;align-items:baseline}
+.card h2 .sub{color:var(--muted);font-weight:400;font-size:15px}
+.card h2 .pts{font-size:15px;font-weight:600}
+.card .err{color:var(--empty)}
+.grid{display:grid;grid-template-columns:1fr;gap:16px;align-items:start}
+@media(min-width:900px){.grid{grid-template-columns:minmax(0,3fr) minmax(0,2fr)}}
+.shot{position:relative;background:#000;border-radius:10px;overflow:hidden}
+.shot img{display:block;width:100%;height:auto}
+.shot svg{position:absolute;inset:0;width:100%;height:100%}
+polygon{fill-opacity:.18;stroke-width:4}
+polygon.empty{fill:var(--empty);stroke:var(--empty)}polygon.half{fill:var(--half);stroke:var(--half)}polygon.full{fill:var(--full);stroke:var(--full)}
+polygon.wrong{stroke:var(--id);stroke-dasharray:12 7}
+body.who polygon{stroke-dasharray:none}
+body.who polygon.by-gate{fill:var(--rule);stroke:var(--rule);fill-opacity:.32}
+body.who polygon.by-opus{fill:var(--model);stroke:var(--model)}
+body.who polygon.by-fallback{fill:none;stroke:var(--empty);stroke-dasharray:6 8}
+polygon.lit,body.who polygon.lit{fill-opacity:.55}
+.tag{font:700 34px system-ui,sans-serif;fill:#fff;paint-order:stroke;stroke:#000;stroke-width:7px}
+ol{list-style:none;margin:0;padding:0;max-height:560px;overflow:auto}
+li{display:grid;grid-template-columns:34px 1fr auto;gap:2px 10px;padding:8px 10px;border-radius:8px;align-items:baseline}
+li:nth-child(even){background:var(--panel2)}
+li:hover,li.lit{background:var(--line)}
+li .n{font-weight:700}
+li .what{font-weight:600}
+li .lvl{font-weight:700;text-align:right}
+li .lvl.empty{color:var(--empty)}li .lvl.half{color:var(--half)}li .lvl.full{color:var(--full)}
+li .lvl.wrong::after{content:" · wrong";color:var(--id)}
+li .more{grid-column:2 / 4;color:var(--muted);font-size:14px}
+li .more .by{color:var(--ink)}
+li .more .by.gate{color:var(--rule)}
+li .more .ok{color:var(--full)}li .more .bad{color:var(--empty)}
+</style>
+</head>
+<body>
+<main>
+  <h1>Gate-first test run</h1>
+  <p class="lead">Drop the validation photos and <b>annotations.json</b>. Each area first goes through the clearly-full rule (pure code); only the areas it is not sure about go to Opus. The score updates as photos finish. <a href="/">Staff view</a></p>
+
+  <div class="drop" id="drop">
+    <p>Drop the validation folder here, or photos and annotations.json</p>
+    <label class="btn" for="pickdir">Choose folder</label>
+    <label class="btn quiet" for="pick">Choose files</label>
+    <input type="file" id="pickdir" webkitdirectory multiple>
+    <input type="file" id="pick" multiple accept="image/*,.json,application/json">
+    <div class="opts">
+      <label><input type="checkbox" id="fresh" checked><span><b>Fresh run:</b> the rule checks every area, and Opus is asked again about every area the rule passes on, ignoring answers saved earlier. A real test; about $0.01 per area, roughly $0.08 a photo. Untick to reuse saved answers where they exist (fast and free on training-day photos).</span></label>
+    </div>
+  </div>
+  <p class="status" id="status"></p>
+
+  <div class="board" id="board" hidden>
+    <section class="side" id="side-gates"></section>
+  </div>
+
+  <div class="actions" id="actions" hidden>
+    <div class="seg" role="group" aria-label="Colour the areas by">
+      <button type="button" id="v-verdict" aria-pressed="true">Colour by verdict</button>
+      <button type="button" id="v-who" aria-pressed="false">Colour by who decided</button>
+    </div>
+    <button type="button" class="dl" id="dl">Download submission.json</button>
+  </div>
+  <div class="legend" id="leg-verdict" hidden><span style="--sw:var(--empty)">empty</span><span style="--sw:var(--half)">half</span><span style="--sw:var(--full)">full</span><span class="dash" style="--sw:var(--id)">wrong product</span></div>
+  <div class="legend" id="leg-who" hidden><span style="--sw:var(--rule)">answered by the rule</span><span style="--sw:var(--model)">answered by Opus</span><span class="dash" style="--sw:var(--empty)">fallback, nobody judged it</span></div>
+
+  <div id="cards"></div>
+</main>
+<script>
+const $ = id => document.getElementById(id);
+const VAL = {empty: 0, half: 0.5, full: 1};
+const queue = []; let running = 0, done = 0, total = 0, spent = 0, ann = null, annName = "";
+const subGates = {}, cards = {}, tally = {gate: 0, opus: 0, fallback: 0};
+
+const drop = $("drop");
+["dragenter", "dragover"].forEach(e => drop.addEventListener(e, ev => { ev.preventDefault(); drop.classList.add("over"); }));
+["dragleave", "drop"].forEach(e => drop.addEventListener(e, ev => { ev.preventDefault(); drop.classList.remove("over"); }));
+drop.addEventListener("drop", async ev => add(await dropped(ev.dataTransfer)));
+document.addEventListener("dragover", ev => ev.preventDefault());
+document.addEventListener("drop", async ev => { if (!drop.contains(ev.target)) { ev.preventDefault(); add(await dropped(ev.dataTransfer)); } });
+for (const id of ["pick", "pickdir"]) $(id).addEventListener("change", ev => {
+  add([...ev.target.files].map(f => ({f, path: f.webkitRelativePath || f.name}))); ev.target.value = "";
+});
+
+// a dropped folder is walked recursively; each file keeps its path so its camera folder (e.g. 6215/) is known
+async function dropped(dt) {
+  const entries = [...dt.items].map(i => i.webkitGetAsEntry && i.webkitGetAsEntry()).filter(Boolean);
+  if (!entries.length) return [...dt.files].map(f => ({f, path: f.name}));
+  const out = [];
+  async function walk(e, prefix) {
+    if (e.isFile) { out.push({f: await new Promise((ok, no) => e.file(ok, no)), path: prefix + e.name}); return; }
+    const rd = e.createReader(); let batch;
+    do { batch = await new Promise((ok, no) => rd.readEntries(ok, no)); for (const c of batch) await walk(c, prefix + e.name + "/"); } while (batch.length);
+  }
+  for (const e of entries) await walk(e, "");
+  return out;
+}
+$("v-verdict").onclick = () => view(false); $("v-who").onclick = () => view(true);
+$("dl").onclick = () => {
+  const b = new Blob([JSON.stringify(subGates, null, 1)], {type: "application/json"});
+  const a = document.createElement("a"); a.href = URL.createObjectURL(b); a.download = "submission.json"; a.click(); URL.revokeObjectURL(a.href);
+};
+
+function view(who) {
+  document.body.classList.toggle("who", who);
+  $("v-who").setAttribute("aria-pressed", who); $("v-verdict").setAttribute("aria-pressed", !who);
+  $("leg-who").hidden = !who; $("leg-verdict").hidden = who;
+}
+function esc(s) { return String(s ?? "").replace(/[&<>"]/g, ch => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"}[ch])); }
+function say(html) { $("status").innerHTML = html; }
+
+async function add(files) {
+  files = [...files].sort((a, b) => a.path.localeCompare(b.path));
+  for (const {f, path} of files) {
+    if (f.name.startsWith(".")) continue;
+    if (f.name.toLowerCase().endsWith(".json")) {
+      try {
+        const d = JSON.parse(await f.text());
+        const n = Object.values(d).reduce((s, c) => s + Object.values(c).reduce((t, a) => t + Object.keys(a).length, 0), 0);
+        if (!n) throw new Error("no areas in it");
+        ann = d; annName = f.name; rescore();
+      } catch (e) { say(`<span class="err">${esc(f.name)} is not an annotations file I can read (${esc(e.message)}).</span>`); }
+      continue;
+    }
+    if (!f.type.startsWith("image/")) continue;
+    const card = document.createElement("section"); card.className = "card";
+    const cam = (path.split("/").slice(-2, -1)[0] || "").match(/^\d{4}$/)?.[0] || "auto";
+    card.innerHTML = `<h2>${esc(cam === "auto" ? f.name : cam + "/" + f.name)} <span class="sub">waiting</span></h2>`;
+    $("cards").appendChild(card); queue.push({f, cam, card}); total++;
+  }
+  status(); pump();
+}
+
+function status() {
+  if (!total && !ann) return say("");
+  const what = ann ? `scoring against ${esc(annName)}` : "no annotations.json yet: scoring against our own hand labels where we have them";
+  say(`${done} of ${total} photos checked${running ? `, ${running} running` : ""} · $${spent.toFixed(2)} spent on Opus · ${what}`);
+}
+
+function pump() {
+  while (running < 3 && queue.length) {
+    const job = queue.shift(); running++;
+    job.card.querySelector(".sub").textContent = "checking…";
+    check(job).finally(() => { running--; done++; status(); pump(); rescore(); });
+  }
+  status();
+}
+
+async function check({f, cam, card}) {
+  try {
+    const q = `name=${encodeURIComponent(f.name)}&cam=${cam}&api=1&fresh=${$("fresh").checked ? 1 : 0}`;
+    const r = await fetch(`/analyze_gates?${q}`, {method: "POST", body: f, headers: {"Content-Type": "application/octet-stream"}});
+    const o = await r.json();
+    if (!r.ok) { card.querySelector(".sub").outerHTML = `<span class="sub err">${esc(o.error || r.statusText)}</span>`; return; }
+    spent += o.summary.api_cost_usd || 0;
+    for (const k in tally) tally[k] += o.summary.by[k];
+    Object.assign((subGates[o.camera] ??= {}), o.submission[o.camera]);
+    cards[`${o.camera}/${o.file}`] = card; show(card, o);
+  } catch (e) { card.querySelector(".sub").outerHTML = `<span class="sub err">${esc(e.message)}</span>`; }
+}
+
+function labelFor(o, a) {
+  const l = ann?.[o.camera]?.[o.file]?.[a.area_id];
+  if (l) return {stock: l.stock_level ?? ({0: "empty", 0.5: "half", 1: "full"})[l.stock_value], compliant: !!l.planogram_compliant};
+  return ann ? null : a.label || null;
+}
+function pts(p, l) {
+  const id = p.compliant === l.compliant ? 1 : -2, d = VAL[p.stock] - VAL[l.stock];
+  return id + (d === 0 ? 1 : d < 0 ? -2 : -3);
+}
+
+function show(card, o) {
+  card._o = o;
+  const by = o.summary.by;
+  const polys = o.areas.map(a => `<polygon data-a="${esc(a.area_id)}" class="${a.stock}${a.compliant ? "" : " wrong"} by-${a.decided_by}" points="${a.quad.map(q => q.join(",")).join(" ")}"></polygon>`).join("");
+  const tags = o.areas.map(a => { const [x, y] = a.quad[0]; return `<text class="tag" x="${Math.max(4, Math.min(1220, x + 6))}" y="${Math.max(36, y + 38)}">${a.number}</text>`; }).join("");
+  const rows = o.areas.slice().sort((a, b) => a.number - b.number).map(a => {
+    const g = a.gate, l = labelFor(o, a);
+    let how;
+    if (a.decided_by === "gate") how = `<span class="by gate">rule</span>: ${esc(g.why)}`;
+    else if (a.decided_by === "opus") how = `<span class="by">Opus</span>${a.fill != null ? `: about ${a.fill}% covered` : ""}, sees ${esc(a.seen || "nothing")}${g ? ` · rule passed it on: ${esc(g.why)}` : ""}`;
+    else how = `<span class="by">fallback</span>: ${esc(a.api_error ? "Opus call failed (" + a.api_error + ")" : a.note || "nobody judged it")}`;
+    const lab = l ? ` · label ${l.stock}${l.compliant ? "" : ", wrong product"}: <span class="${pts(a, l) === 2 ? "ok" : "bad"}">${pts(a, l) > 0 ? "+" : ""}${pts(a, l)}</span>` : "";
+    return `<li data-a="${esc(a.area_id)}"><span class="n">${a.number}</span><span class="what">${esc(a.product)}</span><span class="lvl ${a.stock}${a.compliant ? "" : " wrong"}">${a.stock}</span>
+      <span class="more">${how}${lab}</span></li>`;
+  }).join("");
+  card.innerHTML = `
+    <h2>${esc(o.file)} <span class="pts" data-pts></span> <span class="sub">camera ${esc(o.camera)}${o.camera_name ? " · " + esc(o.camera_name) : ""}${o.time_utc ? " · " + esc(o.time_utc) + " UTC" : ""} · ${o.areas.length} areas: ${by.gate} by the rule, ${by.opus} by Opus${by.fallback ? `, ${by.fallback} fallback` : ""} · ${o.summary.seconds}s · $${(o.summary.api_cost_usd || 0).toFixed(3)}</span></h2>
+    <div class="grid">
+      <div class="shot"><img src="${o.image}" alt="${esc(o.file)} with every area outlined"><svg viewBox="0 0 1280 720" aria-hidden="true">${polys}${tags}</svg></div>
+      <ol>${rows}</ol>
+    </div>`;
+  card.querySelectorAll("li").forEach(li => {
+    const p = card.querySelector(`polygon[data-a="${li.dataset.a}"]`);
+    li.onmouseenter = () => { p?.classList.add("lit"); li.classList.add("lit"); };
+    li.onmouseleave = () => { p?.classList.remove("lit"); li.classList.remove("lit"); };
+    p && (p.onmouseenter = li.onmouseenter, p.onmouseleave = li.onmouseleave);
+  });
+  if ($("actions").hidden) { $("actions").hidden = false; view(document.body.classList.contains("who")); }
+}
+
+async function score(sub) {
+  const r = await fetch("/score", {method: "POST", headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({submission: sub, annotations: ann, only_judged: !ann || running > 0 || queue.length > 0})});
+  return r.ok ? r.json() : null;
+}
+
+async function rescore() {
+  if (!Object.keys(subGates).length) { status(); return; }
+  const g = await score(subGates);
+  if (!g || !g.areas) {
+    $("board").hidden = false;
+    $("side-gates").innerHTML = `<h2>Gate first</h2><p class="na">Nothing to score yet: these photos have no annotations and no hand labels. Drop annotations.json to score them.</p>`;
+    return;
+  }
+  const final = ann && !running && !queue.length;
+  $("board").hidden = false;
+  $("side-gates").innerHTML = side("Gate first", g, final, `${tally.gate} areas by the rule, ${tally.opus} by Opus${tally.fallback ? `, ${tally.fallback} fallback` : ""}`);
+  for (const [k, c] of Object.entries(cards)) {
+    const pg = g.per_photo?.[k], el = c.querySelector("[data-pts]");
+    if (el) el.textContent = pg ? `${pg.points} of ${pg.max} points` : "";
+  }
+  status();
+}
+
+function side(title, s, final, foot) {
+  const c = s.counts;
+  const rows = [["Identification correct", c.id_ok, "+1", c.id_ok], ["Identification wrong", c.id_wrong, "−2", -2 * c.id_wrong],
+                ["Stock level correct", c.stock_ok, "+1", c.stock_ok], ["Stock below the real stock", c.under, "−2", -2 * c.under],
+                ["Stock above the real stock", c.over, "−3", -3 * c.over]];
+  if (c.missing) rows.push(["Area missing from the output", c.missing, "−5", -5 * c.missing]);
+  return `<h2>${title}</h2><p class="src">${s.source}, ${s.photos} photos, ${s.areas} areas${final ? "" : ", so far"}</p>
+    <p class="big">${s.points} <span>of ${s.max} points</span></p>
+    <table>${rows.map(r => `<tr><td>${r[0]}</td><td class="n">${r[1]}</td><td class="p">${r[3] > 0 ? "+" : ""}${r[3]}</td></tr>`).join("")}</table>
+    <p class="foot">${foot}</p>`;
+}
+</script>
+</body>
+</html>

@@ -255,7 +255,18 @@ The rules above still hold; this view settles the borderline cases.{LEAN}"""
 _V8_LEAN = " In case of doubt between two levels, choose the lower one: an under-estimate costs less than an over-estimate."
 SYSTEM_V8 = SYSTEM_V5[:_j] + _V8_EXTRA.replace("{LEAN}", "") + SYSTEM_V5[_j:]
 SYSTEM_V8B = SYSTEM_V5[:_j] + _V8_EXTRA.replace("{LEAN}", _V8_LEAN) + SYSTEM_V5[_j:]
-SYSTEMS = {"v1": SYSTEM_V1, "v4": SYSTEM_V4, "v5": SYSTEM_V5, "v6": SYSTEM_V6, "v6b": SYSTEM_V6B, "v7": SYSTEM_V7, "v8": SYSTEM_V8, "v8b": SYSTEM_V8B}
+# v9 (11 Oct, Ishak): v5 plus the two-customer test, asked as its own question (customers_served).
+_V9_TEST = """
+THE TWO-CUSTOMER TEST decides between empty and the other levels. Ask: could two customers, one after the other, each still buy a normal purchase of the planned product from what is left, without anyone refilling? A normal purchase is one pack or bag of a packaged product; one melon, pineapple, papaya, cabbage, cauliflower or pumpkin; one bunch of bananas or grapes; about 1 kg of other loose fruit or vegetables (6 to 8 apples, oranges or tomatoes).
+- customers_served "none": nothing of the planned product is left (or only scraps nobody would buy).
+- customers_served "one": a single pack, bag or large item, or loose produce for only one purchase. The area is EMPTY: staff must be sent to refill it.
+- customers_served "two_or_more": at least two purchases are left. The area is NOT empty, however little of the floor it covers: two 1 kg bags in a large crate are half. Whether it is half or full still follows the coverage rules above.
+Count only the planned product (or the same kind); leftovers of a wrong product serve nobody. If you cannot tell whether one or two purchases are left, answer "one"."""
+_k = SYSTEM_V5.index("OUTPUT:")
+SYSTEM_V9 = SYSTEM_V5[:_k] + _V9_TEST.strip() + "\n\n" + SYSTEM_V5[_k:].replace(
+    "OUTPUT: integers", "OUTPUT: p_empty must agree with customers_served (high when it is none or one, low when two_or_more); integers")
+SYSTEMS = {"v1": SYSTEM_V1, "v4": SYSTEM_V4, "v5": SYSTEM_V5, "v6": SYSTEM_V6, "v6b": SYSTEM_V6B, "v7": SYSTEM_V7, "v8": SYSTEM_V8, "v8b": SYSTEM_V8B,
+           "v9": SYSTEM_V9}
 
 SCHEMA = {"type": "object", "properties": {
     "image_usable": {"type": "string", "enum": ["clear", "partly_occluded", "fully_occluded", "blur_or_glare"]},
@@ -267,6 +278,12 @@ SCHEMA = {"type": "object", "properties": {
     "p_empty": {"type": "integer"}, "p_half": {"type": "integer"}, "p_full": {"type": "integer"}},
     "required": ["image_usable", "observations", "visible_product", "matches_planned", "p_match",
                  "fill_percent", "p_empty", "p_half", "p_full"], "additionalProperties": False}
+
+
+SCHEMA_V9 = json.loads(json.dumps(SCHEMA))
+SCHEMA_V9["properties"]["customers_served"] = {"type": "string", "enum": ["none", "one", "two_or_more"]}
+SCHEMA_V9["required"] = SCHEMA["required"] + ["customers_served"]
+SCHEMAS = {"v9": SCHEMA_V9}   # every other version keeps SCHEMA, so its requests (and saved answers) are unchanged
 
 
 def img_block(b):
@@ -394,7 +411,7 @@ class Judge:
                     model=model, max_tokens=4000,
                     system=[{"type": "text", "text": SYSTEMS[version], "cache_control": {"type": "ephemeral"}}],
                     messages=[{"role": "user", "content": content}],
-                    output_config={"effort": effort, "format": {"type": "json_schema", "schema": SCHEMA}})
+                    output_config={"effort": effort, "format": {"type": "json_schema", "schema": SCHEMAS.get(version, SCHEMA)}})
             except Exception as e:
                 self.calls.append({"model": model, "error": repr(e)[:200], "seconds": round(time.time() - t0, 1), "tag": tag})
                 return {"error": repr(e)[:300], "_model": model}
@@ -535,7 +552,6 @@ KIND_EXCLUDE = ("plantain", "banana-pão", "banana-pao", "watermelon")
 
 SAME_KIND_OVERRIDE = True
 
-
 def kind_of(name):
     n = (name or "").lower()
     if any(x in n for x in KIND_EXCLUDE):
@@ -551,6 +567,69 @@ def same_kind(planned_name, seen_name):
     return k is not None and k == kind_of(seen_name)
 
 
+# THE TWO-CUSTOMER TEST (Ishak, 11 Oct): "can we still serve two customers in a row without refilling?"
+#   no  -> empty: someone is sent to replenish. One pack or bag left, or a portion for only one customer, is empty.
+#   yes -> at least half, however little of the crate it covers (two 1 kg bags of apples are half, not empty).
+# A unit is one pack or bag for packaged products (a pack weight in the name: 500 G, 1 KG, EMB.; a calibre such as
+# "75/85 KG" or "R0 KG" is not one) and one item for large loose produce (a melon, pineapple, papaya, cabbage...).
+# Prompt v9 asks Opus the question directly (customers_served); for older answers the count is read from Opus's own
+# observation ("Single 1 kg Carioca bag", "Two cardboard packs"). Unknown count -> the coverage reading stands.
+STOCK_TEST = json.load(open(ROOT / "config.json")).get("stock_test", "coverage")
+_PACK = re.compile(r"(?<![/\d.,A-Za-z])\d+(?:[.,]\d+)?\s?(?:KG|G|GR)\b|\bEMB\b", re.I)
+LARGE_ITEMS = ("melon", "watermelon", "pineapple", "papaya", "cabbage", "cauliflower", "pumpkin", "squash")
+_UNITS = r"(?:bags?|packs?|packages?|punnets?|nets?|trays?|boxe?s?|clamshells?|cartons?|sacks?|" + "|".join(f"{w}s?" for w in LARGE_ITEMS) + ")"
+_NUMBER = {"a single": 1, "single": 1, "only one": 1, "one": 1, "one or two": 1, "a couple of": 2, "couple of": 2, "two": 2,
+           "three": 3, "four": 4, "five": 5, "six": 6, "seven": 7, "eight": 8, "nine": 9, "ten": 10, "eleven": 11, "twelve": 12,
+           "several": 3, "a few": 3, "few": 3, "multiple": 3, "many": 6}
+_COUNT = re.compile(r"\b(" + "|".join(sorted(_NUMBER, key=len, reverse=True)) + r")\b(?:\s+[\w'-]+){0,4}?\s+" + _UNITS + r"\b", re.I)
+# "a bag of ...", "an orange net bag", or an observation that opens with "Net bag of ..." = one unit
+_ONE = re.compile(r"(?:\b(?:a|an)\s+(?:[\w'-]+\s+){0,3}?|^(?:[\w'-]+\s+){0,2}?)(?:bag|pack|package|punnet|tray|box|clamshell|carton|sack|"
+                  + "|".join(LARGE_ITEMS) + r")\b(?!s)(?!\s+(?:heads|curds|leaves|halves|slices|pieces))", re.I)
+
+
+def is_packaged(aid):
+    return bool(_PACK.search(AREAS[aid]["product_name"]))
+
+
+def counts_units(aid):
+    """True when stock of this area is counted in units (packs, bags or large items) rather than coverage."""
+    return is_packaged(aid) or any(w in planned(aid)["en"].lower() for w in LARGE_ITEMS)
+
+
+def units_seen(text):
+    """Number of packs / bags / large items Opus describes, or None when its observation gives no count."""
+    m = _COUNT.search(text or "")
+    if m:
+        return _NUMBER[m.group(1).lower()]
+    if _ONE.search(text or "") and not re.search(_UNITS.replace("s?", "s"), text or "", re.I):
+        return 1
+    return None
+
+
+def two_customer_test(stock, rs, aid):
+    """Apply the two-customer test to a stock level decided from coverage. Returns the new level."""
+    if STOCK_TEST != "two_customers":
+        return stock
+    ok = [r for r in rs if r and "error" not in r]
+    if not ok or any(r.get("image_usable") == "fully_occluded" for r in ok):
+        return stock
+    served = [r.get("customers_served") for r in ok if r.get("customers_served")]
+    if served:   # prompt v9: Opus answered the question itself
+        if all(x in ("none", "one") for x in served):
+            return "empty"
+        return "half" if stock == "empty" else stock
+    if not counts_units(aid):
+        return stock
+    right = all(r.get("matches_planned") == "yes" or same_kind(planned(aid)["en"], r.get("visible_product", "")) for r in ok)
+    n = [units_seen(r.get("observations")) for r in ok]
+    if not right or any(x is None for x in n):
+        return stock
+    n = min(n)
+    if n <= 1:
+        return "empty"
+    return "half" if stock == "empty" else stock
+
+
 def predictions(targets, results, samples=(0, 1, 2), stock_rule="ev", flag_rule="unanimous_no", alpha=1.0, fallbacks=None, quiet=True):
     """targets: list of (photo, aid); results: {(cam, name, aid, sample): answer}; fallbacks: {(cam, name, aid): (stock, compliant)}.
     Returns (official dict, notes {(cam, name, aid): note}). Asserts one entry per target."""
@@ -559,6 +638,8 @@ def predictions(targets, results, samples=(0, 1, 2), stock_rule="ev", flag_rule=
         rs = [results.get((ph.cam, ph.name, aid, s)) for s in samples]
         fb = (fallbacks or {}).get((ph.cam, ph.name, aid))
         stock, compliant, note = decide(rs, stock_rule, flag_rule, alpha, fb)
+        if not note:
+            stock = two_customer_test(stock, rs, aid)
         if not compliant and SAME_KIND_OVERRIDE:
             seen = [r.get("visible_product", "") for r in rs if r and "error" not in r]
             if seen and all(same_kind(planned(aid)["en"], x) for x in seen):

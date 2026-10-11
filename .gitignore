@@ -6,3 +6,6 @@ out/
 data/raw/
 models/*/adapters.safetensors
 .DS_Store
+
+# a local link to the answer cache
+cache

@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1240 640" width="1240" height="640" role="img" aria-label="Pipeline: a shelf photo is cut into planogram areas; each area goes to code rules first, then a fine-tuned local Qwen model, and only the ambiguous areas to Claude Opus; code decision rules turn the answer into the stock level and the planogram check.">
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M1 1 L8 5 L1 9" fill="none" stroke="#a3b19c" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+  <style>
+    text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; fill: #edf1e6; }
+    .h { font-size: 18px; font-weight: 650; }
+    .b { font-size: 14px; fill: #c4cfbd; }
+    .m { font-size: 13px; fill: #a3b19c; }
+    .cost { font-size: 14px; font-weight: 650; }
+    .box { fill: #182116; stroke: #2b3828; stroke-width: 1.5; }
+    .flow { fill: none; stroke: #a3b19c; stroke-width: 2; stroke-linecap: round; }
+  </style>
+  <rect width="1240" height="640" fill="#10170f"/>
+
+  <!-- input -->
+  <rect class="box" x="30" y="236" width="190" height="150" rx="12"/>
+  <text class="h" x="50" y="270">Shelf photo</text>
+  <text class="b" x="50" y="298">one frame from one of</text>
+  <text class="b" x="50" y="318">14 ceiling cameras over</text>
+  <text class="b" x="50" y="338">fruit and vegetables</text>
+
+  <rect class="box" x="250" y="236" width="200" height="150" rx="12"/>
+  <text class="h" x="270" y="270">Planogram areas</text>
+  <text class="b" x="270" y="298">camera recognised from</text>
+  <text class="b" x="270" y="318">the photo; each area cut</text>
+  <text class="b" x="270" y="338">out and straightened</text>
+  <text class="m" x="270" y="364">6 to 16 areas per photo</text>
+  <path class="flow" d="M220 311 H244" marker-end="url(#a)"/>
+
+  <!-- tier 0 -->
+  <rect class="box" x="500" y="30" width="380" height="160" rx="12"/>
+  <text class="h" x="522" y="64" style="fill:#e9dca6">0 · Code rules</text>
+  <text class="cost" x="858" y="64" text-anchor="end" style="fill:#e9dca6">$0 · milliseconds</text>
+  <text class="b" x="522" y="94">clearly full: the area differs from its emptiest</text>
+  <text class="b" x="522" y="114">picture on 50 % or more of its floor, and the</text>
+  <text class="b" x="522" y="134">colours match the planned product's fingerprint</text>
+  <text class="m" x="522" y="166">answers about 15 % of areas with no model at all</text>
+
+  <!-- tier 1 -->
+  <rect class="box" x="500" y="240" width="380" height="160" rx="12"/>
+  <text class="h" x="522" y="274" style="fill:#b9d4ab">1 · Qwen 4B + our LoRA</text>
+  <text class="cost" x="858" y="274" text-anchor="end" style="fill:#b9d4ab">$0 · local</text>
+  <text class="b" x="522" y="304">open-weight Qwen3.5-4B, fine-tuned on Opus's</text>
+  <text class="b" x="522" y="324">answers and our 901 hand-checked areas;</text>
+  <text class="b" x="522" y="344">runs on a laptop; keeps what it is sure of</text>
+  <text class="m" x="522" y="376">cascade mode in predict.py</text>
+
+  <!-- tier 2 -->
+  <rect class="box" x="500" y="450" width="380" height="160" rx="12"/>
+  <text class="h" x="522" y="484" style="fill:#8fa88b">2 · Claude Opus 5.5</text>
+  <text class="cost" x="858" y="484" text-anchor="end" style="fill:#8fa88b">$0.011 per area</text>
+  <text class="b" x="522" y="514">only the areas the cheaper tiers pass on;</text>
+  <text class="b" x="522" y="534">sees the frame, a close-up and the area</text>
+  <text class="b" x="522" y="554">straightened; returns fill, product and what</text>
+  <text class="b" x="522" y="574">it sees, packs and bags counted</text>
+
+  <!-- area into the tiers, and "not sure" hand-downs -->
+  <path class="flow" d="M450 311 C 475 311, 470 110, 494 110" marker-end="url(#a)"/>
+  <path class="flow" d="M540 190 V234" marker-end="url(#a)"/>
+  <text class="m" x="552" y="217">not sure</text>
+  <path class="flow" d="M540 400 V444" marker-end="url(#a)"/>
+  <text class="m" x="552" y="427">not sure</text>
+
+  <!-- decision rules -->
+  <rect class="box" x="930" y="150" width="280" height="300" rx="12"/>
+  <text class="h" x="952" y="184">Decision rules (code)</text>
+  <text class="b" x="952" y="216">Two-customer test: could two</text>
+  <text class="b" x="952" y="236">customers still buy here without</text>
+  <text class="b" x="952" y="256">a refill? No → empty, send someone.</text>
+  <text class="b" x="952" y="276">Yes → at least half.</text>
+  <text class="b" x="952" y="306">Packs, bags and melons are</text>
+  <text class="b" x="952" y="326">counted; loose produce by fill:</text>
+  <text class="b" x="952" y="346">under 35 % empty, under 65 % half.</text>
+  <text class="b" x="952" y="376">Wrong product only on a confident</text>
+  <text class="b" x="952" y="396">"no"; Gala for Golden still counts.</text>
+  <text class="m" x="952" y="428">no model, same answer every time</text>
+  <path class="flow" d="M880 110 C 905 110, 902 230, 924 230" marker-end="url(#a)"/>
+  <path class="flow" d="M880 320 H924" marker-end="url(#a)"/>
+  <path class="flow" d="M880 530 C 905 530, 902 410, 924 410" marker-end="url(#a)"/>
+
+  <!-- output -->
+  <rect class="box" x="930" y="490" width="280" height="120" rx="12"/>
+  <text class="h" x="952" y="524">submission.json + staff app</text>
+  <text class="b" x="952" y="554">every area always answered:</text>
+  <text class="b" x="952" y="574">a missing area costs 5 points</text>
+  <path class="flow" d="M1070 450 V484" marker-end="url(#a)"/>
+</svg>

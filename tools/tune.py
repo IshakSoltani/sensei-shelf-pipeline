@@ -4,7 +4,7 @@
     .venv/bin/python tools/tune.py --model claude-opus-5-5 --samples 3 --second-model claude-sonnet-5-5
     .venv/bin/python tools/tune.py --model claude-haiku-5-5 --samples 3 --version v4
 
-Needs labels/dev.csv (tools/merge_labels.py) and data/day_pass.json (tools/day_pass.py). References are causal:
+Needs labels/dev.csv (the 901 hand-checked areas) and data/day_pass.json (tools/day_pass.py). References are causal:
 only photos earlier than the judged one. Writes out/tune/<run>.json (per-area table for the dashboard),
 out/tune/sheets/<cam>_<ts>_<run>.jpg (contact sheets) and appends to out/experiments.jsonl.
 """
