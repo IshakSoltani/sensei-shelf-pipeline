@@ -17,7 +17,8 @@ saved answer takes the fallback. Pass allow_api=True (CLI: --api) to ask Opus fo
 
     .venv/bin/python gatepipe.py build                       # reference pictures + fingerprints -> data/gate_refs.npz
     .venv/bin/python gatepipe.py check                       # replay the training day from saved answers, score on labels/dev.csv
-    .venv/bin/python gatepipe.py predict <photos dir> --out submission.json [--api]
+    .venv/bin/python gatepipe.py predict <photos dir> --out submission.json [--api] [--score annotations.json]
+                                                             (photos in camera folders or loose: the camera is then recognised)
 """
 import argparse, asyncio, json, sys, time
 from pathlib import Path
@@ -245,16 +246,73 @@ def check():
     print(f"decided by, on the labelled photos: {by}")
 
 
-def predict(folder, out, allow_api):
-    folder = Path(folder)
-    sub, t0 = {}, time.time()
-    for cam_dir in sorted(p for p in folder.iterdir() if p.is_dir() and p.name in sc.CAM_AREAS):
-        for f in sorted(cam_dir.glob("*.jpg")):
-            r = asyncio.run(run_photo(sc.load_image(f), cam_dir.name, f.name, allow_api=allow_api))
-            sub.setdefault(cam_dir.name, {}).update(r["submission"][cam_dir.name])
-            print(f"  {cam_dir.name}/{f.name}: {r['summary']['by']}", flush=True)
+_CAM_FP = None
+
+
+def detect_camera(img):
+    """(camera, margin) from a 64x36 grey thumbnail against data/camera_fingerprints.json (the cameras never move);
+    margin = runner-up distance / best distance, so a margin near 1 means the photo could be either camera."""
+    global _CAM_FP
+    if _CAM_FP is None:
+        _CAM_FP = {c: np.array(v, np.float32) for c, v in json.load(open(sc.DATA / "camera_fingerprints.json")).items()}
+    t = cv2.resize(cv2.cvtColor(img, cv2.COLOR_BGR2GRAY), (64, 36), interpolation=cv2.INTER_AREA).astype(np.float32)
+    d = sorted((float(np.mean(np.abs(t - f))), c) for c, f in _CAM_FP.items())
+    return d[0][1], round(d[1][0] / max(d[0][0], 1e-6), 2)
+
+
+def find_photos(folder):
+    """Every photo under folder, with its camera: the camera folder it sits in (e.g. 6215/), else recognised from the image."""
+    found, seen = [], set()
+    for f in sorted(Path(folder).rglob("*")):
+        if f.suffix.lower() not in (".jpg", ".jpeg", ".png") or f.name.startswith("."):
+            continue
+        img = sc.load_image(f)
+        if img.shape[:2] != (720, 1280):
+            img = cv2.resize(img, (1280, 720), interpolation=cv2.INTER_AREA)
+        cam = next((p for p in reversed(f.relative_to(folder).parts[:-1]) if p in sc.CAM_AREAS), None)
+        how, margin = "folder", None
+        if cam is None:
+            cam, margin = detect_camera(img); how = "recognised"
+        if (cam, f.name) in seen:
+            print(f"  WARNING: {f} repeats {cam}/{f.name}; skipped", flush=True); continue
+        seen.add((cam, f.name)); found.append((cam, f, img, how, margin))
+    return found
+
+
+def complete(sub, photos):
+    """Problems that would cost points: a photo or an area missing, or a value outside the format. [] = ready."""
+    bad = []
+    for cam, f, *_ in photos:
+        got = sub.get(cam, {}).get(f.name, {})
+        for aid in sc.CAM_AREAS[cam]:
+            v = got.get(aid)
+            if not v or not isinstance(v.get("planogram_compliant"), bool) or v.get("stock_value") not in (0, 0.5, 1) \
+                    or v.get("stock_level") not in ("empty", "half", "full"):
+                bad.append(f"{cam}/{f.name} {aid}")
+    return bad
+
+
+def predict(folder, out, allow_api, annotations=None):
+    sub, t0, cost = {}, time.time(), 0.0
+    photos = find_photos(folder)
+    print(f"{len(photos)} photos in {folder}", flush=True)
+    for cam, f, img, how, margin in photos:
+        note = "" if how == "folder" else f", camera recognised from the image (margin {margin})" + ("  CHECK: close call" if margin < 1.3 else "")
+        r = asyncio.run(run_photo(img, cam, f.name, allow_api=allow_api))
+        sub.setdefault(cam, {}).update(r["submission"][cam])
+        cost += r["summary"]["api_cost_usd"]
+        print(f"  {cam}/{f.name}: {r['summary']['by']}{note}", flush=True)
+    bad = complete(sub, photos)
     json.dump(sub, open(out, "w"), indent=1)
-    print(f"-> {out} ({sum(len(v) for c in sub.values() for v in c.values())} areas, {time.time() - t0:.0f}s)")
+    n = sum(len(v) for c in sub.values() for v in c.values())
+    print(f"-> {out}: {len(photos)} photos, {n} areas, {time.time() - t0:.0f}s, ${cost:.2f} on the API")
+    print("   complete: every area of every photo has a valid answer" if not bad else f"   INCOMPLETE ({len(bad)}): {bad[:10]}")
+    if annotations:
+        a = json.load(open(annotations))
+        labels = {(c, f, aid): {"stock_value": float(v["stock_value"]), "compliant": bool(v["planogram_compliant"])}
+                  for c, fs in a.items() for f, areas in fs.items() for aid, v in areas.items()}
+        total, c = sc.score(sub, labels)
+        print(f"   score against {annotations}: {total} of {2 * len(labels)}  {c}")
 
 
 if __name__ == "__main__":
@@ -264,5 +322,6 @@ if __name__ == "__main__":
     ap.add_argument("--out", default="submission_gates.json")
     ap.add_argument("--api", action="store_true", help="ask Opus for areas with no saved answer (costs money)")
     ap.add_argument("--all-photos", action="store_true", help="build: references from the whole training day")
+    ap.add_argument("--score", metavar="ANNOTATIONS", help="predict: also score the result against an annotations.json")
     a = ap.parse_args()
-    {"build": lambda: build_refs(a.all_photos), "check": check, "predict": lambda: predict(a.folder, a.out, a.api)}[a.cmd]()
+    {"build": lambda: build_refs(a.all_photos), "check": check, "predict": lambda: predict(a.folder, a.out, a.api, a.score)}[a.cmd]()

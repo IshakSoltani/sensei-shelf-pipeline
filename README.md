@@ -102,7 +102,7 @@ The organisers' dataset is not in this repo. Unzip it into `data/raw/extracted/n
 
 | Command | What it does |
 |---|---|
-| `.venv/bin/python gatepipe.py predict <folder> --api --out submission.json` | the submission run: code rules, then Opus for the rest (`<folder>` holds one sub-folder per camera) |
+| `.venv/bin/python gatepipe.py predict <folder> --api --out submission.json` | the submission run: code rules, then Opus for the rest. Photos can sit in camera folders (`6215/…`) or loose, in which case each camera is recognised from the image. Checks that every area of every photo is answered; add `--score annotations.json` to score it |
 | `.venv/bin/python app/server.py --port 8790` | the model service on its own: http://127.0.0.1:8790/gates is the test run + score page |
 | `.venv/bin/python predict.py <folder> --out submission.json` | Opus on every area, or the full cascade with `"mode": "cascade"` |
 | `.venv/bin/python gatepipe.py check` | replays the training day from saved answers and scores it on `labels/dev.csv` (no API calls) |
